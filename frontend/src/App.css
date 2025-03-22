@@ -1,0 +1,159 @@
+/* Base styles */
+#root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+.app-container {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #000;
+  color: white;
+  font-family: 'Kaisei Decol', serif;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Navigation Menu */
+.nav-menu {
+  display: flex;
+  justify-content: center;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-size: 0.8rem;
+  letter-spacing: 0.15em;
+  margin: 0 2rem;
+  padding: 0.5rem 0;
+  position: relative;
+}
+
+.nav-link:hover:after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background-color: white;
+  bottom: 0;
+  left: 0;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 8rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Logo */
+.logo-container {
+  margin-bottom: 3rem;
+}
+
+.logo {
+  font-size: 5rem;
+  font-weight: 300;
+  letter-spacing: 0.1em;
+  margin: 0;
+  line-height: 1;
+  font-family: 'Zen Tokyo Zoo', cursive;
+  background: linear-gradient(to right, #fff, #f8f8f8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Content Sections */
+.content-section {
+  margin-bottom: 2rem;
+  max-width: 800px;
+}
+
+.mission-statement {
+  font-size: 1.5rem;
+  line-height: 1.5;
+  margin-bottom: 2rem;
+}
+
+.content-section p {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+}
+
+.highlight {
+  color: #d1a080;
+  font-weight: 600;
+}
+
+/* CTA Button */
+.cta-container {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.cta-button {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 0.8rem 2rem;
+  font-size: 0.9rem;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cta-button:hover {
+  background-color: white;
+  color: black;
+}
+
+/* Hexagon Pattern */
+.hexagon-pattern {
+  position: absolute;
+  top: 20%;
+  right: 0;
+  width: 40%;
+  height: 80%;
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0 L93.3 25 L93.3 75 L50 100 L6.7 75 L6.7 25 Z' fill='none' stroke='rgba(255, 255, 255, 0.1)' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 100px 100px;
+  opacity: 0.2;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 2rem;
+  }
+  
+  .logo {
+    font-size: 3.5rem;
+  }
+  
+  .mission-statement {
+    font-size: 1.2rem;
+  }
+  
+  .content-section p {
+    font-size: 1rem;
+  }
+  
+  .nav-link {
+    margin: 0 1rem;
+  }
+}

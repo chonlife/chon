@@ -1,0 +1,41 @@
+# --- Python / Flask / Poetry ---
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+*.env
+.env.*
+instance/
+.mypy_cache/
+.pytest_cache/
+coverage.xml
+htmlcov/
+dist/
+build/
+
+# Poetry virtual environment (if stored in project)
+.venv/
+
+# VSCode settings
+.vscode/
+
+# --- Node / React / Vite / pnpm ---
+node_modules/
+dist/
+build/
+*.log
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+pnpm-lock.yaml
+
+# Vite cache
+.vite/
+
+# macOS / system files
+.DS_Store
+Thumbs.db
