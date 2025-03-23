@@ -83,50 +83,60 @@
 
 /* Content Sections */
 .content-section {
-  margin-bottom: 0.05rem; /* 原 0.1rem，已缩小一半 */
+  margin: 0;
+  padding: 0;
   max-width: 900px;
 }
 
 /* 对特定段落的行距和间距控制 - 恢复正常行距但减少间距 */
 .mission-statement {
   font-size: 1.8rem;
-  line-height: 1.4;
-  margin-bottom: 0.05rem; /* 从0.1rem调整为0.05rem，与 .dont-empower-text 保持一致 */
+  line-height: 1.2; /* 缩小行高 */
+  margin: 0;
+  padding: 0;
 }
 
 /* 调整"We don't empower mothers"与下一段文字的间距 */
 .dont-empower-text {
-  margin-bottom: 0.05rem !important; /* 保持不变 */
-  line-height: 1.4;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.2;
 }
 
 /* 关键文本段落的样式 - 使用更高优先级选择器 */
 .main-content .content-section:nth-child(2) p,
 .main-content .content-section:nth-child(3) p,
 .main-content .content-section:last-of-type p {
-  line-height: 1.4;
-  margin-bottom: 0.05rem; /* 从0.075rem调整为0.05rem，保持统一 */
+  line-height: 1.2;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 /* 为"We don't empower mothers"添加更高优先级 */
 .main-content .dont-empower-text {
-  margin-bottom: 0.05rem !important; /* 保持不变 */
-  line-height: 1.4;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.2;
 }
 
-/* 添加特定样式以控制"We empower the CORPORATE WORLD"和"We are CHON"之间的间距 */
-.main-content .content-section:nth-child(3) {
-  margin-top: 0.05rem; /* 添加与"We don't empower mothers"相同的间距 */
-}
-
+/* 确保同一section内的段落间距正常 */
 .content-section p {
   font-size: 1.4rem;
   line-height: 1;
-  margin: 0 0 0.05rem 0; /* 从0.0125rem调整为统一的0.05rem */
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
+/* 确保empower段落与CHON段落间距紧密 */
+.main-content .content-section:nth-child(2) p:last-child {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 移除重复的段落底部边距设置 */
 .content-section p:first-child {
-  margin-bottom: 0.05rem; /* 从0.0125rem调整为统一的0.05rem */
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 .highlight, 
@@ -138,7 +148,7 @@
 
 /* CTA Button */
 .cta-container {
-  margin-top: 0.7rem;
+  margin-top: 0.4rem; /* 只保留一点点与上面内容的间距 */
   display: flex;
   justify-content: center;
   width: 100%;
@@ -209,21 +219,24 @@
   
   .mission-statement {
     font-size: 1.7rem;
-    line-height: 1.4;
-    margin-bottom: 0.05rem; /* 从0.1rem调整为0.05rem */
+    line-height: 1.2;
+    margin: 0;
+    padding: 0;
   }
   
   .main-content .content-section:nth-child(2) p,
   .main-content .content-section:nth-child(3) p,
   .main-content .content-section:last-of-type p {
-    line-height: 1.4;
-    margin-bottom: 0.05rem; /* 从0.075rem调整为0.05rem */
+    line-height: 1.2;
+    margin: 0;
+    padding: 0;
   }
   
   .content-section p {
     font-size: 1.3rem;
     line-height: 1;
-    margin: 0 0 0.05rem 0; /* 从0.0125rem调整为0.05rem */
+    margin: 0;
+    padding: 0;
   }
 }
 
@@ -238,24 +251,29 @@
   
   .mission-statement {
     font-size: 1.6rem;
-    line-height: 1.4;
-    margin-bottom: 0.05rem; /* 从0.1rem调整为0.05rem */
+    line-height: 1.2;
+    margin: 0;
+    padding: 0;
   }
   
   .main-content .content-section:nth-child(2) p,
   .main-content .content-section:nth-child(3) p,
   .main-content .content-section:last-of-type p {
-    line-height: 1.4;
-    margin-bottom: 0.05rem; /* 从0.075rem调整为0.05rem */
+    line-height: 1.2;
+    margin: 0;
+    padding: 0;
   }
   
   .content-section p {
     font-size: 1.25rem;
     line-height: 1;
+    margin: 0;
+    padding: 0;
   }
   
   .content-section {
-    margin-bottom: 0.05rem; /* 原 0.1rem */
+    margin: 0;
+    padding: 0;
   }
   
   .molecule-background {
@@ -275,25 +293,29 @@
   
   .mission-statement {
     font-size: 1.5rem;
-    line-height: 1.4;
-    margin-bottom: 0.05rem; /* 从0.1rem调整为0.05rem */
+    line-height: 1.2;
+    margin: 0;
+    padding: 0;
   }
   
   .main-content .content-section:nth-child(2) p,
   .main-content .content-section:nth-child(3) p,
   .main-content .content-section:last-of-type p {
-    line-height: 1.4;
-    margin-bottom: 0.05rem; /* 从0.075rem调整为0.05rem */
+    line-height: 1.2;
+    margin: 0;
+    padding: 0;
   }
   
   .content-section p {
     font-size: 1.2rem;
     line-height: 1;
-    margin-bottom: 0.05rem; /* 从0.0375rem调整为0.05rem */
+    margin: 0;
+    padding: 0;
   }
   
   .content-section {
-    margin-bottom: 0.05rem; /* 原 0.1rem */
+    margin: 0;
+    padding: 0;
   }
   
   .main-content .cta-container .cta-button {
@@ -318,21 +340,24 @@
   
   .mission-statement {
     font-size: 1.3rem;
-    line-height: 1.3;
-    margin-bottom: 0.05rem; /* 从0.075rem调整为0.05rem */
+    line-height: 1.2;
+    margin: 0;
+    padding: 0;
   }
   
   .main-content .content-section:nth-child(2) p,
   .main-content .content-section:nth-child(3) p,
   .main-content .content-section:last-of-type p {
-    line-height: 1.3;
-    margin-bottom: 0.05rem; /* 保持不变 */
+    line-height: 1.2;
+    margin: 0;
+    padding: 0;
   }
   
   .content-section p {
     font-size: 1.1rem;
     line-height: 1;
-    margin-bottom: 0.05rem; /* 从0.0375rem调整为0.05rem */
+    margin: 0;
+    padding: 0;
   }
   
   .cta-container {
@@ -350,7 +375,8 @@
   }
   
   .content-section {
-    margin-bottom: 0.05rem; /* 从0.0375rem调整为0.05rem */
+    margin: 0;
+    padding: 0;
   }
 }
 
@@ -363,4 +389,16 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* 特殊处理We are CHON段落 - 确保与前面段落间距紧密 */
+.close-section {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 调整close-section内部段落的边距 */
+.close-section p {
+  margin: 0 !important;
+  padding: 0 !important;
 }

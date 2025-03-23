@@ -23,8 +23,7 @@ interface LanguageProviderProps {
 
 export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) => {
   const getInitialLanguage = (): 'en' | 'zh' => {
-    const savedLanguage = localStorage.getItem('language');
-    return (savedLanguage === 'zh') ? 'zh' : 'en';
+    return 'en';
   };
 
   const [language, setLanguageState] = useState<'en' | 'zh'>(getInitialLanguage);
@@ -38,11 +37,9 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   };
   
   useEffect(() => {
-    if (!localStorage.getItem('language')) {
-      localStorage.setItem('language', 'en');
-    }
+    localStorage.setItem('language', 'en');
     console.log('Current language:', language);
-  }, [language]);
+  }, []);
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t }}>

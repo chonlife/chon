@@ -50,7 +50,7 @@ const Home = () => {
         <p lang={language}>{renderHtml(t.home.empowerment.paragraph)}</p>
       </section>
 
-      <section className="content-section" lang={language}>
+      <section className="content-section close-section" lang={language}>
         <p lang={language}>
           {renderHtml(t.home.about.weAre)}, {renderHtml(t.home.about.paragraph)}
         </p>
