@@ -40,6 +40,13 @@ interface Translation {
     title: string;
     description: string;
     content: string;
+    identity: {
+      title: string;
+      mother: string;
+      corporate: string;
+      both: string;
+      other: string;
+    };
   };
   contact: {
     title: string;
@@ -49,6 +56,20 @@ interface Translation {
       email: string;
       message: string;
       send: string;
+    };
+    prototype: {
+      text: string;
+    };
+    expertise: {
+      text: string;
+    };
+    skills: {
+      text: string;
+    };
+    buttons: {
+      fund: string;
+      join: string;
+      collaborate: string;
     };
   };
   login: {
@@ -88,7 +109,7 @@ const translations: TranslationsType = {
       cta: 'I\'M A CARBON-BASED LIFE →',
     },
     intro: {
-      question: '<span class="highlight">Mothers</span> are natural leaders.',
+      question: '<span style="color: #F0BDC0">Mothers</span> are natural leaders.',
       yes: 'YES',
       no: 'NO',
       agree: 'Agree',
@@ -100,6 +121,13 @@ const translations: TranslationsType = {
       title: 'Personality Test',
       description: 'Coming soon: Discover how you can contribute to a more inclusive corporate environment for mothers.',
       content: 'Our test is being developed to help corporations understand how to better integrate mothers into the workplace.',
+      identity: {
+        title: 'I AM',
+        mother: 'MOTHER',
+        corporate: 'Senior manager, director, vice president,\npartner, managing director, president,\nC-suite executives, Board of Directors, Founders, etc.',
+        both: 'MOTHER + CORPORATE LEADER',
+        other: 'Not a robot and not yet one of the above'
+      }
     },
     contact: {
       title: 'Contact Us',
@@ -110,6 +138,20 @@ const translations: TranslationsType = {
         message: 'Message',
         send: 'Send Message',
       },
+      prototype: {
+        text: "As we focus on developing our prototype, we are not actively seeking outside funding at this time. If you are interested in funding our venture or business collaborations, please select the appropriate form below, and we will reach out when the time is appropriate."
+      },
+      expertise: {
+        text: "We are actively looking for individuals who share a love for humankind and possess specialized expertise in computer science, including software engineering, natural language processing, and machine learning."
+      },
+      skills: {
+        text: "Additionally, we welcome those with strong visuospatial and abstract logical thinking skills, whether it's group theory, topology, abstract algebra, LEGO or Rubik's Cube."
+      },
+      buttons: {
+        fund: "FUND →",
+        join: "JOIN →",
+        collaborate: "COLLABORATE →"
+      }
     },
     login: {
       title: 'Login',
@@ -144,7 +186,7 @@ const translations: TranslationsType = {
       cta: '我是碳基生命 →',
     },
     intro: {
-      question: '<span class="highlight">母亲</span>是天生的领导者。',
+      question: '<span style="color: #F0BDC0">母亲</span>是天生的领导者。',
       yes: '是',
       no: '否',
       agree: '同意',
@@ -156,6 +198,13 @@ const translations: TranslationsType = {
       title: '性格测试',
       description: '即将推出：探索如何为母亲创造更包容的企业环境。',
       content: '我们正在开发测试，帮助企业更好地理解如何将母亲融入工作场所。',
+      identity: {
+        title: '我是',
+        mother: '母亲',
+        corporate: '高级经理、总监、副总经理、\n合伙人、董事总经理、总裁、\nC级行政主管、董事会成员、企业创始人等',
+        both: '母亲 + 企业领导者',
+        other: '不是机器人及上述人员'
+      }
     },
     contact: {
       title: '联系我们',
@@ -166,6 +215,20 @@ const translations: TranslationsType = {
         message: '留言',
         send: '发送消息',
       },
+      prototype: {
+        text: "由于我们专注于开发产品模型，目前我们并不主动寻找外部融资。如果您有兴趣投资我们或者对业务合作感兴趣，请选择下面相应的选项，我们将在合适的时候与您联系。"
+      },
+      expertise: {
+        text: "我们正在积极寻找热爱人类并拥有计算机科学专业知识——包括软件开发、自然语言处理和机器学习——的人加入我们的团队。"
+      },
+      skills: {
+        text: "此外，我们也欢迎那些具有很强的视觉空间和抽象逻辑思维能力的人才，不论是群论、拓扑学、抽象代数、乐高还是魔方。"
+      },
+      buttons: {
+        fund: "投资 →",
+        join: "加入 →",
+        collaborate: "合作 →"
+      }
     },
     login: {
       title: '登录',

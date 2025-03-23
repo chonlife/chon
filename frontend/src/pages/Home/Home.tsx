@@ -22,7 +22,7 @@ const Home = () => {
   }, [language, t]);
 
   const handleCtaClick = () => {
-    navigate('/intro');
+    navigate('/personality-test');
   };
 
   return (

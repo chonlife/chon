@@ -4,28 +4,34 @@ import './Contact.css';
 const Contact = () => {
   const { t, language } = useLanguage();
   
+  const renderHtml = (html: string) => {
+    const wrappedHtml = `<span lang="${language}">${html}</span>`;
+    return <span dangerouslySetInnerHTML={{ __html: wrappedHtml }} />;
+  };
+
   return (
     <main className="contact-container" lang={language}>
-      <h1 lang={language}>{t.contact.title}</h1>
-      <p lang={language}>{t.contact.description}</p>
+      <div className="molecule-background"></div>
+      <div className="hexagon-pattern"></div>
       
-      <div className="contact-form" lang={language}>
-        <div className="form-group">
-          <label htmlFor="name" lang={language}>{t.contact.form.name}</label>
-          <input type="text" id="name" name="name" />
-        </div>
+      <div className="contact-content">
+        <p className="main-text" lang={language}>
+          {t.contact.prototype.text}
+        </p>
         
-        <div className="form-group">
-          <label htmlFor="email" lang={language}>{t.contact.form.email}</label>
-          <input type="email" id="email" name="email" />
-        </div>
+        <p className="main-text" lang={language}>
+          {t.contact.expertise.text}
+        </p>
         
-        <div className="form-group">
-          <label htmlFor="message" lang={language}>{t.contact.form.message}</label>
-          <textarea id="message" name="message" rows={5}></textarea>
-        </div>
-        
-        <button type="submit" className="submit-button" lang={language}>{t.contact.form.send}</button>
+        <p className="main-text" lang={language}>
+          {t.contact.skills.text}
+        </p>
+      </div>
+
+      <div className="buttons-container">
+        <button className="contact-button" lang={language}>{t.contact.buttons.fund}</button>
+        <button className="contact-button" lang={language}>{t.contact.buttons.join}</button>
+        <button className="contact-button" lang={language}>{t.contact.buttons.collaborate}</button>
       </div>
     </main>
   );

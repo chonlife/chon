@@ -2,21 +2,19 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 3rem 5rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  font-family: 'Kaisei Decol', 'Alike Angular', serif;
+  padding: 3rem 8rem;
   position: relative;
+  font-family: 'Kaisei Decol', serif;
+  min-height: 100vh;
 }
 
-.personality-test-container:lang(zh),
-.personality-test-container *:lang(zh),
-.test-content:lang(zh),
-.test-content *:lang(zh) {
+.personality-test-container[lang="zh"],
+.personality-test-container *[lang="zh"] {
   font-family: 'Alike Angular', serif !important;
 }
 
-.personality-test-container .molecule-background {
+/* 背景元素 */
+.molecule-background {
   position: absolute;
   top: 50%;
   right: 0;
@@ -32,7 +30,7 @@
   transform: translateY(-50%);
 }
 
-.personality-test-container .hexagon-pattern {
+.hexagon-pattern {
   position: absolute;
   top: 20%;
   right: 0;
@@ -45,91 +43,318 @@
   z-index: 0;
 }
 
-.personality-test-container h1 {
-  font-size: 3rem;
-  margin-bottom: 2rem;
-  color: #F0BDC0;
+/* Intro页面样式 */
+.intro-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
   position: relative;
   z-index: 1;
-}
-
-.personality-test-container p {
-  position: relative;
-  z-index: 1;
-  font-size: 1.2rem;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-.test-content {
-  margin-top: 2rem;
   padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  position: relative;
-  z-index: 1;
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.03);
+  flex: 1;
 }
 
+.intro-question {
+  font-size: 3rem;
+  color: white;
+  text-align: center;
+  margin-bottom: 2rem;
+  font-weight: normal;
+  letter-spacing: 0.1em;
+}
+
+.test-options {
+  display: flex;
+  justify-content: center;
+  gap: 5rem;
+  margin-bottom: 4rem;
+  width: 100%;
+}
+
+.test-option-button {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 1rem 3rem;
+  font-size: 1.5rem;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+  white-space: nowrap;
+}
+
+.test-option-button:hover {
+  background-color: #F0BDC0;
+  color: black;
+  border-color: #F0BDC0;
+}
+
+.progress-container {
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 3rem;
+  opacity: 0;
+  animation: fadeIn 0.6s ease forwards;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.percentage-labels {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.agree-label {
+  text-align: left;
+  color: #F0BDC0;
+}
+
+.disagree-label {
+  text-align: right;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background-color: #F0BDC0;
+  transition: width 0.5s ease;
+}
+
+.begin-test-button {
+  opacity: 0;
+  animation: fadeIn 0.8s ease forwards;
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 1.2rem 3rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-weight: 500;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.begin-test-button:hover {
+  background-color: #F0BDC0;
+  color: white;
+  box-shadow: 0 4px 15px rgba(240, 189, 192, 0.3);
+  transform: translateY(-2px);
+}
+
+/* 身份选择页面样式 */
+.identity-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  padding: 2rem;
+  flex: 1;
+  margin-top: 2rem;
+}
+
+.identity-title {
+  font-size: 3rem;
+  color: white;
+  text-align: center;
+  margin-bottom: 3rem;
+  font-weight: normal;
+  letter-spacing: 0.1em;
+}
+
+/* 重置所有身份选项的基础样式 */
+.identity-option {
+  width: 100%;
+  padding: 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  background-color: white;
+  border: none;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}
+
+.identity-option p {
+  font-size: 1.4rem;
+  line-height: 1.6;
+  margin: 0;
+  color: black;
+  transition: all 0.3s ease;
+}
+
+/* Hover效果 */
+.identity-option:hover {
+  background-color: #F0BDC0;
+  box-shadow: 0 4px 15px rgba(240, 189, 192, 0.3);
+  transform: translateY(-2px);
+}
+
+.identity-option:hover p {
+  color: white;
+}
+
+/* 确保所有选项都使用相同的基础样式 */
+.identity-option.mother,
+.identity-option.corporate,
+.identity-option.both,
+.identity-option.other {
+  background-color: white;
+}
+
+.identity-option.mother:hover,
+.identity-option.corporate:hover,
+.identity-option.both:hover,
+.identity-option.other:hover {
+  background-color: #F0BDC0;
+}
+
+.identity-option.mother:hover p,
+.identity-option.corporate:hover p,
+.identity-option.both:hover p,
+.identity-option.other:hover p {
+  color: white;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 响应式设计 */
 @media (max-width: 1200px) {
   .personality-test-container {
-    padding: 3rem 4rem;
+    padding: 2.5rem 4rem;
+  }
+  
+  .identity-title, .intro-question {
+    font-size: 2.5rem;
+  }
+  
+  .identity-option p {
+    font-size: 1.3rem;
   }
 }
 
 @media (max-width: 900px) {
   .personality-test-container {
-    padding: 2.5rem 3rem;
+    padding: 2rem 3rem;
   }
   
-  .personality-test-container .molecule-background {
+  .identity-title, .intro-question {
+    font-size: 2.2rem;
+  }
+  
+  .identity-option p {
+    font-size: 1.2rem;
+  }
+  
+  .molecule-background {
     opacity: 0.1;
     width: 80%;
+  }
+  
+  .test-options {
+    gap: 2rem;
+    flex-direction: column;
+  }
+  
+  .test-option-button {
+    padding: 0.8rem 2rem;
+    font-size: 1.2rem;
   }
 }
 
 @media (max-width: 768px) {
   .personality-test-container {
-    padding: 2rem;
-  }
-  
-  .personality-test-container h1 {
-    font-size: 2.2rem;
-    text-align: center;
-    margin-bottom: 1.5rem;
-  }
-  
-  .personality-test-container p {
-    font-size: 1.1rem;
-    text-align: center;
-    margin-bottom: 1.2rem;
-  }
-  
-  .test-content {
-    margin-top: 1.5rem;
     padding: 1.5rem;
   }
   
-  .test-content p {
-    font-size: 1rem;
+  .identity-title, .intro-question {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .identity-option {
+    padding: 1.5rem;
+  }
+  
+  .identity-option p {
+    font-size: 1.1rem;
+  }
+  
+  .identity-selection, .intro-content {
+    gap: 1.5rem;
+    padding: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
   .personality-test-container {
-    padding: 1.5rem 1rem;
+    padding: 1rem;
   }
   
-  .personality-test-container h1 {
+  .identity-title, .intro-question {
     font-size: 1.8rem;
   }
   
-  .test-content {
+  .identity-option {
     padding: 1.2rem;
   }
   
-  .personality-test-container .molecule-background {
+  .identity-option p {
+    font-size: 1rem;
+  }
+  
+  .identity-selection, .intro-content {
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .molecule-background {
     width: 100%;
     opacity: 0.08;
+  }
+  
+  .test-option-button {
+    padding: 0.7rem 1.5rem;
+    font-size: 1.1rem;
+  }
+  
+  .begin-test-button {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
   }
 } 

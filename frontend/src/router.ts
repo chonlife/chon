@@ -1,15 +1,15 @@
-import React from 'react';
-import Home from './pages/Home/Home.tsx';
-import Intro from './pages/Intro/Intro.tsx';
-import PersonalityTest from './pages/PersonalityTest/PersonalityTest.tsx';
-import Contact from './pages/Contact/Contact.tsx';
-import Login from './pages/Login/Login.tsx';
+import { lazy } from 'react';
+import Home from './pages/Home/Home';
+import PersonalityTest from './pages/PersonalityTest/PersonalityTest';
+import Contact from './pages/Contact/Contact';
+import Login from './pages/Login/Login';
 
 export interface Route {
   path: string;
   component: React.ComponentType;
   name: string;
-  showInNav?: boolean;
+  showInNav: boolean;
+  children?: Route[];
 }
 
 const routes: Route[] = [
@@ -18,12 +18,6 @@ const routes: Route[] = [
     component: Home,
     name: 'HOME',
     showInNav: true,
-  },
-  {
-    path: '/intro',
-    component: Intro,
-    name: 'INTRO',
-    showInNav: false,
   },
   {
     path: '/personality-test',

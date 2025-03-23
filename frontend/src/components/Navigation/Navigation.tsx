@@ -23,6 +23,11 @@ const Navigation = () => {
     }
   };
 
+  const isActive = (path: string) => {
+    // 检查当前路径是否是该路由或其子路由
+    return currentPath === path || currentPath.startsWith(`${path}/`);
+  };
+
   const navRoutes = routes.filter(route => route.showInNav !== false);
 
   return (
@@ -31,7 +36,7 @@ const Navigation = () => {
         <Link
           key={route.path}
           to={route.path}
-          className={`nav-link ${currentPath === route.path ? 'active' : ''}`}
+          className={`nav-link ${isActive(route.path) ? 'active' : ''}`}
         >
           {getTranslatedName(route.name)}
         </Link>
