@@ -1,9 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext.tsx';
 import './Home.css';
 
 const Home = () => {
   const { t, language } = useLanguage();
+  const navigate = useNavigate();
 
   const renderHtml = (html: string) => {
     return <span dangerouslySetInnerHTML={{ __html: html }} />;
@@ -17,6 +19,10 @@ const Home = () => {
   React.useEffect(() => {
     debugLanguage();
   }, [language, t]);
+
+  const handleCtaClick = () => {
+    navigate('/intro');
+  };
 
   return (
     <main className="main-content">
@@ -53,7 +59,7 @@ const Home = () => {
       <div className="cta-container">
         <button 
           className="cta-button" 
-          onClick={debugLanguage}
+          onClick={handleCtaClick}
         >
           {t.home.cta}
         </button>

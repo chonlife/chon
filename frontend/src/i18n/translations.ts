@@ -27,6 +27,15 @@ interface Translation {
     };
     cta: string;
   };
+  intro: {
+    question: string;
+    yes: string;
+    no: string;
+    agree: string;
+    disagree: string;
+    progressDescription: string;
+    beginTest: string;
+  };
   personalityTest: {
     title: string;
     description: string;
@@ -41,6 +50,10 @@ interface Translation {
       message: string;
       send: string;
     };
+  };
+  login: {
+    title: string;
+    comingSoon: string;
   };
 }
 
@@ -74,6 +87,15 @@ const translations: TranslationsType = {
       },
       cta: 'I\'M A CARBON-BASED LIFE →',
     },
+    intro: {
+      question: '<span class="highlight">Mothers</span> are natural leaders.',
+      yes: 'YES',
+      no: 'NO',
+      agree: 'Agree',
+      disagree: 'Disagree',
+      progressDescription: 'This represents the percentage of people who agree versus disagree with this statement.',
+      beginTest: 'BEGIN MY CHON PERSONALITY TEST →',
+    },
     personalityTest: {
       title: 'Personality Test',
       description: 'Coming soon: Discover how you can contribute to a more inclusive corporate environment for mothers.',
@@ -88,6 +110,10 @@ const translations: TranslationsType = {
         message: 'Message',
         send: 'Send Message',
       },
+    },
+    login: {
+      title: 'Login',
+      comingSoon: 'Login page coming soon...',
     },
   },
   zh: {
@@ -117,6 +143,15 @@ const translations: TranslationsType = {
       },
       cta: '我是碳基生命 →',
     },
+    intro: {
+      question: '<span class="highlight">母亲</span>是天生的领导者。',
+      yes: '是',
+      no: '否',
+      agree: '同意',
+      disagree: '不同意',
+      progressDescription: '这表示同意与不同意该说法的人群比例。',
+      beginTest: '开始我的CHON性格测试 →',
+    },
     personalityTest: {
       title: '性格测试',
       description: '即将推出：探索如何为母亲创造更包容的企业环境。',
@@ -131,6 +166,10 @@ const translations: TranslationsType = {
         message: '留言',
         send: '发送消息',
       },
+    },
+    login: {
+      title: '登录',
+      comingSoon: '登录页面即将上线...',
     },
   },
 };

@@ -23,9 +23,11 @@ const Navigation = () => {
     }
   };
 
+  const navRoutes = routes.filter(route => route.showInNav !== false);
+
   return (
     <nav className="nav-menu">
-      {routes.map((route) => (
+      {navRoutes.map((route) => (
         <Link
           key={route.path}
           to={route.path}

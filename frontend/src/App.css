@@ -5,6 +5,7 @@
   margin: 0;
   padding: 0;
   text-align: left;
+  font-size: 16px;
 }
 
 .app-container {
@@ -136,7 +137,23 @@
 }
 
 /* Responsive adjustments */
+@media (max-width: 1200px) {
+  #root {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 900px) {
+  #root {
+    font-size: 14px;
+  }
+}
+
 @media (max-width: 768px) {
+  #root {
+    font-size: 13px;
+  }
+  
   .main-content {
     padding: 2rem;
   }
@@ -155,5 +172,68 @@
   
   .nav-link {
     margin: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  #root {
+    font-size: 12px;
+  }
+  
+  .app-container {
+    overflow-x: hidden;
+  }
+}
+
+/* Fix for mobile devices touch handling */
+@media (hover: none) {
+  .app-container {
+    min-height: -webkit-fill-available;
+  }
+}
+
+/* Language Selector */
+.language-selector {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 5px 10px;
+  border-radius: 20px;
+  z-index: 100;
+  display: flex;
+  gap: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.language-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 2px 5px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.language-btn.active {
+  background: #F0BDC0;
+  color: black;
+}
+
+.language-btn:hover:not(.active) {
+  color: white;
+}
+
+@media (max-width: 480px) {
+  .language-selector {
+    bottom: 10px;
+    left: 10px;
+    padding: 3px 8px;
+  }
+  
+  .language-btn {
+    font-size: 0.7rem;
   }
 }
