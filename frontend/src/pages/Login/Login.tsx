@@ -2,13 +2,13 @@ import { useLanguage } from '../../contexts/LanguageContext.tsx';
 import './Login.css';
 
 const Login = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
-    <div className="login-container">
-      <h1>{t.login.title}</h1>
-      <div className="login-content">
-        <p>{t.login.comingSoon}</p>
+    <div className="login-container" lang={language}>
+      <h1 lang={language}>{t.login.title}</h1>
+      <div className="login-content" lang={language}>
+        <p lang={language}>{t.login.comingSoon}</p>
       </div>
     </div>
   );

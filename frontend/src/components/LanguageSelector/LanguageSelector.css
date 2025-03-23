@@ -1,14 +1,31 @@
 .language-selector {
-  position: absolute;
-  bottom: 1rem;
-  left: 1rem;
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
   font-size: 0.8rem;
   color: rgba(255, 255, 255, 0.6);
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  z-index: 10;
+  z-index: 100;
   pointer-events: auto;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 5px 10px;
+  border-radius: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  font-family: 'Kaisei Decol', 'Alike Angular', serif;
+}
+
+/* 语言切换器中文文本的特定样式 */
+.language-selector:lang(zh),
+.language-selector *:lang(zh),
+.lang-button:lang(zh) {
+  font-family: 'Alike Angular', serif !important;
+}
+
+/* 专门为中文按钮设置字体 */
+.lang-button[lang="zh"] {
+  font-family: 'Alike Angular', serif !important;
 }
 
 .lang-button {

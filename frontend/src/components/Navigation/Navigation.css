@@ -3,9 +3,16 @@
   justify-content: center;
   padding: 1.5rem 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  font-family: 'Kaisei Decol', serif;
+  font-family: 'Kaisei Decol', 'Alike Angular', serif;
   flex-wrap: wrap;
   gap: 0.5rem;
+}
+
+/* 导航栏中文文本的特定样式 */
+.nav-menu:lang(zh),
+.nav-menu *:lang(zh),
+.nav-link:lang(zh) {
+  font-family: 'Alike Angular', serif !important;
 }
 
 .nav-link {

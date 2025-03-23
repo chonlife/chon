@@ -28,6 +28,7 @@ const LanguageSelector = () => {
         className={`lang-button ${language === 'en' ? 'active' : ''}`}
         onClick={handleEnglishClick}
         type="button"
+        lang="en"
       >
         English
       </button>
@@ -36,6 +37,7 @@ const LanguageSelector = () => {
         className={`lang-button ${language === 'zh' ? 'active' : ''}`}
         onClick={handleChineseClick}
         type="button"
+        lang="zh"
       >
         中文
       </button>

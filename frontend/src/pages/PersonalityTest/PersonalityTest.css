@@ -5,8 +5,15 @@
   padding: 3rem 5rem;
   max-width: 1200px;
   margin: 0 auto;
-  font-family: 'Kaisei Decol', serif;
+  font-family: 'Kaisei Decol', 'Alike Angular', serif;
   position: relative;
+}
+
+.personality-test-container:lang(zh),
+.personality-test-container *:lang(zh),
+.test-content:lang(zh),
+.test-content *:lang(zh) {
+  font-family: 'Alike Angular', serif !important;
 }
 
 .personality-test-container .molecule-background {

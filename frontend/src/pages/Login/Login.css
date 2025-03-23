@@ -5,8 +5,15 @@
   padding: 3rem 5rem;
   max-width: 800px;
   margin: 0 auto;
-  font-family: 'Kaisei Decol', serif;
+  font-family: 'Kaisei Decol', 'Alike Angular', serif;
   position: relative;
+}
+
+.login-container:lang(zh),
+.login-container *:lang(zh),
+.login-content:lang(zh),
+.login-content *:lang(zh) {
+  font-family: 'Alike Angular', serif !important;
 }
 
 .login-container .molecule-background {

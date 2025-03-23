@@ -8,7 +8,8 @@ const Home = () => {
   const navigate = useNavigate();
 
   const renderHtml = (html: string) => {
-    return <span dangerouslySetInnerHTML={{ __html: html }} />;
+    const wrappedHtml = `<span lang="${language}">${html}</span>`;
+    return <span dangerouslySetInnerHTML={{ __html: wrappedHtml }} />;
   };
 
   const debugLanguage = () => {
@@ -25,32 +26,32 @@ const Home = () => {
   };
 
   return (
-    <main className="main-content">
+    <main className="main-content" lang={language}>
       {/* Background Elements */}
       <div className="molecule-background"></div>
       <div className="hexagon-pattern"></div>
       
       {/* Logo */}
       <div className="logo-container">
-        <h1 className="logo">
+        <h1 className="logo" lang="en">
           CH<span className="highlight-letter">O</span>N
         </h1>
       </div>
 
       {/* Content Sections */}
-      <section className="content-section">
-        <p className="mission-statement">
+      <section className="content-section" lang={language}>
+        <p className="mission-statement" lang={language}>
           {renderHtml(t.home.motherhood.paragraph)}
         </p>
       </section>
 
-      <section className="content-section">
-        <p className="dont-empower-text">{t.home.empowerment.dontEmpower}</p>
-        <p>{renderHtml(t.home.empowerment.paragraph)}</p>
+      <section className="content-section" lang={language}>
+        <p className="dont-empower-text" lang={language}>{t.home.empowerment.dontEmpower}</p>
+        <p lang={language}>{renderHtml(t.home.empowerment.paragraph)}</p>
       </section>
 
-      <section className="content-section">
-        <p>
+      <section className="content-section" lang={language}>
+        <p lang={language}>
           {renderHtml(t.home.about.weAre)}, {renderHtml(t.home.about.paragraph)}
         </p>
       </section>
@@ -60,6 +61,7 @@ const Home = () => {
         <button 
           className="cta-button" 
           onClick={handleCtaClick}
+          lang={language}
         >
           {t.home.cta}
         </button>

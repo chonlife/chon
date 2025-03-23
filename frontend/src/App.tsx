@@ -7,11 +7,21 @@ import PersonalityTest from './pages/PersonalityTest/PersonalityTest.tsx'
 import Contact from './pages/Contact/Contact.tsx'
 import Login from './pages/Login/Login.tsx'
 import NotFound from './pages/NotFound/NotFound.tsx'
+import { useLanguage } from './contexts/LanguageContext.tsx'
+import { useEffect } from 'react'
 import './App.css'
 
 function App() {
+  const { language } = useLanguage();
+
+  // 当语言变化时，更新HTML根元素的lang属性
+  useEffect(() => {
+    document.documentElement.lang = language;
+    console.log('Document language set to:', language);
+  }, [language]);
+
   return (
-    <div className="app-container">
+    <div className="app-container" lang={language}>
       <Navigation />
       <Routes>
         <Route path="/" element={<Home />} />

@@ -5,8 +5,16 @@
   padding: 3rem 5rem;
   max-width: 800px;
   margin: 0 auto;
-  font-family: 'Kaisei Decol', serif;
+  font-family: 'Kaisei Decol', 'Alike Angular', serif;
   position: relative;
+}
+
+/* 中文文本的特定样式 */
+.contact-container:lang(zh),
+.contact-container *:lang(zh),
+.contact-form:lang(zh),
+.contact-form *:lang(zh) {
+  font-family: 'Alike Angular', serif !important;
 }
 
 .contact-container .molecule-background {
@@ -102,6 +110,7 @@
   align-self: flex-start;
   margin-top: 1rem;
   border-radius: 4px;
+  white-space: nowrap;
 }
 
 .submit-button:hover {
@@ -181,6 +190,7 @@
   .submit-button {
     font-size: 0.8rem;
     padding: 0.7rem 1.5rem;
+    letter-spacing: 0.05em;
   }
   
   .contact-container .molecule-background {
