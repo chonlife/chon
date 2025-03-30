@@ -53,26 +53,28 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 2rem;
+  margin-bottom: 2rem;
 }
 
 .main-text {
-  font-size: 1.4rem;
+  font-size: 1.1rem;
   line-height: 1.5;
   margin: 0 !important;
-  padding: 1.2rem 2rem;
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  padding: 0;
+  color: white;
   position: relative;
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
 }
 
 /* 按钮容器 */
 .buttons-container {
   display: flex;
-  justify-content: center;
-  gap: 3rem;
-  margin-top: 1.2rem;
+  flex-direction: column;
+  gap: 2.5rem;
+  margin-top: 2.5rem;
   position: relative;
   z-index: 1;
   width: 100%;
@@ -83,143 +85,129 @@
 
 /* 按钮样式 */
 .contact-button {
-  background-color: white;
-  color: black;
+  background-color: transparent;
+  color: white;
   border: none;
-  padding: 1.2rem 3rem;
-  font-size: 1.1rem;
-  letter-spacing: 0.15em;
+  padding: 1.2rem 0;
+  font-size: 1.2rem;
+  letter-spacing: 0.2em;
   cursor: pointer;
   transition: all 0.3s ease;
   text-transform: uppercase;
-  font-weight: 500;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 2px;
-  text-align: center;
+  font-weight: 300;
+  text-align: left;
   white-space: nowrap;
-  min-width: 200px;
+  width: 100%;
+  position: relative;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contact-button::after {
+  content: '→';
+  font-size: 1rem;
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: all 0.3s ease;
+  margin-left: 1rem;
 }
 
 .contact-button:hover {
-  background-color: #F0BDC0;
-  color: white;
-  box-shadow: 0 4px 15px rgba(240, 189, 192, 0.3);
-  transform: translateY(-2px);
+  background-color: transparent;
+  color: #F0BDC0;
+  border-bottom-color: #F0BDC0;
+  transform: none;
+  box-shadow: none;
+}
+
+.contact-button:hover::after {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 /* 响应式调整 */
 @media (max-width: 1200px) {
   .contact-container {
-    padding: 2.5rem 4rem;
+    padding: 2.5rem 6rem;
   }
   
   .main-text {
-    font-size: 1.3rem;
-    line-height: 1.5;
-    padding: 1.1rem 1.8rem;
+    font-size: 1rem;
   }
 
-  .buttons-container {
-    gap: 2rem;
-    margin-top: 1.8rem;
-  }
-
-  .contact-content {
-    gap: 0.8rem;
+  .contact-button {
+    font-size: 1.1rem;
   }
 }
 
 @media (max-width: 900px) {
   .contact-container {
-    padding: 2rem 3rem;
+    padding: 2rem 4rem;
   }
   
   .main-text {
-    font-size: 1.25rem;
-    line-height: 1.5;
-    padding: 1rem 1.6rem;
-  }
-  
-  .buttons-container {
-    gap: 1.5rem;
-    margin-top: 1.6rem;
+    font-size: 0.95rem;
   }
   
   .contact-button {
-    padding: 1rem 2rem;
     font-size: 1rem;
-    min-width: 160px;
+    padding: 1rem 0;
   }
   
-  .contact-container .molecule-background {
-    opacity: 0.1;
-    width: 80%;
-  }
-
-  .contact-content {
-    gap: 0.7rem;
+  .buttons-container {
+    gap: 2rem;
+    margin-top: 2rem;
   }
 }
 
 @media (max-width: 768px) {
   .contact-container {
-    padding: 2rem 1.5rem;
+    padding: 2rem 3rem;
   }
   
   .main-text {
-    font-size: 1.2rem;
-    line-height: 1.4;
-    text-align: left;
-    padding: 0.9rem 1.5rem;
+    font-size: 0.9rem;
   }
   
   .buttons-container {
-    flex-direction: column;
-    align-items: center;
-    gap: 1.2rem;
-    margin-top: 1.5rem;
+    gap: 1.8rem;
+    margin-top: 1.8rem;
   }
   
   .contact-button {
-    width: 100%;
-    max-width: 280px;
-    min-width: unset;
-  }
-
-  .contact-content {
-    gap: 0.7rem;
+    font-size: 0.95rem;
+    padding: 0.9rem 0;
   }
 }
 
 @media (max-width: 480px) {
   .contact-container {
-    padding: 1.5rem 1.2rem;
+    padding: 1.5rem 2rem;
   }
   
   .main-text {
-    font-size: 1.1rem;
-    line-height: 1.4;
-    margin-bottom: 0;
-    padding: 0.8rem 1.4rem;
+    font-size: 0.85rem;
   }
   
   .buttons-container {
-    margin-top: 1.2rem;
-    gap: 1rem;
+    gap: 1.5rem;
+    margin-top: 1.5rem;
   }
   
   .contact-button {
-    padding: 1rem 1.5rem;
     font-size: 0.9rem;
-    max-width: 250px;
+    padding: 0.8rem 0;
+    letter-spacing: 0.15em;
+  }
+  
+  .contact-button::after {
+    font-size: 0.9rem;
   }
   
   .contact-container .molecule-background {
     width: 100%;
     opacity: 0.08;
-  }
-
-  .contact-content {
-    gap: 0.6rem;
   }
 } 

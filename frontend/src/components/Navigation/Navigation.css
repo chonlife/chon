@@ -8,6 +8,25 @@
   gap: 0.5rem;
 }
 
+/* White theme nav styles */
+.white-theme .nav-menu {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.white-theme .nav-link {
+  color: black;
+}
+
+.white-theme .nav-link:hover,
+.white-theme .nav-link.active {
+  color: #555;
+}
+
+.white-theme .nav-link:hover:after,
+.white-theme .nav-link.active:after {
+  background-color: #555;
+}
+
 /* 导航栏中文文本的特定样式 */
 .nav-menu:lang(zh),
 .nav-menu *:lang(zh),

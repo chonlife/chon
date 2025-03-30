@@ -23,6 +23,21 @@
   overflow: hidden;
 }
 
+/* White theme styles */
+.white-theme {
+  background-color: white !important;
+  color: black !important;
+}
+
+.white-theme .main-content {
+  background-color: white !important;
+}
+
+.white-theme .hexagon-pattern {
+  opacity: 0;
+  display: none;
+}
+
 /* 中文字体设置 - 高优先级 */
 *:lang(zh):not(.logo):not(.logo *) {
   font-family: 'Alike Angular', serif !important;

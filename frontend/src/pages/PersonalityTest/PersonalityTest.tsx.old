@@ -47,10 +47,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   const [showSeventhPage, setShowSeventhPage] = useState(false);
   const [showEighthPage, setShowEighthPage] = useState(false);
   const [showNinthPage, setShowNinthPage] = useState(false);
-  const [showTenthPage, setShowTenthPage] = useState(false);
-  const [showEleventhPage, setShowEleventhPage] = useState(false);
-  const [showTwelfthPage, setShowTwelfthPage] = useState(false);
-  const [showThirteenthPage, setShowThirteenthPage] = useState(false);
   const [showSaveIndicator, setShowSaveIndicator] = useState(false);
   const [agreePercentage, setAgreePercentage] = useState<number>(65);
   
@@ -445,7 +441,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         maxZh: '非常支持 – 能有效保障专业性和安全性'
       }
     },
-    // About Motherhood section questions (36-40)
     {
       id: 36,
       type: 'scale-question',
@@ -506,7 +501,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         maxZh: '非常满足 – 极大丰富了我的生活'
       }
     },
-    // Additional motherhood questions for tenth page (41-46)
+    // Adding new questions about motherhood influence
     {
       id: 41,
       type: 'scale-question',
@@ -537,10 +532,10 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       textEn: 'How often do you feel pressure to meet external expectations of motherhood (e.g., societal, cultural, or family expectations)?',
       textZh: '您多久感受到来自外界对母亲角色（如社会、文化或家庭）的期待压力？',
       scaleLabels: {
-        minEn: 'Never – do not feel this pressure at all',
-        minZh: '从不 – 完全不受这些压力影响',
-        maxEn: 'Always – constantly feel this pressure',
-        maxZh: '总是 – 时刻感到压力'
+        minEn: 'Always – constantly feel this pressure',
+        minZh: '总是 – 时刻感到压力',
+        maxEn: 'Never – do not feel this pressure at all',
+        maxZh: '从不 – 完全不受这些压力影响'
       }
     },
     {
@@ -579,11 +574,10 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         maxZh: '非常深远'
       }
     },
-    // ... We can add the remaining questions here to reach a total of 46
   ];
   
   const progress = 65;
-  const totalQuestions = 46; // Total number of questions
+  const totalQuestions = 52; // Updated total number of questions
   
   // 从本地存储加载答案数据
   useEffect(() => {
@@ -601,10 +595,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     const savedShowSeventhPage = localStorage.getItem('chon_personality_show_seventh_page');
     const savedShowEighthPage = localStorage.getItem('chon_personality_show_eighth_page');
     const savedShowNinthPage = localStorage.getItem('chon_personality_show_ninth_page');
-    const savedShowTenthPage = localStorage.getItem('chon_personality_show_tenth_page');
-    const savedShowEleventhPage = localStorage.getItem('chon_personality_show_eleventh_page');
-    const savedShowTwelfthPage = localStorage.getItem('chon_personality_show_twelfth_page');
-    const savedShowThirteenthPage = localStorage.getItem('chon_personality_show_thirteenth_page');
     
     if (savedAnswers) {
       setAnswers(JSON.parse(savedAnswers));
@@ -661,22 +651,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     if (savedShowNinthPage) {
       setShowNinthPage(savedShowNinthPage === 'true');
     }
-    
-    if (savedShowTenthPage) {
-      setShowTenthPage(savedShowTenthPage === 'true');
-    }
-    
-    if (savedShowEleventhPage) {
-      setShowEleventhPage(savedShowEleventhPage === 'true');
-    }
-    
-    if (savedShowTwelfthPage) {
-      setShowTwelfthPage(savedShowTwelfthPage === 'true');
-    }
-    
-    if (savedShowThirteenthPage) {
-      setShowThirteenthPage(savedShowThirteenthPage === 'true');
-    }
   }, []);
   
   // 验证步骤值是否有效
@@ -725,40 +699,13 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     localStorage.setItem('chon_personality_show_seventh_page', showSeventhPage.toString());
     localStorage.setItem('chon_personality_show_eighth_page', showEighthPage.toString());
     localStorage.setItem('chon_personality_show_ninth_page', showNinthPage.toString());
-    localStorage.setItem('chon_personality_show_tenth_page', showTenthPage.toString());
-    localStorage.setItem('chon_personality_show_eleventh_page', showEleventhPage.toString());
-    localStorage.setItem('chon_personality_show_twelfth_page', showTwelfthPage.toString());
-    localStorage.setItem('chon_personality_show_thirteenth_page', showThirteenthPage.toString());
-  }, [currentQuestionIndex, showFirstPage, showSecondPage, showThirdPage, showFourthPage, showFifthPage, showSixthPage, showSeventhPage, showEighthPage, showNinthPage, showTenthPage, showEleventhPage, showTwelfthPage, showThirteenthPage]);
+  }, [currentQuestionIndex, showFirstPage, showSecondPage, showThirdPage, showFourthPage, showFifthPage, showSixthPage, showSeventhPage, showEighthPage, showNinthPage]);
 
   // Update white theme state when step changes
   useEffect(() => {
     if (onWhiteThemeChange) {
       const isWhiteTheme = step === 'mother-questionnaire' || step === 'mother-privacy';
       onWhiteThemeChange(isWhiteTheme);
-      
-      // 对于荷尔蒙问题页面，使用不同的背景图片
-      if (isWhiteTheme && (showEleventhPage || showTwelfthPage || showThirteenthPage)) {
-        const styleEl = document.createElement('style');
-        styleEl.id = 'hormone-style';
-        styleEl.textContent = `
-          .white-theme::after {
-            background-image: url('/images/molecule_white_after.jpg') !important;
-          }
-        `;
-        // 确保之前的样式被移除
-        const existingStyle = document.getElementById('hormone-style');
-        if (existingStyle) {
-          existingStyle.remove();
-        }
-        document.head.appendChild(styleEl);
-      } else {
-        // 恢复正常透明度，移除自定义样式
-        const existingStyle = document.getElementById('hormone-style');
-        if (existingStyle) {
-          existingStyle.remove();
-        }
-      }
     }
     
     // 根据步骤决定是否隐藏UI元素
@@ -766,8 +713,8 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       const shouldHideUI = step === 'mother-questionnaire' || step === 'mother-privacy';
       onHideUIChange(shouldHideUI);
     }
-  }, [step, showEleventhPage, showTwelfthPage, showThirteenthPage, onWhiteThemeChange, onHideUIChange]);
-
+  }, [step, onWhiteThemeChange, onHideUIChange]);
+  
   // 模拟获取同意/不同意的比例数据
   useEffect(() => {
     // 这里可以替换为实际的API调用，获取真实数据
@@ -781,22 +728,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       setUserChoice(null);
     }
   }, [step]);
-  
-  // 重置问题36的答案，确保没有预设值
-  useEffect(() => {
-    if (showNinthPage) {
-      // 检查问题36是否有预设值，如果有则清除
-      setAnswers(prev => {
-        if (prev[36]) {
-          console.log("发现问题36有预设值，正在清除:", prev[36]);
-          const newAnswers = {...prev};
-          delete newAnswers[36];
-          return newAnswers;
-        }
-        return prev;
-      });
-    }
-  }, [showNinthPage]);
   
   const handleOptionClick = (choice: string) => {
     setUserChoice(choice);
@@ -1193,7 +1124,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
             </div>
           </div>
         ) : showFifthPage ? (
-          // Fifth page with questions about networking with mothers (18-21)
+          // Fifth page with four questions about networking with mothers (18-21)
           <div className="first-page-questions">
             {motherQuestions.slice(17, 21).map((question) => (
               <div key={question.id} className="question-container">
@@ -1270,7 +1201,286 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
             </div>
           </div>
         ) : showSixthPage ? (
-          // Sixth page - About Us, CHON questions (22-26)
+          // Display forum and features questions on one page
+          <div className="first-page-questions">
+            
+            {motherQuestions.slice(26, 32).map((question) => (
+              <div key={question.id} className="question-container">
+                <h2 className="question-text">
+                  {language === 'en' ? question.textEn : question.textZh}
+                </h2>
+                
+                {question.type === 'scale-question' && (
+                  <div className="scale-question-container">
+                    <div className="scale-labels-wrapper">
+                      <div className="scale-extreme-labels">
+                        <span className="scale-extreme-label">
+                          {language === 'en' 
+                            ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                            : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                        </span>
+                        <span className="scale-extreme-label">
+                          {language === 'en' 
+                            ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                            : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                        </span>
+                      </div>
+                      <div className="scale-options">
+                        {['1', '2', '3', '4', '5'].map((value) => (
+                          <div 
+                            key={value}
+                            className={`scale-option ${answers[question.id] === value ? 'selected' : ''}`}
+                            onClick={() => handleScaleAnswer(question.id, value)}
+                          >
+                            <div className="scale-circle"></div>
+                            <span className="scale-value">{value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+            
+            <div className="question-navigation">
+              <button 
+                className="nav-button prev-button"
+                onClick={() => {
+                  setShowSixthPage(false);
+                  setShowFifthPage(true);
+                }}
+              >
+                {language === 'en' ? 'Previous Page' : '上一页'}
+              </button>
+              
+              <button 
+                className="nav-button next-button"
+                onClick={() => {
+                  setShowSixthPage(false);
+                  setShowSeventhPage(true);
+                }}
+                disabled={!answers[27] || !answers[28] || !answers[29] || !answers[30] || !answers[31]}
+              >
+                {language === 'en' ? 'Continue' : '继续'}
+              </button>
+            </div>
+          </div>
+        ) : showSeventhPage ? (
+          // Display security and trust questions on one page
+          <div className="first-page-questions">
+            <h1 className="section-title">
+              {language === 'en' 
+                ? 'Security and Trust' 
+                : '安全和信任'}
+            </h1>
+            
+            {motherQuestions.slice(32, 36).map((question) => (
+              <div key={question.id} className="question-container">
+                <h2 className="question-text">
+                  {language === 'en' ? question.textEn : question.textZh}
+                </h2>
+                
+                {question.type === 'scale-question' && (
+                  <div className="scale-question-container">
+                    <div className="scale-labels-wrapper">
+                      <div className="scale-extreme-labels">
+                        <span className="scale-extreme-label">
+                          {language === 'en' 
+                            ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                            : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                        </span>
+                        <span className="scale-extreme-label">
+                          {language === 'en' 
+                            ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                            : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                        </span>
+                      </div>
+                      <div className="scale-options">
+                        {['1', '2', '3', '4', '5'].map((value) => (
+                          <div 
+                            key={value}
+                            className={`scale-option ${answers[question.id] === value ? 'selected' : ''}`}
+                            onClick={() => handleScaleAnswer(question.id, value)}
+                          >
+                            <div className="scale-circle"></div>
+                            <span className="scale-value">{value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+            
+            <div className="question-navigation">
+              <button 
+                className="nav-button prev-button"
+                onClick={() => {
+                  setShowSeventhPage(false);
+                  setShowSixthPage(true);
+                }}
+              >
+                {language === 'en' ? 'Previous Page' : '上一页'}
+              </button>
+              
+              <button 
+                className="nav-button next-button"
+                onClick={() => {
+                  setShowSeventhPage(false);
+                  setShowEighthPage(true);
+                }}
+                disabled={!answers[32] || !answers[33] || !answers[34] || !answers[35]}
+              >
+                {language === 'en' ? 'Continue' : '继续'}
+              </button>
+            </div>
+          </div>
+        ) : showEighthPage ? (
+          // Display motherhood experience questions on one page
+          <div className="first-page-questions">
+            <h1 className="section-title">
+              {language === 'en' 
+                ? 'III. About Motherhood' 
+                : 'III. 关于母亲身份'}
+            </h1>
+            
+            {motherQuestions.slice(36, 41).map((question) => (
+              <div key={question.id} className="question-container">
+                <h2 className="question-text">
+                  {language === 'en' ? question.textEn : question.textZh}
+                </h2>
+                
+                {question.type === 'scale-question' && (
+                  <div className="scale-question-container">
+                    <div className="scale-labels-wrapper">
+                      <div className="scale-extreme-labels">
+                        <span className="scale-extreme-label">
+                          {language === 'en' 
+                            ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                            : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                        </span>
+                        <span className="scale-extreme-label">
+                          {language === 'en' 
+                            ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                            : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                        </span>
+                      </div>
+                      <div className="scale-options">
+                        {['1', '2', '3', '4', '5'].map((value) => (
+                          <div 
+                            key={value}
+                            className={`scale-option ${answers[question.id] === value ? 'selected' : ''}`}
+                            onClick={() => handleScaleAnswer(question.id, value)}
+                          >
+                            <div className="scale-circle"></div>
+                            <span className="scale-value">{value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+            
+            <div className="question-navigation">
+              <button 
+                className="nav-button prev-button"
+                onClick={() => {
+                  setShowEighthPage(false);
+                  setShowSeventhPage(true);
+                }}
+              >
+                {language === 'en' ? 'Previous Page' : '上一页'}
+              </button>
+              
+              <button 
+                className="nav-button next-button"
+                onClick={() => {
+                  setShowEighthPage(false);
+                  setShowNinthPage(true);
+                }}
+                disabled={!answers[36] || !answers[37] || !answers[38] || !answers[39] || !answers[40]}
+              >
+                {language === 'en' ? 'Continue' : '继续'}
+              </button>
+            </div>
+          </div>
+        ) : showNinthPage ? (
+          // Display motherhood influence questions on one page
+          <div className="first-page-questions">
+            <h1 className="section-title">
+              {language === 'en' 
+                ? 'IV. Motherhood Influence' 
+                : 'IV. 母亲身份的影响'}
+            </h1>
+            
+            {motherQuestions.slice(41, 47).map((question) => (
+              <div key={question.id} className="question-container">
+                <h2 className="question-text">
+                  {language === 'en' ? question.textEn : question.textZh}
+                </h2>
+                
+                {question.type === 'scale-question' && (
+                  <div className="scale-question-container">
+                    <div className="scale-labels-wrapper">
+                      <div className="scale-extreme-labels">
+                        <span className="scale-extreme-label">
+                          {language === 'en' 
+                            ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                            : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                        </span>
+                        <span className="scale-extreme-label">
+                          {language === 'en' 
+                            ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                            : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                        </span>
+                      </div>
+                      <div className="scale-options">
+                        {['1', '2', '3', '4', '5'].map((value) => (
+                          <div 
+                            key={value}
+                            className={`scale-option ${answers[question.id] === value ? 'selected' : ''}`}
+                            onClick={() => handleScaleAnswer(question.id, value)}
+                          >
+                            <div className="scale-circle"></div>
+                            <span className="scale-value">{value}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+            
+            <div className="question-navigation">
+              <button 
+                className="nav-button prev-button"
+                onClick={() => {
+                  setShowNinthPage(false);
+                  setShowEighthPage(true);
+                }}
+              >
+                {language === 'en' ? 'Previous Page' : '上一页'}
+              </button>
+              
+              <button 
+                className="nav-button next-button"
+                onClick={() => {
+                  // Clear ninth page flag and go to the CHON questions page
+                  setShowNinthPage(false);
+                }}
+                disabled={!answers[41] || !answers[42] || !answers[43] || !answers[44] || !answers[45] || !answers[46]}
+              >
+                {language === 'en' ? 'Continue' : '继续'}
+              </button>
+            </div>
+          </div>
+        ) : (
+          // Display all About Us CHON questions on one page
           <div className="first-page-questions">
             <h1 className="section-title">
               {language === 'en' 
@@ -1347,7 +1557,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               <button 
                 className="nav-button prev-button"
                 onClick={() => {
-                  setShowSixthPage(false);
                   setShowFifthPage(true);
                 }}
               >
@@ -1357,8 +1566,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               <button 
                 className="nav-button next-button"
                 onClick={() => {
-                  setShowSixthPage(false);
-                  setShowSeventhPage(true);
+                  setShowSixthPage(true);
                 }}
                 disabled={!answers[22] || !answers[23] || !answers[24] || !answers[25] || !answers[26]}
               >
@@ -1366,573 +1574,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               </button>
             </div>
           </div>
-        ) : showSeventhPage ? (
-          // Seventh page - Forum and cognitive training questions (27-31)
-          <div className="first-page-questions">
-            
-            {motherQuestions.slice(26, 31).map((question) => (
-              <div key={question.id} className="question-container">
-                <h2 className="question-text">
-                  {language === 'en' ? question.textEn : question.textZh}
-                </h2>
-                
-                {question.type === 'scale-question' && (
-                  <div className="scale-question-container">
-                    <div className="scale-labels-wrapper">
-                      <div className="scale-extreme-labels">
-                        <span className="scale-extreme-label">
-                          {language === 'en' 
-                            ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                            : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                        </span>
-                        <span className="scale-extreme-label">
-                          {language === 'en' 
-                            ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                            : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                        </span>
-                      </div>
-                      <div className="scale-options">
-                        {['1', '2', '3', '4', '5'].map((value) => (
-                          <div 
-                            key={value}
-                            className={`scale-option ${answers[question.id] === value ? 'selected' : ''}`}
-                            onClick={() => handleScaleAnswer(question.id, value)}
-                          >
-                            <div className="scale-circle"></div>
-                            <span className="scale-value">{value}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-            
-            <div className="question-navigation">
-              <button 
-                className="nav-button prev-button"
-                onClick={() => {
-                  setShowSeventhPage(false);
-                  setShowSixthPage(true);
-                }}
-              >
-                {language === 'en' ? 'Previous Page' : '上一页'}
-              </button>
-              
-              <button 
-                className="nav-button next-button"
-                onClick={() => {
-                  setShowSeventhPage(false);
-                  setShowEighthPage(true);
-                }}
-                disabled={!answers[27] || !answers[28] || !answers[29] || !answers[30] || !answers[31]}
-              >
-                {language === 'en' ? 'Continue' : '继续'}
-              </button>
-            </div>
-          </div>
-        ) : showEighthPage ? (
-          // Eighth page - Security and personalization questions (32-35)
-          <div className="first-page-questions">
-            {motherQuestions.slice(31, 36).map((question) => (
-              <div key={question.id} className="question-container">
-                <h2 className="question-text">
-                  {language === 'en' ? question.textEn : question.textZh}
-                </h2>
-                
-                {question.type === 'scale-question' && (
-                  <div className="scale-question-container">
-                    <div className="scale-labels-wrapper">
-                      <div className="scale-extreme-labels">
-                        <span className="scale-extreme-label">
-                          {language === 'en' 
-                            ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                            : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                        </span>
-                        <span className="scale-extreme-label">
-                          {language === 'en' 
-                            ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                            : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                        </span>
-                      </div>
-                      <div className="scale-options">
-                        {['1', '2', '3', '4', '5'].map((value) => (
-                          <div 
-                            key={value}
-                            className={`scale-option ${answers[question.id] === value ? 'selected' : ''}`}
-                            onClick={() => handleScaleAnswer(question.id, value)}
-                          >
-                            <div className="scale-circle"></div>
-                            <span className="scale-value">{value}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-            
-            <div className="question-navigation">
-              <button 
-                className="nav-button prev-button"
-                onClick={() => {
-                  setShowEighthPage(false);
-                  setShowSeventhPage(true);
-                }}
-              >
-                {language === 'en' ? 'Previous Page' : '上一页'}
-              </button>
-              
-              <button 
-                className="nav-button next-button"
-                onClick={() => {
-                  // 在显示第九页前清除问题36的答案
-                  setAnswers(prev => {
-                    const newAnswers = {...prev};
-                    delete newAnswers[36];
-                    return newAnswers;
-                  });
-                  
-                  setShowEighthPage(false);
-                  setShowNinthPage(true);
-                }}
-                disabled={!answers[32] || !answers[33] || !answers[34] || !answers[35]}
-              >
-                {language === 'en' ? 'Continue' : '继续'}
-              </button>
-            </div>
-          </div>
-        ) : showNinthPage ? (
-          (() => {
-            // 调试输出，查看问题36的值
-            console.log("Debug Question 36 value:", answers[36]);
-            console.log("Debug all Answers:", answers);
-            
-            return (
-              <div className="first-page-questions">
-                <h1 className="section-title">
-                  {language === 'en' 
-                    ? 'III. About Motherhood' 
-                    : 'III. 关于母亲身份'}
-                </h1>
-                
-                {motherQuestions.slice(35, 40).map((question) => (
-                  <div key={question.id} className="question-container">
-                    <h2 className="question-text">
-                      {language === 'en' ? question.textEn : question.textZh}
-                    </h2>
-                    
-                    {question.type === 'scale-question' && (
-                      <div className="scale-question-container">
-                        <div className="scale-labels-wrapper">
-                          <div className="scale-extreme-labels">
-                            <span className="scale-extreme-label">
-                              {language === 'en' 
-                                ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                                : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                            </span>
-                            <span className="scale-extreme-label">
-                              {language === 'en' 
-                                ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                                : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                            </span>
-                          </div>
-                          <div className="scale-options">
-                            {['1', '2', '3', '4', '5'].map((value) => (
-                              <div 
-                                key={value}
-                                className={`scale-option ${answers[question.id] === value ? 'selected' : ''}`}
-                                onClick={() => handleScaleAnswer(question.id, value)}
-                              >
-                                <div className="scale-circle"></div>
-                                <span className="scale-value">{value}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-                
-                <div className="question-navigation">
-                  <button 
-                    className="nav-button prev-button"
-                    onClick={() => {
-                      setShowNinthPage(false);
-                      setShowEighthPage(true);
-                    }}
-                  >
-                    {language === 'en' ? 'Previous Page' : '上一页'}
-                  </button>
-                  
-                  <button 
-                    className="nav-button next-button"
-                    onClick={() => {
-                      setShowNinthPage(false);
-                      setShowTenthPage(true);
-                    }}
-                    disabled={!answers[36] || !answers[37] || !answers[38] || !answers[39] || !answers[40]}
-                  >
-                    {language === 'en' ? 'Continue' : '继续'}
-                  </button>
-                </div>
-              </div>
-            );
-          })()
-        ) : showTenthPage ? (
-          // Tenth page - Additional motherhood questions (41-46)
-          <div className="first-page-questions">
-            {motherQuestions.slice(40, 46).map((question) => (
-              <div key={question.id} className="question-container">
-                <h2 className="question-text">
-                  {language === 'en' ? question.textEn : question.textZh}
-                </h2>
-                
-                {question.type === 'scale-question' && (
-                  <div className="scale-question-container">
-                    <div className="scale-labels-wrapper">
-                      <div className="scale-extreme-labels">
-                        <span className="scale-extreme-label">
-                          {language === 'en' 
-                            ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                            : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                        </span>
-                        <span className="scale-extreme-label">
-                          {language === 'en' 
-                            ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                            : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                        </span>
-                      </div>
-                      <div className="scale-options">
-                        {['1', '2', '3', '4', '5'].map((value) => (
-                          <div 
-                            key={value}
-                            className={`scale-option ${answers[question.id] === value ? 'selected' : ''}`}
-                            onClick={() => handleScaleAnswer(question.id, value)}
-                          >
-                            <div className="scale-circle"></div>
-                            <span className="scale-value">{value}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-            
-            <div className="question-navigation">
-              <button 
-                className="nav-button prev-button"
-                onClick={() => {
-                  // 当用户从第十页返回第九页时也清除问题36的答案
-                  setAnswers(prev => {
-                    const newAnswers = {...prev};
-                    delete newAnswers[36];
-                    return newAnswers;
-                  });
-                  
-                  setShowTenthPage(false);
-                  setShowNinthPage(true);
-                }}
-              >
-                {language === 'en' ? 'Previous Page' : '上一页'}
-              </button>
-              
-              <button 
-                className="nav-button next-button"
-                onClick={() => {
-                  setShowTenthPage(false);
-                  setShowEleventhPage(true);
-                }}
-                disabled={!answers[41] || !answers[42] || !answers[43] || !answers[44] || !answers[45] || !answers[46]}
-              >
-                {language === 'en' ? 'Continue' : '继续'}
-              </button>
-            </div>
-          </div>
-        ) : showEleventhPage ? (
-          // 荷尔蒙相关问题页面 - 第一页
-          <div className="first-page-questions hormone-questions" style={{ 
-            position: 'relative', 
-            zIndex: 5, 
-            width: '50%', 
-            maxWidth: '500px', 
-            margin: '0 auto 0 5%', // 左对齐而非居中
-            backgroundColor: 'rgba(255, 255, 255, 0.5)', // 降低背景不透明度
-            padding: '20px',
-            borderRadius: '8px'
-          }}>
-            <div className="question-container" style={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
-              <h2 className="question-text" style={{ color: '#333', fontWeight: 'bold', fontSize: '1.5rem' }}>
-                {language === 'en' 
-                  ? 'What hormone is this?' 
-                  : '请问这是身体中的什么激素？'}
-              </h2>
-              
-              <div className="answer-options">
-                <div 
-                  className={`answer-option ${answers[47] === 'cortisol' ? 'selected' : ''}`}
-                  onClick={() => handleMultipleChoiceAnswer(47, 'cortisol')}
-                  style={{
-                    padding: '15px',
-                    marginBottom: '10px',
-                    backgroundColor: answers[47] === 'cortisol' ? '#F0BDC0' : '#f9f9f9',
-                    borderRadius: '8px',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    border: answers[47] === 'cortisol' ? '1px solid #e3a6a9' : '1px solid #eee'
-                  }}
-                >
-                  <p style={{ 
-                    margin: 0, 
-                    color: answers[47] === 'cortisol' ? 'white' : '#333',
-                    fontWeight: answers[47] === 'cortisol' ? 'bold' : 'normal'
-                  }}>{language === 'en' ? 'cortisol' : '皮质醇'}</p>
-                </div>
-                <div 
-                  className={`answer-option ${answers[47] === 'dopamine' ? 'selected' : ''}`}
-                  onClick={() => handleMultipleChoiceAnswer(47, 'dopamine')}
-                  style={{
-                    padding: '15px',
-                    marginBottom: '10px',
-                    backgroundColor: answers[47] === 'dopamine' ? '#F0BDC0' : '#f9f9f9',
-                    borderRadius: '8px',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    border: answers[47] === 'dopamine' ? '1px solid #e3a6a9' : '1px solid #eee'
-                  }}
-                >
-                  <p style={{ 
-                    margin: 0, 
-                    color: answers[47] === 'dopamine' ? 'white' : '#333',
-                    fontWeight: answers[47] === 'dopamine' ? 'bold' : 'normal'
-                  }}>{language === 'en' ? 'dopamine' : '多巴胺'}</p>
-                </div>
-                <div 
-                  className={`answer-option ${answers[47] === 'oxytocin' ? 'selected' : ''}`}
-                  onClick={() => handleMultipleChoiceAnswer(47, 'oxytocin')}
-                  style={{
-                    padding: '15px',
-                    marginBottom: '10px',
-                    backgroundColor: answers[47] === 'oxytocin' ? '#F0BDC0' : '#f9f9f9',
-                    borderRadius: '8px',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    border: answers[47] === 'oxytocin' ? '1px solid #e3a6a9' : '1px solid #eee'
-                  }}
-                >
-                  <p style={{ 
-                    margin: 0, 
-                    color: answers[47] === 'oxytocin' ? 'white' : '#333',
-                    fontWeight: answers[47] === 'oxytocin' ? 'bold' : 'normal'
-                  }}>{language === 'en' ? 'oxytocin' : '催产素'}</p>
-                </div>
-                <div 
-                  className={`answer-option ${answers[47] === 'testosterone' ? 'selected' : ''}`}
-                  onClick={() => handleMultipleChoiceAnswer(47, 'testosterone')}
-                  style={{
-                    padding: '15px',
-                    marginBottom: '10px',
-                    backgroundColor: answers[47] === 'testosterone' ? '#F0BDC0' : '#f9f9f9',
-                    borderRadius: '8px',
-                    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    border: answers[47] === 'testosterone' ? '1px solid #e3a6a9' : '1px solid #eee'
-                  }}
-                >
-                  <p style={{ 
-                    margin: 0, 
-                    color: answers[47] === 'testosterone' ? 'white' : '#333',
-                    fontWeight: answers[47] === 'testosterone' ? 'bold' : 'normal'
-                  }}>{language === 'en' ? 'testosterone' : '睾酮'}</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="question-navigation" style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between', width: '100%', maxWidth: '480px', margin: '20px 0 0 0' }}>
-              <button 
-                className="nav-button prev-button"
-                onClick={() => {
-                  setShowEleventhPage(false);
-                  setShowTenthPage(true);
-                }}
-                style={{ padding: '10px 20px', border: 'none', borderRadius: '4px', cursor: 'pointer', backgroundColor: '#f0f0f0', fontWeight: 'bold' }}
-              >
-                {language === 'en' ? 'Previous Page' : '上一页'}
-              </button>
-              
-              <button 
-                className="nav-button next-button"
-                onClick={() => {
-                  setShowEleventhPage(false);
-                  setShowTwelfthPage(true);
-                }}
-                disabled={!answers[47]}
-                style={{ padding: '10px 20px', border: 'none', borderRadius: '4px', cursor: 'pointer', backgroundColor: '#F0BDC0', color: 'white', fontWeight: 'bold' }}
-              >
-                {language === 'en' ? 'Continue' : '继续'}
-              </button>
-            </div>
-          </div>
-        ) : showTwelfthPage ? (
-          // 荷尔蒙相关问题页面 - 第二页
-          <div className="first-page-questions hormone-questions" style={{ 
-            position: 'relative', 
-            zIndex: 5, 
-            width: '50%', 
-            maxWidth: '500px', 
-            margin: '0 auto 0 5%', // 左对齐而非居中
-            backgroundColor: 'rgba(255, 255, 255, 0.5)', // 降低背景不透明度
-            padding: '20px',
-            borderRadius: '8px'
-          }}>
-            <div className="question-container" style={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
-              <h2 className="question-text" style={{ color: '#333', fontWeight: 'bold', fontSize: '1.5rem' }}>
-                {language === 'en' 
-                  ? 'What function is it associated with?' 
-                  : '它和身体的什么功能相关？'}
-              </h2>
-              
-              <div className="answer-options">
-                <div 
-                  className={`answer-option ${answers[48] === 'stress' ? 'selected' : ''}`}
-                  onClick={() => handleMultipleChoiceAnswer(48, 'stress')}
-                >
-                  <p>{language === 'en' 
-                    ? 'Stress response & Immune system' 
-                    : '应激反应&免疫功能'}</p>
-                </div>
-                <div 
-                  className={`answer-option ${answers[48] === 'motivation' ? 'selected' : ''}`}
-                  onClick={() => handleMultipleChoiceAnswer(48, 'motivation')}
-                >
-                  <p>{language === 'en' 
-                    ? 'Motivation & Pleasure' 
-                    : '动机&愉悦'}</p>
-                </div>
-                <div 
-                  className={`answer-option ${answers[48] === 'empathy' ? 'selected' : ''}`}
-                  onClick={() => handleMultipleChoiceAnswer(48, 'empathy')}
-                >
-                  <p>{language === 'en' 
-                    ? 'Empathy & Stress reduction' 
-                    : '共情&减压'}</p>
-                </div>
-                <div 
-                  className={`answer-option ${answers[48] === 'competitiveness' ? 'selected' : ''}`}
-                  onClick={() => handleMultipleChoiceAnswer(48, 'competitiveness')}
-                >
-                  <p>{language === 'en' 
-                    ? 'Competitiveness & Risk-taking behavior' 
-                    : '竞争力&冒险行为'}</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="question-navigation" style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between', width: '100%', maxWidth: '480px', margin: '20px 0 0 0' }}>
-              <button 
-                className="nav-button prev-button"
-                onClick={() => {
-                  setShowTwelfthPage(false);
-                  setShowEleventhPage(true);
-                }}
-                style={{ padding: '10px 20px', border: 'none', borderRadius: '4px', cursor: 'pointer', backgroundColor: '#f0f0f0', fontWeight: 'bold' }}
-              >
-                {language === 'en' ? 'Previous Page' : '上一页'}
-              </button>
-              
-              <button 
-                className="nav-button next-button"
-                onClick={() => {
-                  setShowTwelfthPage(false);
-                  setShowThirteenthPage(true);
-                }}
-                disabled={!answers[48]}
-                style={{ padding: '10px 20px', border: 'none', borderRadius: '4px', cursor: 'pointer', backgroundColor: '#F0BDC0', color: 'white', fontWeight: 'bold' }}
-              >
-                {language === 'en' ? 'Continue' : '继续'}
-              </button>
-            </div>
-          </div>
-        ) : showThirteenthPage ? (
-          // 荷尔蒙相关问题页面 - 第三页
-          <div className="first-page-questions hormone-questions" style={{ 
-            position: 'relative', 
-            zIndex: 5, 
-            width: '50%', 
-            maxWidth: '500px', 
-            margin: '0 auto 0 5%', // 左对齐而非居中
-            backgroundColor: 'rgba(255, 255, 255, 0.5)', // 降低背景不透明度
-            padding: '20px',
-            borderRadius: '8px'
-          }}>
-            <div className="question-container" style={{ backgroundColor: 'transparent', boxShadow: 'none' }}>
-              <h2 className="question-text" style={{ color: '#333', fontWeight: 'bold', fontSize: '1.5rem' }}>
-                {language === 'en' 
-                  ? 'Under what circumstances is it secreted?' 
-                  : '它是在什么情况下分泌的？'}
-              </h2>
-              
-              <div className="answer-options">
-                <div 
-                  className={`answer-option ${answers[49] === 'stress' ? 'selected' : ''}`}
-                  onClick={() => handleMultipleChoiceAnswer(49, 'stress')}
-                >
-                  <p>{language === 'en' ? 'Stress' : '压力'}</p>
-                </div>
-                <div 
-                  className={`answer-option ${answers[49] === 'rewards' ? 'selected' : ''}`}
-                  onClick={() => handleMultipleChoiceAnswer(49, 'rewards')}
-                >
-                  <p>{language === 'en' ? 'Rewards & Novelty' : '奖励&新颖'}</p>
-                </div>
-                <div 
-                  className={`answer-option ${answers[49] === 'love' ? 'selected' : ''}`}
-                  onClick={() => handleMultipleChoiceAnswer(49, 'love')}
-                >
-                  <p>{language === 'en' ? 'Love & Social Bonding' : '爱&社会联系'}</p>
-                </div>
-                <div 
-                  className={`answer-option ${answers[49] === 'competition' ? 'selected' : ''}`}
-                  onClick={() => handleMultipleChoiceAnswer(49, 'competition')}
-                >
-                  <p>{language === 'en' ? 'Competition & Dominance' : '竞争&统治'}</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="question-navigation" style={{ marginTop: '20px', display: 'flex', justifyContent: 'space-between', width: '100%', maxWidth: '480px', margin: '20px 0 0 0' }}>
-              <button 
-                className="nav-button prev-button"
-                onClick={() => {
-                  setShowThirteenthPage(false);
-                  setShowTwelfthPage(true);
-                }}
-                style={{ padding: '10px 20px', border: 'none', borderRadius: '4px', cursor: 'pointer', backgroundColor: '#f0f0f0', fontWeight: 'bold' }}
-              >
-                {language === 'en' ? 'Previous Page' : '上一页'}
-              </button>
-              
-              <button 
-                className="nav-button next-button"
-                // Navigate to results page
-                disabled={!answers[49]}
-                style={{ padding: '10px 20px', border: 'none', borderRadius: '4px', cursor: 'pointer', backgroundColor: '#F0BDC0', color: 'white', fontWeight: 'bold' }}
-              >
-                {language === 'en' ? 'Continue' : '继续'}
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div></div> // Placeholder for any other case
         )}
       </div>
     );
@@ -1978,10 +1619,10 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   const calculatedQuestionnaireProgress = () => {
     if (!userChoice) return 0;
 
-    // 计算总问题数量 - 更新为包括荷尔蒙问题
-    const totalQuestionsInTest = motherQuestions.length + 3; // 添加最后三个额外问题
+    // 计算总问题数量
+    const totalQuestionsInTest = motherQuestions.length;
     
-    // 已回答的问题数量 
+    // 已回答的问题数量
     const answeredCount = Object.keys(answers).length;
     
     // 计算完成百分比
@@ -2050,7 +1691,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         </div>
       )}
       
-      {/* 只为非母亲问卷页面显示背景 */}
       {step !== 'mother-questionnaire' && step !== 'mother-privacy' && (
         <>
           <div className="molecule-background"></div>
