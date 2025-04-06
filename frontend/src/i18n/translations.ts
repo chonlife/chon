@@ -160,9 +160,9 @@ const translations: TranslationsType = {
         text: "Additionally, we welcome those with strong visuospatial and abstract logical thinking skills, whether it's group theory, topology, abstract algebra, LEGO or Rubik's Cube."
       },
       buttons: {
-        fund: "FUND →",
-        join: "JOIN →",
-        collaborate: "COLLABORATE →"
+        fund: "FUND",
+        join: "JOIN",
+        collaborate: "COLLABORATE"
       }
     },
     login: {

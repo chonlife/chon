@@ -5,10 +5,10 @@
   align-items: center;
   justify-content: flex-start;
   gap: 2rem;
-  max-width: 800px;
+  max-width: 950px; /* 增加宽度 */
   margin: 0 auto;
   position: relative;
-  z-index: 1;
+  z-index: 2; /* 提高z-index，确保在背景图之上 */
   padding: 2rem;
   flex: 1;
   width: 100%;
@@ -33,6 +33,38 @@
   right: 0;
   bottom: 0;
   z-index: 10;
+}
+
+/* Other questionnaire specific styles */
+.other-questionnaire {
+  background-color: transparent;
+  color: black;
+  min-height: calc(100vh - 20px);
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 3rem 5rem 5rem 5rem;
+  align-items: flex-start;
+  text-align: left;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
+.other-questionnaire .questionnaire-title {
+  color: black;
+  text-align: left;
+  background-color: rgba(255, 255, 255, 0);
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 3rem;
+  width: auto;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0);
 }
 
 .mother-questionnaire .questionnaire-title {
@@ -114,11 +146,12 @@
   letter-spacing: 0.02em;
 }
 
+/* 重新设计privacy continue按钮 */
 .privacy-continue {
   display: inline-block;
   background-color: #F0BDC0;
   color: black;
-  padding: 1.2rem 4rem;
+  padding: 1.2rem 3rem;
   font-size: 1.2rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -128,57 +161,209 @@
   font-weight: 500;
   text-decoration: none;
   position: relative;
+  text-align: center;
 }
 
-.privacy-continue::after {
-  content: "→";
-  position: absolute;
-  right: 2rem;
-  top: 50%;
-  transform: translateY(-50%);
-  transition: transform 0.3s ease;
-}
-
-.privacy-continue:hover {
-  background-color: white;
-  transform: translateY(-2px);
-}
-
-.privacy-continue:hover::after {
-  transform: translate(5px, -50%);
-}
-
-/* 专门为mother-privacy页面设置粉色按钮 */
-.mother-privacy .privacy-continue {
+/* 重写母亲隐私页面的Continue按钮样式 */
+.privacy-statement.mother-privacy .privacy-continue {
   background-color: #F0BDC0;
   color: black;
   box-shadow: 0 4px 10px rgba(240, 189, 192, 0.3);
   border-radius: 4px;
   margin-top: 10px;
-  position: relative;
-  z-index: 2;
-  padding: 1rem 3.5rem;
-  font-size: 1.1rem;
-  transition: all 0.3s ease;
+  padding: 0.6rem 2rem 0.6rem 1.2rem; /* 增加右侧内边距 */
+  font-size: 0.9rem;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.15em;
+  min-width: 120px; /* 略微增加宽度 */
+  max-width: 170px; /* 略微增加最大宽度 */
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.mother-privacy .privacy-continue:hover {
+.privacy-statement.mother-privacy .privacy-continue span {
+  position: relative;
+  z-index: 2;
+}
+
+/* 分离箭头为一个单独的元素 */
+.privacy-statement.mother-privacy .privacy-continue .continue-arrow {
+  position: absolute;
+  right: 0.8rem; /* 将箭头靠右放置 */
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+  line-height: 1;
+  margin-left: 12px; /* 增加文本和箭头之间的间距 */
+  transition: transform 0.3s ease;
+}
+
+.privacy-statement.mother-privacy .privacy-continue:hover {
   background-color: #e3a6a9;
   color: white;
-  box-shadow: 0 6px 15px rgba(240, 189, 192, 0.5); /* 增强阴影效果 */
+  box-shadow: 0 6px 15px rgba(240, 189, 192, 0.5);
   transform: translateY(-4px);
 }
 
-/* 专门为母亲隐私页面设计的Continue按钮，移除箭头 */
-.mother-continue::after {
-  content: "→" !important;
-  position: absolute;
-  right: 2rem;
-  top: 50%;
-  transform: translateY(-50%);
-  transition: transform 0.3s ease;
+.privacy-statement.mother-privacy .privacy-continue:hover .continue-arrow {
+  transform: translate(5px, -50%);
+}
+
+/* 为移动设备优化privacy页面 */
+@media (max-width: 900px) {
+  .privacy-statement.mother-privacy {
+    padding: 2.5rem 3rem 3rem 3rem;
+  }
+  
+  .privacy-statement.other-privacy {
+    padding: 2.5rem 3rem 3rem 3rem;
+  }
+  
+  .mother-privacy .privacy-text {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    padding: 1.5rem;
+    max-width: 95%;
+  }
+  
+  .other-privacy .privacy-text {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    padding: 1.5rem;
+    max-width: 95%;
+  }
+  
+  .privacy-text {
+    font-size: 1.7rem;
+    margin-bottom: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .privacy-statement.mother-privacy {
+    padding: 2rem 1.5rem 2rem 1.5rem;
+    justify-content: flex-start;
+    padding-top: 4rem; /* 为顶部的exit按钮留出空间 */
+  }
+  
+  .privacy-statement.other-privacy {
+    padding: 2rem 1.5rem 2rem 1.5rem;
+    justify-content: flex-start;
+    padding-top: 4rem;
+  }
+  
+  .mother-privacy .privacy-text {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    padding: 1.2rem;
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+  }
+  
+  .other-privacy .privacy-text {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    padding: 1.2rem;
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+  }
+  
+  .privacy-text {
+    font-size: 1.4rem;
+    line-height: 1.4;
+    margin-bottom: 2rem;
+  }
+  
+  .privacy-continue {
+    padding: 0.9rem 2.5rem;
+    font-size: 1rem;
+  }
+  
+  .mother-privacy .privacy-continue,
+  .other-privacy .privacy-continue {
+    padding: 0.5rem 1.8rem 0.5rem 1rem; /* 增加右侧内边距 */
+    font-size: 0.85rem;
+    min-width: 100px; /* 略微增加宽度 */
+    max-width: 150px; /* 略微增加最大宽度 */
+  }
+  
+  .mother-privacy .privacy-continue .continue-arrow,
+  .other-privacy .privacy-continue .continue-arrow {
+    right: 0.7rem; /* 调整箭头位置 */
+    font-size: 0.8rem;
+    margin-left: 10px; /* 增加文本和箭头之间的间距 */
+  }
+}
+
+@media (max-width: 480px) {
+  .privacy-statement.mother-privacy {
+    padding: 1.5rem 1rem 1.5rem 1rem;
+    padding-top: 3.5rem; /* 为顶部的exit按钮留出空间 */
+  }
+  
+  .privacy-statement.other-privacy {
+    padding: 1.5rem 1rem 1.5rem 1rem;
+    padding-top: 3.5rem;
+  }
+  
+  .mother-privacy .privacy-text {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    padding: 1rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .other-privacy .privacy-text {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    padding: 1rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .privacy-text {
+    font-size: 1.1rem;
+    line-height: 1.35;
+    margin-bottom: 1.5rem;
+  }
+  
+  .privacy-continue {
+    padding: 0.75rem 2rem;
+    font-size: 0.9rem;
+  }
+  
+  .mother-privacy .privacy-continue,
+  .other-privacy .privacy-continue {
+    padding: 0.4rem 1.6rem 0.4rem 0.9rem; /* 增加右侧内边距 */
+    font-size: 0.8rem;
+    min-width: 90px; /* 略微增加宽度 */
+    max-width: 140px; /* 略微增加最大宽度 */
+  }
+  
+  .mother-privacy .privacy-continue .continue-arrow,
+  .other-privacy .privacy-continue .continue-arrow {
+    right: 0.6rem; /* 调整箭头位置 */
+    font-size: 0.7rem;
+    margin-left: 8px; /* 增加文本和箭头之间的间距 */
+  }
+}
+
+@media (max-width: 360px) {
+  .mother-privacy .privacy-continue,
+  .other-privacy .privacy-continue {
+    padding: 0.3rem 1.4rem 0.3rem 0.8rem; /* 增加右侧内边距 */
+    font-size: 0.75rem;
+    min-width: 80px; /* 略微增加宽度 */
+    max-width: 130px; /* 略微增加最大宽度 */
+  }
+  
+  .mother-privacy .privacy-continue .continue-arrow,
+  .other-privacy .privacy-continue .continue-arrow {
+    right: 0.5rem; /* 调整箭头位置 */
+    font-size: 0.65rem;
+    margin-left: 6px; /* 增加文本和箭头之间的间距 */
+  }
 }
 
 /* Questionnaire Progress Bar */
@@ -187,7 +372,7 @@
   max-width: 800px;
   margin: 0 auto 2rem;
   padding: 0 1rem;
-  margin-top: 1rem;
+  margin-top: 2.5rem; /* 增加顶部间距，为exit button留出空间 */
 }
 
 .question-progress-bar {
@@ -218,22 +403,21 @@
 
 /* Question Container */
 .question-container {
+  background-color: white;
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   width: 100%;
-  max-width: 900px; /* 增加最大宽度 */
-  background-color: transparent; /* 移除背景色 */
-  border-radius: 0; /* 移除圆角 */
-  padding: 2rem 0; /* 只保留上下内边距 */
-  margin: 0 auto 2rem;
-  box-shadow: none; /* 移除阴影 */
-  animation: fadeIn 0.5s ease;
+  box-sizing: border-box;
 }
 
 .question-text {
   font-size: 1.4rem;
-  color: #333;
   margin-bottom: 2rem;
+  font-weight: 400;
   line-height: 1.5;
-  font-weight: 500;
+  color: #333;
 }
 
 /* Multiple Choice Options */
@@ -371,13 +555,18 @@
 
 /* Responsive styles */
 @media (max-width: 768px) {
+  .questionnaire-content {
+    padding: 1.5rem;
+    gap: 1.5rem;
+  }
+  
   .question-container {
-    padding: 1.5rem 0; /* 只保留上下内边距 */
-    max-width: 100%;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
   }
   
   .question-text {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     margin-bottom: 1.5rem;
   }
   
@@ -402,8 +591,15 @@
 }
 
 @media (max-width: 480px) {
+  .questionnaire-content {
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
   .question-container {
-    padding: 1.2rem 0; /* 只保留上下内边距 */
+    padding: 1.2rem;
+    margin-bottom: 1.2rem;
+    border-radius: 6px;
   }
   
   .question-text {
@@ -423,60 +619,6 @@
     padding: 0.6rem 1.2rem;
     font-size: 0.85rem;
     min-width: 80px;
-  }
-}
-
-/* Responsive styles for privacy statement */
-@media (max-width: 900px) {
-  .privacy-statement {
-    margin: 3rem auto;
-    padding: 1.5rem;
-  }
-  
-  .privacy-text {
-    font-size: 1.8rem;
-    margin-bottom: 2.5rem;
-  }
-  
-  .privacy-continue {
-    padding: 1rem 3.5rem;
-    font-size: 1.1rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .privacy-statement {
-    margin: 2rem auto;
-    padding: 1.2rem;
-  }
-  
-  .privacy-text {
-    font-size: 1.5rem;
-    margin-bottom: 2rem;
-  }
-  
-  .privacy-continue {
-    padding: 0.9rem 3rem;
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .privacy-statement {
-    margin: 1.5rem auto;
-    padding: 1rem;
-  }
-  
-  .privacy-text {
-    font-size: 1.2rem;
-    margin-bottom: 1.5rem;
-    line-height: 1.4;
-  }
-  
-  .privacy-continue {
-    padding: 0.8rem 2.5rem;
-    font-size: 0.9rem;
-    width: 80%;
   }
 }
 
@@ -545,7 +687,7 @@
   }
 }
 
-/* Exit button and actions */
+/* Exit actions */
 .exit-actions {
   position: fixed;
   bottom: 20px;
@@ -553,22 +695,6 @@
   display: flex;
   gap: 15px;
   z-index: 100;
-}
-
-.exit-button {
-  display: inline-block;
-  padding: 0.8rem 1.5rem;
-  background-color: rgba(0, 0, 0, 0.1);
-  color: #777;
-  border-radius: 4px;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-}
-
-.exit-button:hover {
-  background-color: rgba(0, 0, 0, 0.2);
-  color: #444;
 }
 
 .clear-answers-button {
@@ -608,6 +734,71 @@
   100% { opacity: 0; }
 }
 
+/* Exit button styles */
+.exit-button {
+  position: fixed;
+  top: 10px; /* 降低位置 */
+  left: 20px;
+  font-size: 1rem;
+  color: white;
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.white-theme .exit-button {
+  color: #333;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid #ddd;
+}
+
+.exit-button:hover {
+  background-color: rgba(240, 189, 192, 0.5);
+  transform: translateY(-2px);
+  color: white;
+}
+
+.white-theme .exit-button:hover {
+  background-color: #F0BDC0;
+  color: white;
+}
+
+/* 调整移动端exit button尺寸和位置 */
+@media (max-width: 768px) {
+  .exit-button {
+    top: 8px; /* 降低位置 */
+    left: 15px;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+  }
+  
+  /* 确保progress bar不被exit button遮挡 */
+  .question-progress-container {
+    margin-top: 40px; /* 为exit button留出空间 */
+  }
+}
+
+@media (max-width: 480px) {
+  .exit-button {
+    top: 6px; /* 更低的位置 */
+    left: 10px;
+    font-size: 0.8rem;
+    padding: 5px 10px;
+    border-radius: 3px;
+  }
+  
+  /* 确保progress bar不被exit button遮挡 */
+  .question-progress-container {
+    margin-top: 35px; /* 为exit button留出空间 */
+  }
+}
+
 /* Scale question styles */
 .scale-question-container {
   width: 100%;
@@ -617,7 +808,7 @@
 
 .scale-labels-wrapper {
   display: flex;
-  flex-direction: row;
+  flex-direction: column; /* 改为纵向排列 */
   align-items: center;
   width: 100%;
   margin-bottom: 2rem;
@@ -626,21 +817,21 @@
 }
 
 .scale-extreme-labels {
-  position: absolute;
+  position: relative; /* 改为相对定位 */
   width: 100%;
   display: flex;
   justify-content: space-between;
-  padding: 0 15px; /* 添加两侧内边距 */
-  margin: 0;
+  padding: 0 15px;
+  margin: 0 0 30px 0; /* 增加底部边距 */
   z-index: 1;
 }
 
 .scale-extreme-label {
-  max-width: 30%;
+  max-width: 40%;
   line-height: 1.4;
   white-space: normal;
   word-wrap: break-word;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   display: flex;
   flex-direction: column;
   height: auto;
@@ -674,7 +865,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 35%; /* 减小圆环区域宽度 */
+  width: 80%; /* 增大圆环区域宽度 */
   padding: 0;
   position: relative;
   margin: 0 auto;
@@ -695,7 +886,7 @@
   z-index: 1;
   transition: all 0.3s ease;
   padding: 0;
-  margin: 0 5px; /* 减少圆环间距 */
+  margin: 0 10px; /* 增加圆环间距 */
 }
 
 /* 第一和最后一个圆环最大，中间逐渐变小 */
@@ -776,79 +967,199 @@
   border-color: #FF9598;
 }
 
-@media (max-width: 768px) {
-  .scale-extreme-labels {
-    padding: 0 10px;
+/* 桌面端优化 - 将文字部分下移，与气泡对齐 */
+@media (min-width: 1024px) {
+  /* 调整问题文字位置 */
+  .question-text {
+    position: relative;
+    margin-bottom: 3.5rem; /* 增加底部间距，为scale腾出空间 */
+    padding-top: 10px;
   }
   
-  .scale-options {
-    width: 40%;
+  /* 确保scale部分与文字位置配合正确 */
+  .scale-question-container {
+    position: relative;
+    margin-top: -15px; /* 向上移动一点，更好地与文字对齐 */
+  }
+  
+  /* 调整左右说明标签位置 */
+  .scale-extreme-labels {
+    position: relative;
+    top: 10px; /* 微调位置，确保与气泡对齐 */
   }
   
   .scale-extreme-label {
-    max-width: 35%;
-    font-size: 0.75rem;
+    position: relative;
+    top: 20px; /* 下移文字，与气泡垂直居中对齐 */
   }
   
-  .scale-extreme-label span {
-    margin-bottom: 1px;
+  /* 调整气泡位置 */
+  .scale-options {
+    margin-top: 10px;
+  }
+}
+
+/* 移动端样式优化 */
+@media (max-width: 768px) {
+  .scale-extreme-labels {
+    padding: 0 10px;
+    margin-bottom: 25px; /* 更小的间距 */
+  }
+  
+  .scale-extreme-label {
+    max-width: 45%;
+    font-size: 0.8rem;
+  }
+  
+  .scale-options {
+    width: 90%;
   }
   
   .scale-option {
-    margin: 0 3px;
+    margin: 0 8px;
   }
   
-  .scale-option:nth-child(1) .scale-circle,
-  .scale-option:nth-child(5) .scale-circle {
-    width: 45px;
-    height: 45px;
+  /* 缩小圆环尺寸 */
+  .scale-option:nth-child(1) .scale-circle {
+    width: 50px;
+    height: 50px;
   }
   
-  .scale-option:nth-child(2) .scale-circle,
+  .scale-option:nth-child(2) .scale-circle {
+    width: 42px;
+    height: 42px;
+  }
+  
+  .scale-option:nth-child(3) .scale-circle {
+    width: 34px;
+    height: 34px;
+  }
+  
   .scale-option:nth-child(4) .scale-circle {
-    width: 38px;
-    height: 38px;
+    width: 42px;
+    height: 42px;
+  }
+  
+  .scale-option:nth-child(5) .scale-circle {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+@media (max-width: 480px) {
+  .scale-extreme-labels {
+    margin-bottom: 20px;
+  }
+  
+  .scale-extreme-label {
+    font-size: 0.75rem;
+    max-width: 45%;
+    line-height: 1.3;
+  }
+  
+  .scale-options {
+    width: 100%;
+  }
+  
+  .scale-option {
+    margin: 0 4px;
+  }
+  
+  /* 进一步缩小圆环尺寸 */
+  .scale-option:nth-child(1) .scale-circle {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .scale-option:nth-child(2) .scale-circle {
+    width: 35px;
+    height: 35px;
   }
   
   .scale-option:nth-child(3) .scale-circle {
     width: 30px;
     height: 30px;
   }
-}
-
-@media (max-width: 480px) {
-  .scale-extreme-labels {
-    padding: 0 5px;
+  
+  .scale-option:nth-child(4) .scale-circle {
+    width: 35px;
+    height: 35px;
   }
   
-  .scale-options {
-    width: 45%;
-  }
-  
-  .scale-extreme-label {
-    max-width: 40%;
-    font-size: 0.7rem;
-  }
-  
-  .scale-option {
-    margin: 0 2px;
-  }
-  
-  .scale-option:nth-child(1) .scale-circle,
   .scale-option:nth-child(5) .scale-circle {
     width: 40px;
     height: 40px;
   }
   
-  .scale-option:nth-child(2) .scale-circle,
-  .scale-option:nth-child(4) .scale-circle {
+  /* 增加点击区域 */
+  .scale-option {
+    padding: 10px;
+  }
+}
+
+/* 针对特小屏幕的优化 */
+@media (max-width: 360px) {
+  .scale-extreme-labels {
+    margin-bottom: 15px;
+  }
+  
+  .scale-extreme-label {
+    font-size: 0.7rem;
+    line-height: 1.2;
+  }
+  
+  /* 进一步缩小圆圈 */
+  .scale-option:nth-child(1) .scale-circle,
+  .scale-option:nth-child(5) .scale-circle {
     width: 32px;
     height: 32px;
+  }
+  
+  .scale-option:nth-child(2) .scale-circle,
+  .scale-option:nth-child(4) .scale-circle {
+    width: 28px;
+    height: 28px;
   }
   
   .scale-option:nth-child(3) .scale-circle {
     width: 24px;
     height: 24px;
+  }
+  
+  .question-container {
+    padding: 1rem 0.8rem;
+  }
+  
+  .question-text {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+/* 改进导航按钮在移动端的布局 */
+@media (max-width: 480px) {
+  .question-navigation {
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .nav-button {
+    min-width: 45%;
+    padding: 0.8rem 0.5rem;
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .question-container {
+    padding: 1.2rem 0.8rem;
+    margin-bottom: 1rem;
+  }
+  
+  .first-page-questions {
+    gap: 1rem;
   }
 }
 
@@ -877,4 +1188,286 @@
     margin-bottom: 1rem;
     padding-left: 1rem;
   }
+}
+
+/* 标签样式 - 当前不显示在前端，但保留样式以备将来需要 */
+.question-tags {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 0.8em;
+  color: #888;
+  font-style: italic;
+  font-weight: normal;
+}
+
+.white-theme .question-tags {
+  color: #666;
+}
+
+/* 优化privacy页面在移动端的显示 */
+@media (max-width: 900px) {
+  .privacy-statement.mother-privacy {
+    padding: 2.5rem 3rem 3rem 3rem;
+  }
+  
+  .privacy-statement.other-privacy {
+    padding: 2.5rem 3rem 3rem 3rem;
+  }
+  
+  .mother-privacy .privacy-text {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    padding: 1.5rem;
+    max-width: 95%;
+  }
+  
+  .other-privacy .privacy-text {
+    font-size: 1.3rem;
+    line-height: 1.6;
+    padding: 1.5rem;
+    max-width: 95%;
+  }
+  
+  .privacy-text {
+    font-size: 1.7rem;
+    margin-bottom: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .privacy-statement.mother-privacy {
+    padding: 2rem 1.5rem 2rem 1.5rem;
+    justify-content: flex-start;
+    padding-top: 4rem; /* 为顶部的exit按钮留出空间 */
+  }
+  
+  .privacy-statement.other-privacy {
+    padding: 2rem 1.5rem 2rem 1.5rem;
+    justify-content: flex-start;
+    padding-top: 4rem;
+  }
+  
+  .mother-privacy .privacy-text {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    padding: 1.2rem;
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+  }
+  
+  .other-privacy .privacy-text {
+    font-size: 1.1rem;
+    line-height: 1.5;
+    padding: 1.2rem;
+    max-width: 100%;
+    margin-bottom: 1.5rem;
+  }
+  
+  .privacy-text {
+    font-size: 1.4rem;
+    line-height: 1.4;
+    margin-bottom: 2rem;
+  }
+  
+  .privacy-continue {
+    padding: 0.9rem 2.5rem;
+    font-size: 1rem;
+  }
+  
+  .mother-privacy .privacy-continue,
+  .other-privacy .privacy-continue {
+    padding: 0.5rem 1.8rem 0.5rem 1rem; /* 增加右侧内边距 */
+    font-size: 0.85rem;
+    min-width: 100px; /* 略微增加宽度 */
+    max-width: 150px; /* 略微增加最大宽度 */
+  }
+  
+  .mother-privacy .privacy-continue .continue-arrow,
+  .other-privacy .privacy-continue .continue-arrow {
+    right: 0.7rem; /* 调整箭头位置 */
+    font-size: 0.8rem;
+    margin-left: 10px; /* 增加文本和箭头之间的间距 */
+  }
+}
+
+@media (max-width: 480px) {
+  .privacy-statement.mother-privacy {
+    padding: 1.5rem 1rem 1.5rem 1rem;
+    padding-top: 3.5rem; /* 为顶部的exit按钮留出空间 */
+  }
+  
+  .privacy-statement.other-privacy {
+    padding: 1.5rem 1rem 1.5rem 1rem;
+    padding-top: 3.5rem;
+  }
+  
+  .mother-privacy .privacy-text {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    padding: 1rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .other-privacy .privacy-text {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    padding: 1rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .privacy-text {
+    font-size: 1.1rem;
+    line-height: 1.35;
+    margin-bottom: 1.5rem;
+  }
+  
+  .privacy-continue {
+    padding: 0.75rem 2rem;
+    font-size: 0.9rem;
+  }
+  
+  .mother-privacy .privacy-continue,
+  .other-privacy .privacy-continue {
+    padding: 0.4rem 1.6rem 0.4rem 0.9rem; /* 增加右侧内边距 */
+    font-size: 0.8rem;
+    min-width: 90px; /* 略微增加宽度 */
+    max-width: 140px; /* 略微增加最大宽度 */
+  }
+  
+  .mother-privacy .privacy-continue .continue-arrow,
+  .other-privacy .privacy-continue .continue-arrow {
+    right: 0.6rem; /* 调整箭头位置 */
+    font-size: 0.7rem;
+    margin-left: 8px; /* 增加文本和箭头之间的间距 */
+  }
+}
+
+@media (max-width: 360px) {
+  .mother-privacy .privacy-continue,
+  .other-privacy .privacy-continue {
+    padding: 0.3rem 1.4rem 0.3rem 0.8rem; /* 增加右侧内边距 */
+    font-size: 0.75rem;
+    min-width: 80px; /* 略微增加宽度 */
+    max-width: 130px; /* 略微增加最大宽度 */
+  }
+  
+  .mother-privacy .privacy-continue .continue-arrow,
+  .other-privacy .privacy-continue .continue-arrow {
+    right: 0.5rem; /* 调整箭头位置 */
+    font-size: 0.65rem;
+    margin-left: 6px; /* 增加文本和箭头之间的间距 */
+  }
+}
+
+/* 在小屏幕上修复progress bar的位置 */
+@media (max-width: 900px) {
+  .question-progress-container {
+    margin-top: 3rem; /* 为退出按钮留出更多空间 */
+  }
+}
+
+/* Other privacy statement specific styles */
+.privacy-statement.other-privacy {
+  background-color: transparent;
+  color: black;
+  min-height: calc(100vh - 20px);
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  padding: 3rem 5rem 5rem 5rem;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+}
+
+.other-privacy .privacy-text {
+  color: black;
+  text-align: left;
+  overflow: hidden;
+  max-height: 70vh;
+  font-size: 1.4rem;
+  line-height: 1.7;
+  max-width: 90%;
+  margin-bottom: 2rem;
+  background-color: transparent;
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: none;
+}
+
+/* 添加other-privacy的Continue按钮样式，使其与mother-privacy一致 */
+.privacy-statement.other-privacy .privacy-continue {
+  background-color: #F0BDC0;
+  color: black;
+  box-shadow: 0 4px 10px rgba(240, 189, 192, 0.3);
+  border-radius: 4px;
+  margin-top: 10px;
+  padding: 0.6rem 2rem 0.6rem 1.2rem; /* 增加右侧内边距，与mother-privacy一致 */
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  min-width: 120px; /* 略微增加宽度 */
+  max-width: 170px; /* 略微增加最大宽度 */
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.privacy-statement.other-privacy .privacy-continue span {
+  position: relative;
+  z-index: 2;
+}
+
+.privacy-statement.other-privacy .privacy-continue .continue-arrow {
+  position: absolute;
+  right: 0.8rem; /* 将箭头靠右放置 */
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+  line-height: 1;
+  margin-left: 12px; /* 增加文本和箭头之间的间距 */
+  transition: transform 0.3s ease;
+}
+
+.privacy-statement.other-privacy .privacy-continue:hover {
+  background-color: #e3a6a9;
+  color: white;
+  box-shadow: 0 6px 15px rgba(240, 189, 192, 0.5);
+  transform: translateY(-4px);
+}
+
+.privacy-statement.other-privacy .privacy-continue:hover .continue-arrow {
+  transform: translate(5px, -50%);
+}
+
+/* 为真正的第一页创建特殊样式 */
+.first-page-true {
+  position: relative;
+  min-height: 400px;  /* 确保有足够的高度来放置底部按钮 */
+}
+
+.first-page-true .question-navigation {
+  display: flex;
+  justify-content: flex-end;  /* 将按钮放在右侧 */
+  position: relative;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+/* 保持原有的样式用于后续页面 */
+.question-navigation {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 2rem;
 } 

@@ -89,7 +89,7 @@
   color: white;
   border: none;
   padding: 1.2rem 0;
-  font-size: 1.2rem;
+  font-size: 0.96rem;
   letter-spacing: 0.2em;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -107,11 +107,13 @@
 
 .contact-button::after {
   content: '→';
-  font-size: 1rem;
+  font-size: 1.2rem;
   opacity: 0;
   transform: translateX(-20px);
   transition: all 0.3s ease;
   margin-left: 1rem;
+  font-weight: 600;
+  color: #F0BDC0;
 }
 
 .contact-button:hover {
@@ -120,11 +122,26 @@
   border-bottom-color: #F0BDC0;
   transform: none;
   box-shadow: none;
+  letter-spacing: 0.25em;
 }
 
 .contact-button:hover::after {
   opacity: 1;
   transform: translateX(0);
+  text-shadow: 0 0 5px rgba(240, 189, 192, 0.5);
+}
+
+/* 添加箭头动画效果 */
+@keyframes arrowBounce {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(5px); }
+}
+
+.contact-button:hover::after {
+  opacity: 1;
+  transform: translateX(0);
+  text-shadow: 0 0 5px rgba(240, 189, 192, 0.5);
+  animation: arrowBounce 0.8s ease-in-out infinite;
 }
 
 /* 响应式调整 */
@@ -138,7 +155,7 @@
   }
 
   .contact-button {
-    font-size: 1.1rem;
+    font-size: 0.88rem;
   }
 }
 
@@ -152,7 +169,7 @@
   }
   
   .contact-button {
-    font-size: 1rem;
+    font-size: 0.8rem;
     padding: 1rem 0;
   }
   
@@ -177,7 +194,7 @@
   }
   
   .contact-button {
-    font-size: 0.95rem;
+    font-size: 0.76rem;
     padding: 0.9rem 0;
   }
 }
@@ -197,13 +214,13 @@
   }
   
   .contact-button {
-    font-size: 0.9rem;
+    font-size: 0.72rem;
     padding: 0.8rem 0;
     letter-spacing: 0.15em;
   }
   
   .contact-button::after {
-    font-size: 0.9rem;
+    font-size: 1rem;
   }
   
   .contact-container .molecule-background {
