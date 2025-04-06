@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext.tsx';
 import LanguageSelector from '../../components/LanguageSelector/LanguageSelector.tsx';
 import './PersonalityTest.css';
@@ -68,6 +68,7 @@ const MetaTags = () => {
 
 const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTestProps) => {
   const { t, language } = useLanguage();
+  const navigate = useNavigate(); // 添加导航钩子
   const [step, setStep] = useState<TestStep>('intro');
   const [userChoice, setUserChoice] = useState<string | null>(null);
   const [selectedIdentities, setSelectedIdentities] = useState<Set<IdentityType>>(new Set());
@@ -2131,15 +2132,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
             >
               {language === 'en' ? 'Mother Questionnaire' : '母亲问卷'}
             </button>
-            <button 
+              <button 
               className={`switcher-button ${!showingPrimaryQuestionnaire ? 'active' : ''}`}
-              onClick={() => {
+                onClick={() => {
                 if (showingPrimaryQuestionnaire) switchQuestionnaire();
-              }}
-            >
+                }}
+              >
               {language === 'en' ? 'Corporate Questionnaire' : '企业问卷'}
-            </button>
-          </div>
+              </button>
+            </div>
         )}
         
         {/* 母亲问卷分页内容 */}
@@ -2148,107 +2149,107 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
             // 第1页: ID 1-8，无标题，只有问题
             <div className="first-page-questions first-page-true">
               {questions.slice(0, 8).map((question) => (
-                <div key={question.id} className="question-container">
-                  {renderQuestionText(question)}
-                  
-                  {question.type === 'multiple-choice' && (
-                    <div className="answer-options">
-                      {question.options?.map(option => (
-                        <div 
-                          key={option.id}
-                          className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                          onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                        >
-                          <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {question.type === 'text-input' && (
-                    <div className="text-input-container">
-                      <input
-                        type="text"
-                        className="text-answer-input"
-                        value={getCurrentAnswers()[question.id] || ''}
-                        onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                        placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                      />
-                    </div>
-                  )}
-                  
-                  {question.type === 'scale-question' && (
-                    <div className="scale-question-container">
-                      <div className="scale-labels-wrapper">
-                        <div className="scale-extreme-labels">
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                        </div>
-                        <div className="scale-options">
-                          {['1', '2', '3', '4', '5'].map((value) => (
-                            <div 
-                              key={value}
-                              className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                              onClick={() => handleScaleAnswer(question.id, value)}
-                            >
-                              <div className="scale-circle"></div>
-                              <span className="scale-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
+              <div key={question.id} className="question-container">
+                {renderQuestionText(question)}
+                
+                {question.type === 'multiple-choice' && (
+                  <div className="answer-options">
+                    {question.options?.map(option => (
+                      <div 
+                        key={option.id}
+                        className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
+                        onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
+                      >
+                        <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {question.type === 'text-input' && (
+                  <div className="text-input-container">
+                    <input
+                      type="text"
+                      className="text-answer-input"
+                      value={getCurrentAnswers()[question.id] || ''}
+                      onChange={(e) => handleTextAnswer(question.id, e.target.value)}
+                      placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
+                    />
+                  </div>
+                )}
+                
+                {question.type === 'scale-question' && (
+                  <div className="scale-question-container">
+                    <div className="scale-labels-wrapper">
+                      <div className="scale-extreme-labels">
+                        <span className="scale-extreme-label">
+                          {language === 'en' 
+                            ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                            : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                        </span>
+                        <span className="scale-extreme-label">
+                          {language === 'en' 
+                            ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                            : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                        </span>
+                      </div>
+                      <div className="scale-options">
+                        {['1', '2', '3', '4', '5'].map((value) => (
+                          <div 
+                            key={value}
+                            className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
+                            onClick={() => handleScaleAnswer(question.id, value)}
+                          >
+                            <div className="scale-circle"></div>
+                            <span className="scale-value">{value}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  )}
-                </div>
-              ))}
-              
-              <div className="question-navigation">
-                <button 
-                  className="nav-button next-button"
-                  onClick={() => {
+                  </div>
+                )}
+              </div>
+            ))}
+            
+            <div className="question-navigation">
+              <button 
+                className="nav-button next-button"
+                onClick={() => {
                     setShowFirstPage(false);
                     setShowThirdPage(true);
-                  }}
+                }}
                   disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 1 && parseInt(id) <= 8).length < 8}
-                >
-                  {language === 'en' ? 'Continue' : '继续'}
-                </button>
-              </div>
+              >
+                {language === 'en' ? 'Continue' : '继续'}
+              </button>
             </div>
+          </div>
           ) : showThirdPage ? (
             // 第2页: ID 9-21，标题"I. About Work-Life Balance / 关于工作与生活的平衡"
-            <div className="first-page-questions">
+          <div className="first-page-questions">
               <h1 className="section-title">
-                {language === 'en' 
+                          {language === 'en' 
                   ? 'I. About Work-Life Balance' 
                   : 'I. 关于工作与生活的平衡'}
               </h1>
               
               {questions.slice(8, 21).map((question) => (
-                <div key={question.id} className="question-container">
-                  {renderQuestionText(question)}
-                  
-                  {question.type === 'multiple-choice' && (
-                    <div className="answer-options">
-                      {question.options?.map(option => (
-                        <div 
-                          key={option.id}
-                          className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                          onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                        >
-                          <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+              <div key={question.id} className="question-container">
+                {renderQuestionText(question)}
+                
+                {question.type === 'multiple-choice' && (
+                  <div className="answer-options">
+                    {question.options?.map(option => (
+                      <div 
+                        key={option.id}
+                        className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
+                        onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
+                      >
+                        <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
                   
                   {question.type === 'text-input' && (
                     <div className="text-input-container">
@@ -2259,187 +2260,187 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                         onChange={(e) => handleTextAnswer(question.id, e.target.value)}
                         placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
                       />
-                    </div>
-                  )}
-                  
-                  {question.type === 'scale-question' && (
-                    <div className="scale-question-container">
-                      <div className="scale-labels-wrapper">
-                        <div className="scale-extreme-labels">
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                        </div>
-                        <div className="scale-options">
-                          {['1', '2', '3', '4', '5'].map((value) => (
-                            <div 
-                              key={value}
-                              className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                              onClick={() => handleScaleAnswer(question.id, value)}
-                            >
-                              <div className="scale-circle"></div>
-                              <span className="scale-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
+                  </div>
+                )}
+                
+                {question.type === 'scale-question' && (
+                  <div className="scale-question-container">
+                    <div className="scale-labels-wrapper">
+                      <div className="scale-extreme-labels">
+                        <span className="scale-extreme-label">
+                          {language === 'en' 
+                            ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                            : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                        </span>
+                        <span className="scale-extreme-label">
+                          {language === 'en' 
+                            ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                            : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                        </span>
+                      </div>
+                      <div className="scale-options">
+                        {['1', '2', '3', '4', '5'].map((value) => (
+                          <div 
+                            key={value}
+                            className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
+                            onClick={() => handleScaleAnswer(question.id, value)}
+                          >
+                            <div className="scale-circle"></div>
+                            <span className="scale-value">{value}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  )}
-                </div>
-              ))}
-              
-              <div className="question-navigation">
-                <button 
-                  className="nav-button prev-button"
-                  onClick={() => {
+                  </div>
+                )}
+              </div>
+            ))}
+            
+            <div className="question-navigation">
+              <button 
+                className="nav-button prev-button"
+                onClick={() => {
                     setShowThirdPage(false);
                     setShowFirstPage(true);
-                  }}
-                >
-                  {language === 'en' ? 'Back' : '返回'}
-                </button>
-                
-                <button 
-                  className="nav-button next-button"
-                  onClick={() => {
+                }}
+              >
+                {language === 'en' ? 'Back' : '返回'}
+              </button>
+              
+              <button 
+                className="nav-button next-button"
+                onClick={() => {
                     setShowThirdPage(false);
                     setShowFourthPage(true);
-                  }}
+                }}
                   disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 9 && parseInt(id) <= 21).length < 13}
-                >
-                  {language === 'en' ? 'Continue' : '继续'}
-                </button>
-              </div>
+              >
+                {language === 'en' ? 'Continue' : '继续'}
+              </button>
             </div>
+          </div>
           ) : showFourthPage ? (
             // 第3页: ID 22-35，标题"II. About Us, CHON / 关于我们"
-            <div className="first-page-questions">
-              <h1 className="section-title">
-                {language === 'en' 
-                  ? 'II. About Us, CHON' 
-                  : 'II. 关于我们'}
-              </h1>
-              
+          <div className="first-page-questions">
+            <h1 className="section-title">
+              {language === 'en' 
+                ? 'II. About Us, CHON' 
+                : 'II. 关于我们'}
+            </h1>
+            
               {questions.slice(21, 35).map((question) => (
-                <div key={question.id} className="question-container">
-                  {renderQuestionText(question)}
-                  
-                  {question.type === 'multiple-choice' && (
-                    <div className="answer-options">
-                      {question.options?.map(option => (
-                        <div 
-                          key={option.id}
-                          className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                          onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                        >
-                          <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {question.type === 'text-input' && (
-                    <div className="text-input-container">
-                      <input
-                        type="text"
-                        className="text-answer-input"
-                        value={getCurrentAnswers()[question.id] || ''}
-                        onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                        placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                      />
-                    </div>
-                  )}
-                  
-                  {question.type === 'scale-question' && (
-                    <div className="scale-question-container">
-                      <div className="scale-labels-wrapper">
-                        <div className="scale-extreme-labels">
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                        </div>
-                        <div className="scale-options">
-                          {['1', '2', '3', '4', '5'].map((value) => (
-                            <div 
-                              key={value}
-                              className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                              onClick={() => handleScaleAnswer(question.id, value)}
-                            >
-                              <div className="scale-circle"></div>
-                              <span className="scale-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
+              <div key={question.id} className="question-container">
+                {renderQuestionText(question)}
+                
+                {question.type === 'multiple-choice' && (
+                  <div className="answer-options">
+                    {question.options?.map(option => (
+                      <div 
+                        key={option.id}
+                        className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
+                        onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
+                      >
+                        <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {question.type === 'text-input' && (
+                  <div className="text-input-container">
+                    <input
+                      type="text"
+                      className="text-answer-input"
+                      value={getCurrentAnswers()[question.id] || ''}
+                      onChange={(e) => handleTextAnswer(question.id, e.target.value)}
+                      placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
+                    />
+                  </div>
+                )}
+                
+                {question.type === 'scale-question' && (
+                  <div className="scale-question-container">
+                    <div className="scale-labels-wrapper">
+                      <div className="scale-extreme-labels">
+                        <span className="scale-extreme-label">
+                          {language === 'en' 
+                            ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                            : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                        </span>
+                        <span className="scale-extreme-label">
+                          {language === 'en' 
+                            ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                            : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                        </span>
+                      </div>
+                      <div className="scale-options">
+                        {['1', '2', '3', '4', '5'].map((value) => (
+                          <div 
+                            key={value}
+                            className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
+                            onClick={() => handleScaleAnswer(question.id, value)}
+                          >
+                            <div className="scale-circle"></div>
+                            <span className="scale-value">{value}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  )}
-                </div>
-              ))}
-              
-              <div className="question-navigation">
-                <button 
-                  className="nav-button prev-button"
-                  onClick={() => {
+                  </div>
+                )}
+              </div>
+            ))}
+            
+            <div className="question-navigation">
+              <button 
+                className="nav-button prev-button"
+                onClick={() => {
                     setShowFourthPage(false);
                     setShowThirdPage(true);
-                  }}
-                >
-                  {language === 'en' ? 'Back' : '返回'}
-                </button>
-                
-                <button 
-                  className="nav-button next-button"
-                  onClick={() => {
+                }}
+              >
+                {language === 'en' ? 'Back' : '返回'}
+              </button>
+              
+              <button 
+                className="nav-button next-button"
+                onClick={() => {
                     setShowFourthPage(false);
                     setShowFifthPage(true);
-                  }}
+                }}
                   disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 22 && parseInt(id) <= 35).length < 14}
-                >
-                  {language === 'en' ? 'Continue' : '继续'}
-                </button>
-              </div>
+              >
+                {language === 'en' ? 'Continue' : '继续'}
+              </button>
             </div>
+          </div>
           ) : showFifthPage ? (
             // 第4页: ID 36-48，标题"III. About Motherhood"
-            <div className="first-page-questions">
+          <div className="first-page-questions">
               <h1 className="section-title">
                 {language === 'en' 
                   ? 'III. About Motherhood' 
                   : 'III. 关于母亲'}
               </h1>
-              
+            
               {questions.slice(35, 48).map((question) => (
-                <div key={question.id} className="question-container">
-                  {renderQuestionText(question)}
-                  
-                  {question.type === 'multiple-choice' && (
-                    <div className="answer-options">
-                      {question.options?.map(option => (
-                        <div 
-                          key={option.id}
-                          className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                          onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                        >
-                          <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
+              <div key={question.id} className="question-container">
+                {renderQuestionText(question)}
+                
+                {question.type === 'multiple-choice' && (
+                  <div className="answer-options">
+                    {question.options?.map(option => (
+                      <div 
+                        key={option.id}
+                        className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
+                        onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
+                      >
+                        <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
                   {question.type === 'text-input' && (
                     <div className="text-input-container">
                       <input
@@ -2449,66 +2450,65 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                         onChange={(e) => handleTextAnswer(question.id, e.target.value)}
                         placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
                       />
-                    </div>
-                  )}
-                  
-                  {question.type === 'scale-question' && (
-                    <div className="scale-question-container">
-                      <div className="scale-labels-wrapper">
-                        <div className="scale-extreme-labels">
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                        </div>
-                        <div className="scale-options">
-                          {['1', '2', '3', '4', '5'].map((value) => (
-                            <div 
-                              key={value}
-                              className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                              onClick={() => handleScaleAnswer(question.id, value)}
-                            >
-                              <div className="scale-circle"></div>
-                              <span className="scale-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
+                  </div>
+                )}
+                
+                {question.type === 'scale-question' && (
+                  <div className="scale-question-container">
+                    <div className="scale-labels-wrapper">
+                      <div className="scale-extreme-labels">
+                        <span className="scale-extreme-label">
+                          {language === 'en' 
+                            ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                            : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                        </span>
+                        <span className="scale-extreme-label">
+                          {language === 'en' 
+                            ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                            : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                        </span>
+                      </div>
+                      <div className="scale-options">
+                        {['1', '2', '3', '4', '5'].map((value) => (
+                          <div 
+                            key={value}
+                            className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
+                            onClick={() => handleScaleAnswer(question.id, value)}
+                          >
+                            <div className="scale-circle"></div>
+                            <span className="scale-value">{value}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
-                  )}
-                </div>
-              ))}
-              
-              <div className="question-navigation">
-                <button 
-                  className="nav-button prev-button"
-                  onClick={() => {
+                  </div>
+                )}
+              </div>
+            ))}
+            
+            <div className="question-navigation">
+              <button 
+                className="nav-button prev-button"
+                onClick={() => {
                     setShowFifthPage(false);
                     setShowFourthPage(true);
-                  }}
-                >
-                  {language === 'en' ? 'Back' : '返回'}
-                </button>
-                
-                <button 
-                  className="nav-button finish-button"
-                  onClick={() => {
-                    // 计算结果并显示完成信息
-                    calculateTagResults();
-                    alert(language === 'en' ? 'Questionnaire completed!' : '问卷完成！');
-                  }}
+                }}
+              >
+                {language === 'en' ? 'Back' : '返回'}
+              </button>
+              
+              <button 
+                className="nav-button finish-button"
+                onClick={() => {
+                    // 计算结果并跳转到结果页面
+                    finishQuestionnaire();
+                }}
                   disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 36 && parseInt(id) <= 48).length < 13}
-                >
-                  {language === 'en' ? 'Finish' : '完成'}
-                </button>
-              </div>
+              >
+                {language === 'en' ? 'Finish' : '完成'}
+              </button>
             </div>
+          </div>
           ) : null
         }
       </div>
@@ -3354,11 +3354,10 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                 <button 
                   className="nav-button finish-button"
                   onClick={() => {
-                    // 计算结果并显示完成信息
-                    calculateTagResults();
-                    alert(language === 'en' ? 'Questionnaire completed!' : '问卷完成！');
+                    // 计算结果并跳转到结果页面
+                    finishQuestionnaire();
                   }}
-                  disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 37 && parseInt(id) <= 47).length < 11}
+                  disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 32 && parseInt(id) <= 42).length < 11}
                 >
                   {language === 'en' ? 'Finish' : '完成'}
                 </button>
@@ -3652,9 +3651,8 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                 <button 
                   className="nav-button finish-button"
                   onClick={() => {
-                    // 计算结果并显示完成信息
-                    calculateTagResults();
-                    alert(language === 'en' ? 'Questionnaire completed!' : '问卷完成！');
+                    // 计算结果并跳转到结果页面
+                    finishQuestionnaire();
                   }}
                   disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 27 && parseInt(id) <= 37).length < 11}
                 >
@@ -3666,6 +3664,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         }
       </div>
     );
+  };
+
+  // 完成问卷并跳转到结果页面的函数
+  const finishQuestionnaire = () => {
+    // 计算结果并保存
+    calculateTagResults();
+    
+    // 跳转到结果页面
+    navigate('/results');
   };
 
   return (
