@@ -85,6 +85,38 @@ const HexagonChart: React.FC<{
     return points;
   };
 
+  // 获取标签位置的函数 - 优化定位
+  const getTagPosition = (center: [number, number], size: number, tagIndex: number) => {
+    // 从30度开始，每隔60度一个顶点
+    const angle = (Math.PI / 6) + (Math.PI / 3 * tagIndex);
+    // 为外部标签增加额外距离
+    const distance = size + 30;
+    
+    // 计算标签坐标
+    const x = center[0] + distance * Math.cos(angle);
+    const y = center[1] + distance * Math.sin(angle);
+    
+    return { 
+      key: tagKeys[tagIndex], 
+      labelX: x, 
+      labelY: y, 
+      angle: angle * (180 / Math.PI) // 转换为角度
+    };
+  };
+
+  // 获取分数标签的位置
+  const getScorePosition = (center: [number, number], size: number, tagIndex: number, score: number) => {
+    // 从30度开始，每隔60度一个顶点
+    const angle = (Math.PI / 6) + (Math.PI / 3 * tagIndex);
+    // 计算分数位置 - 在数据点和中心点之间
+    const scaledSize = (size * score) / 100 * 0.7; // 略微靠近中心点，用0.7比例
+    
+    const x = center[0] + scaledSize * Math.cos(angle);
+    const y = center[1] + scaledSize * Math.sin(angle);
+    
+    return { x, y };
+  };
+
   // 生成同心六边形的点（创建刻度线）
   const generateConcentric = (center: [number, number], maxSize: number, count: number = 4) => {
     const polygons = [];
@@ -96,7 +128,6 @@ const HexagonChart: React.FC<{
     return polygons;
   };
 
-  const [hoveredTag, setHoveredTag] = useState<string | null>(null);
   const [animated, setAnimated] = useState(false);
   
   // 使用useEffect监听animationKey变化，重置动画状态
@@ -107,17 +138,6 @@ const HexagonChart: React.FC<{
     }, 500);
     return () => clearTimeout(timer);
   }, [animationKey]); // 依赖于animationKey
-  
-  // 添加防抖处理，避免频繁状态更新
-  const handleMouseEnter = (tag: string) => {
-    if (hoveredTag !== tag) {
-      setHoveredTag(tag);
-    }
-  };
-  
-  const handleMouseLeave = () => {
-    setHoveredTag(null);
-  };
   
   const center: [number, number] = [200, 200]; // 中心点坐标
   const size = 160; // 六边形尺寸
@@ -133,15 +153,21 @@ const HexagonChart: React.FC<{
   const scorePoints = getScorePoints(center, size, scores);
   const scorePolygon = scorePoints.map(point => point.join(',')).join(' ');
   
-  // 重新调整标签位置 - 确保标签显示在顶点上 - 使用tagKeys确保顺序一致
-  const tagPositions = [
-    { key: tagKeys[0], labelX: center[0], labelY: center[1] - size - 25, angle: 30 },
-    { key: tagKeys[1], labelX: center[0] + size * 0.85 + 15, labelY: center[1] - size * 0.5 - 15, angle: 90 },
-    { key: tagKeys[2], labelX: center[0] + size * 0.85 + 15, labelY: center[1] + size * 0.5 + 15, angle: 150 },
-    { key: tagKeys[3], labelX: center[0], labelY: center[1] + size + 25, angle: 210 },
-    { key: tagKeys[4], labelX: center[0] - size * 0.85 - 15, labelY: center[1] + size * 0.5 + 15, angle: 270 },
-    { key: tagKeys[5], labelX: center[0] - size * 0.85 - 15, labelY: center[1] - size * 0.5 - 15, angle: 330 },
-  ];
+  // 为每个位置增加标签和分数位置
+  const tagPositions = [];
+  for (let i = 0; i < 6; i++) {
+    const pos = getTagPosition(center, size, i);
+    const tagKey = tagKeys[i];
+    const score = scores[tagKey] || 0;
+    const scorePos = getScorePosition(center, size, i, score);
+    
+    tagPositions.push({
+      ...pos,
+      score,
+      scoreX: scorePos.x,
+      scoreY: scorePos.y
+    });
+  }
 
   // 添加刻度值 - 调整位置以匹配新的角度
   const scaleValues = ["0", "25", "50", "75", "100"];
@@ -228,7 +254,7 @@ const HexagonChart: React.FC<{
             transition: 'opacity 1s ease 0.7s, fill 0.3s ease'
           }}
         />
-        
+
         {/* 分数点 */}
         {scorePoints.map((point, i) => (
           <circle
@@ -249,14 +275,49 @@ const HexagonChart: React.FC<{
           />
         ))}
         
-        {/* 标签文本和悬停交互区域 */}
+        {/* 分数值气泡 */}
+        {tagPositions.map((item, index) => {
+          return (
+            <g 
+              key={`score-bubble-${item.key}`} 
+              style={{
+                opacity: animated ? 1 : 0,
+                transition: `opacity 0.5s ease ${1.2 + index * 0.1}s`
+              }}
+            >
+              {/* 分数背景气泡 */}
+              <circle
+                cx={item.scoreX}
+                cy={item.scoreY}
+                r="18"
+                fill="rgba(10,10,10,0.8)"
+                stroke="#F0BDC0"
+                strokeWidth="1.5"
+                style={{
+                  filter: "drop-shadow(0 0 3px rgba(240,189,192,0.5))"
+                }}
+              />
+              {/* 分数文本 */}
+              <text
+                x={item.scoreX}
+                y={item.scoreY}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fill="#F0BDC0"
+                fontSize="12"
+                fontWeight="bold"
+              >
+                {item.score}%
+              </text>
+            </g>
+          );
+        })}
+        
+        {/* 标签文本 */}
         {tagPositions.map((item, index) => {
           const labelText = labels[item.key] 
             ? (language === 'en' ? labels[item.key].en : labels[item.key].zh) 
             : item.key;
-          
-          const value = scores[item.key] || 0;
-          const isHovered = hoveredTag === item.key;
           
           return (
             <g 
@@ -266,40 +327,18 @@ const HexagonChart: React.FC<{
                 transition: `opacity 0.5s ease ${1 + index * 0.1}s`
               }}
             >
-              {/* 增加一个更大的透明悬停区域 */}
+              {/* 标签文本背景 */}
               <rect
-                x={item.labelX - 100}
-                y={item.labelY - 40}
-                width="200"
-                height="80"
-                rx="40"
-                ry="40"
-                fill="transparent"
-                className="label-hover-area"
-                onMouseEnter={() => handleMouseEnter(item.key)}
-                onMouseLeave={handleMouseLeave}
-                style={{ cursor: 'pointer' }}
-              />
-              
-              {/* 标签文本背景 - 添加悬停交互 */}
-              <rect
-                x={item.labelX - 70}
+                x={item.labelX - 65}
                 y={item.labelY - 12}
-                width="140"
+                width="130"
                 height="24"
                 rx="12"
                 ry="12"
                 fill="rgba(0,0,0,0.6)"
-                stroke={isHovered ? "#F0BDC0" : "rgba(255,255,255,0.1)"}
-                strokeWidth={isHovered ? "2" : "1"}
+                stroke="rgba(255,255,255,0.1)"
+                strokeWidth="1"
                 className="label-background"
-                onMouseEnter={() => handleMouseEnter(item.key)}
-                onMouseLeave={handleMouseLeave}
-                style={{ 
-                  cursor: 'pointer',
-                  transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-                  transition: 'transform 0.2s ease, stroke 0.2s ease'
-                }}
               />
               
               {/* 标签文本 */}
@@ -308,48 +347,13 @@ const HexagonChart: React.FC<{
                 y={item.labelY} 
                 textAnchor="middle" 
                 dominantBaseline="middle"
-                fill={isHovered ? "#F0BDC0" : "white"}
+                fill="white"
                 fontSize="13"
                 fontWeight="bold"
                 className="label-text"
-                onMouseEnter={() => handleMouseEnter(item.key)}
-                onMouseLeave={handleMouseLeave}
-                style={{ 
-                  cursor: 'pointer', 
-                  pointerEvents: 'all',
-                  transition: 'fill 0.2s ease'
-                }}
               >
                 {labelText}
               </text>
-              
-              {/* 悬停时显示的分数提示 */}
-              {isHovered && (
-                <g className="score-tooltip">
-                  <rect
-                    x={item.labelX - 30}
-                    y={item.labelY - 45}
-                    width="60"
-                    height="28"
-                    rx="14"
-                    ry="14"
-                    fill="rgba(0,0,0,0.8)"
-                    stroke="#F0BDC0"
-                    strokeWidth="1"
-                  />
-                  <text
-                    x={item.labelX}
-                    y={item.labelY - 30}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                    fill="#F0BDC0"
-                    fontSize="14"
-                    fontWeight="bold"
-                  >
-                    {value}%
-                  </text>
-                </g>
-              )}
             </g>
           );
         })}
