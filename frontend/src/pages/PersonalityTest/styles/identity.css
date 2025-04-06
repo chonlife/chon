@@ -1,0 +1,125 @@
+/* Identity selection page styles */
+.identity-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+  padding: 1rem;
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.identity-title {
+  font-size: 2.2rem;
+  color: white;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: normal;
+  letter-spacing: 0.1em;
+  width: 100%;
+}
+
+.identity-option {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  background-color: white;
+  border: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 0.6rem;
+}
+
+.identity-option.selected {
+  background-color: #F0BDC0;
+  box-shadow: 0 4px 15px rgba(240, 189, 192, 0.3);
+  transform: translateY(-2px);
+}
+
+.identity-option.selected p {
+  color: white;
+}
+
+.identity-option p {
+  font-size: 1.1rem;
+  line-height: 1.3;
+  margin: 0;
+  color: black;
+  transition: all 0.3s ease;
+}
+
+.identity-option:hover {
+  background-color: #F0BDC0;
+  box-shadow: 0 4px 15px rgba(240, 189, 192, 0.3);
+  transform: translateY(-2px);
+}
+
+.identity-option:hover p {
+  color: white;
+}
+
+.identity-option.mother,
+.identity-option.corporate,
+.identity-option.other {
+  background-color: white;
+}
+
+.identity-option.mother.selected,
+.identity-option.corporate.selected,
+.identity-option.other.selected {
+  background-color: #F0BDC0;
+}
+
+.identity-option.mother:hover,
+.identity-option.corporate:hover,
+.identity-option.other:hover {
+  background-color: #F0BDC0;
+}
+
+.identity-option.mother.selected p,
+.identity-option.corporate.selected p,
+.identity-option.other.selected p,
+.identity-option.mother:hover p,
+.identity-option.corporate:hover p,
+.identity-option.other:hover p {
+  color: white;
+}
+
+.continue-button {
+  margin-top: 2rem;
+  background-color: white;
+  color: black;
+  border: none;
+  padding: 1.2rem 2.5rem;
+  font-size: 1.1rem;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-weight: 500;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  white-space: nowrap;
+  min-width: 200px;
+}
+
+.continue-button:hover:not(:disabled) {
+  background-color: #F0BDC0;
+  color: white;
+  box-shadow: 0 4px 15px rgba(240, 189, 192, 0.3);
+  transform: translateY(-2px);
+}
+
+.continue-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #ccc;
+} 

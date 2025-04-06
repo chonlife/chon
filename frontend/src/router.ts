@@ -3,6 +3,7 @@ import Home from './pages/Home/Home';
 import PersonalityTest from './pages/PersonalityTest/PersonalityTest';
 import Contact from './pages/Contact/Contact';
 import Login from './pages/Login/Login';
+import Results from './pages/Results/Results';
 
 export interface Route {
   path: string;
@@ -24,6 +25,12 @@ const routes: Route[] = [
     component: PersonalityTest,
     name: 'PERSONALITY TEST',
     showInNav: true,
+  },
+  {
+    path: '/results',
+    component: Results,
+    name: 'RESULTS',
+    showInNav: false,
   },
   {
     path: '/contact',

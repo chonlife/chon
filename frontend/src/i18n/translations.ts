@@ -47,6 +47,12 @@ interface Translation {
       both: string;
       other: string;
     };
+    motherQuestionnaire: {
+      privacy: {
+        statement: string;
+        continue: string;
+      };
+    };
   };
   contact: {
     title: string;
@@ -127,6 +133,12 @@ const translations: TranslationsType = {
         corporate: 'Senior manager, director, vice president,\npartner, managing director, president,\nC-suite executives, Board of Directors, Founders, etc.',
         both: 'MOTHER + CORPORATE LEADER',
         other: 'Not a robot and not yet one of the above'
+      },
+      motherQuestionnaire: {
+        privacy: {
+          statement: 'Your information will only be used for verification purposes and to formulate your CHON personality test. It will not be shared, disclosed, or used for any other purpose. We value your honesty and are committed to protecting your privacy and ensuring the security of your data.',
+          continue: 'CONTINUE'
+        }
       }
     },
     contact: {
@@ -148,9 +160,9 @@ const translations: TranslationsType = {
         text: "Additionally, we welcome those with strong visuospatial and abstract logical thinking skills, whether it's group theory, topology, abstract algebra, LEGO or Rubik's Cube."
       },
       buttons: {
-        fund: "FUND →",
-        join: "JOIN →",
-        collaborate: "COLLABORATE →"
+        fund: "FUND",
+        join: "JOIN",
+        collaborate: "COLLABORATE"
       }
     },
     login: {
@@ -204,6 +216,12 @@ const translations: TranslationsType = {
         corporate: '高级经理、总监、副总经理、\n合伙人、董事总经理、总裁、\nC级行政主管、董事会成员、企业创始人等',
         both: '母亲 + 企业领导者',
         other: '不是机器人及上述人员'
+      },
+      motherQuestionnaire: {
+        privacy: {
+          statement: '您的信息仅用于验证目的和制定您的CHON性格测试。不会被分享、披露或用于任何其他目的。我们重视您的诚信，并致力于保护您的隐私和确保您的数据安全。',
+          continue: '继续'
+        }
       }
     },
     contact: {
