@@ -503,7 +503,29 @@
 }
 
 /* 响应式设计 */
+@media (max-width: 1200px) {
+  .results-layout {
+    gap: 3rem;
+  }
+  
+  .character-portrait {
+    max-width: 300px;
+  }
+  
+  .character-name {
+    font-size: 2.6rem;
+  }
+  
+  .svg-hexagon-chart {
+    max-width: 450px;
+  }
+}
+
 @media (max-width: 1024px) {
+  .results-container {
+    padding: 2.5rem;
+  }
+  
   .results-layout {
     flex-direction: column;
     gap: 2rem;
@@ -512,10 +534,19 @@
   .results-left {
     flex-direction: row;
     align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 1rem;
   }
 
   .character-portrait, .hexagon-chart {
     max-width: 250px;
+    margin: 0;
+  }
+  
+  .svg-hexagon-chart {
+    max-width: 400px;
+    padding: 1.2rem;
   }
 
   .character-name {
@@ -525,19 +556,62 @@
   .character-title {
     font-size: 1.3rem;
   }
+  
+  .dock-card {
+    transform: scale(0.95);
+  }
+  
+  .character-cards-dock {
+    max-width: 580px;
+  }
 }
 
-@media (max-width: 768px) {
-  .results-container {
-    padding: 2rem;
-  }
-
+/* 中型平板和大型手机 */
+@media (max-width: 890px) {
   .results-left {
     flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+  }
+  
+  .character-portrait {
+    max-width: 220px;
+    margin: 0 auto;
+  }
+  
+  .hexagon-chart {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .svg-hexagon-chart {
+    max-width: 380px;
+    margin: 0 auto;
+  }
+}
+
+/* 平板和手机 */
+@media (max-width: 768px) {
+  .results-container {
+    padding: 2rem 1.5rem;
+  }
+  
+  .results-layout {
+    gap: 1.5rem;
+    margin-bottom: 5rem;
   }
 
-  .character-portrait, .hexagon-chart {
+  .character-portrait {
     max-width: 200px;
+  }
+  
+  .hexagon-chart {
+    max-width: 100%;
+  }
+  
+  .svg-hexagon-chart {
+    max-width: 350px;
+    padding: 1rem;
   }
 
   .dock-card-image {
@@ -561,25 +635,87 @@
   .mythology-description, .workplace-description {
     font-size: 0.9rem;
   }
+  
+  .character-cards-dock {
+    max-width: 500px;
+    gap: 0.6rem;
+  }
+  
+  .result-item {
+    margin-bottom: 0.2rem;
+  }
 }
 
+/* 手机 */
+@media (max-width: 576px) {
+  .results-container {
+    padding: 1.5rem 1rem;
+  }
+  
+  .character-portrait {
+    max-width: 180px;
+  }
+  
+  .svg-hexagon-chart {
+    max-width: 320px;
+    padding: 0.8rem;
+  }
+  
+  .character-name {
+    font-size: 2rem;
+  }
+  
+  .character-title {
+    font-size: 1.1rem;
+  }
+  
+  .character-cards-dock {
+    max-width: 400px;
+    gap: 0.4rem;
+    padding: 0.6rem 0.8rem;
+  }
+  
+  .dock-card-image {
+    width: 38px;
+    height: 38px;
+  }
+  
+  .result-label {
+    width: 45%;
+    font-size: 0.85rem;
+  }
+  
+  .result-value {
+    font-size: 0.85rem;
+    width: 40px;
+  }
+}
+
+/* 小型手机 */
 @media (max-width: 480px) {
   .results-container {
-    padding: 1.5rem;
+    padding: 1.2rem 0.8rem;
   }
 
-  .character-portrait, .hexagon-chart {
-    max-width: 180px;
+  .character-portrait {
+    max-width: 150px;
+  }
+  
+  .svg-hexagon-chart {
+    max-width: 300px;
+    padding: 0.6rem;
   }
 
   .character-cards-dock {
     padding: 0.5rem;
-    gap: 0.5rem;
+    gap: 0.4rem;
+    max-width: 350px;
   }
 
   .dock-card-image {
-    width: 35px;
-    height: 35px;
+    width: 32px;
+    height: 32px;
+    margin-bottom: 0.3rem;
   }
 
   .dock-card-name {
@@ -588,17 +724,125 @@
 
   .result-label {
     width: 40%;
+    font-size: 0.8rem;
+  }
+  
+  .result-value {
+    font-size: 0.8rem;
+    width: 35px;
   }
 
   .character-name {
-    font-size: 1.8rem;
+    font-size: 1.7rem;
     line-height: 1.1;
   }
 
   .character-title {
-    font-size: 1.1rem;
-    margin: 0.2rem 0 1rem 0;
+    font-size: 1rem;
+    margin: 0.2rem 0 0.8rem 0;
     padding-top: 0.4rem;
+  }
+  
+  .mythology-description, .workplace-description {
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  
+  .results-grid {
+    gap: 0.5rem;
+  }
+  
+  .result-bar-container {
+    height: 10px;
+  }
+}
+
+/* 超小型手机 */
+@media (max-width: 380px) {
+  .results-container {
+    padding: 1rem 0.6rem;
+  }
+  
+  .character-portrait {
+    max-width: 130px;
+  }
+  
+  .svg-hexagon-chart {
+    max-width: 280px;
+    padding: 0.5rem;
+  }
+  
+  .character-name {
+    font-size: 1.5rem;
+  }
+  
+  .character-title {
+    font-size: 0.9rem;
+  }
+  
+  .character-cards-dock {
+    max-width: 320px;
+    gap: 0.3rem;
+  }
+  
+  .dock-card-image {
+    width: 30px;
+    height: 30px;
+  }
+  
+  .dock-card-name {
+    font-size: 0.5rem;
+  }
+  
+  .result-label {
+    font-size: 0.75rem;
+  }
+  
+  .user-results h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+  }
+}
+
+/* 硬件特定优化 */
+/* 适配折叠屏内屏 */
+@media (max-width: 320px) {
+  .results-container {
+    padding: 0.8rem 0.5rem;
+  }
+  
+  .character-portrait {
+    max-width: 120px;
+  }
+  
+  .svg-hexagon-chart {
+    max-width: 250px;
+  }
+  
+  .character-cards-dock {
+    max-width: 280px;
+    padding: 0.4rem;
+  }
+  
+  .dock-card-image {
+    width: 28px;
+    height: 28px;
+  }
+}
+
+/* 高度较短的设备 */
+@media (max-height: 650px) {
+  .results-container {
+    padding-top: 1rem;
+    padding-bottom: 4.5rem;
+  }
+  
+  .character-portrait {
+    max-width: 130px;
+  }
+  
+  .results-layout {
+    margin-bottom: 4rem;
   }
 }
 
@@ -1215,4 +1459,16 @@
     transform: scale(1.2);
     filter: drop-shadow(0 0 5px rgba(240, 189, 192, 0.9));
   }
-} 
+}
+
+/* 新增分数气泡动画 */
+@keyframes scorePulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 3px rgba(240, 189, 192, 0.5);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 8px rgba(240, 189, 192, 0.7);
+  }
+}
