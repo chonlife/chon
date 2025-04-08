@@ -853,6 +853,18 @@
   margin-bottom: 3px;
 }
 
+/* Add specific style for the dash break */
+.scale-extreme-label span:first-child::after {
+  content: "";
+  display: block;
+  height: 5px; /* Space between lines */
+}
+
+.scale-extreme-label span:last-child {
+  /* Added to ensure the second part is properly styled */
+  display: block;
+}
+
 .scale-extreme-label:first-child {
   text-align: left;
   color: #333;
@@ -1193,6 +1205,7 @@
   font-size: 1.8rem;
   color: #333;
   margin-bottom: 1.25rem;
+  margin-top: 60px; /* Match the spacing of pages without titles */
   font-weight: 600;
   width: 100%;
   text-align: left;
@@ -1203,6 +1216,7 @@
   .section-title {
     font-size: 1.6rem;
     margin-bottom: 1.2rem;
+    margin-top: 40px; /* Match tablet spacing */
     padding-left: 1.5rem;
   }
 }
@@ -1211,7 +1225,17 @@
   .section-title {
     font-size: 1.3rem;
     margin-bottom: 1rem;
+    margin-top: 30px; /* Match mobile spacing */
     padding-left: 1rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .section-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+    margin-top: 25px; /* Match small mobile spacing */
+    padding-left: 0.5rem;
   }
 }
 
@@ -1479,6 +1503,7 @@
 .first-page-true {
   position: relative;
   min-height: 400px;
+  margin-top: 60px; /* Add spacing equivalent to a section title */
 }
 
 .first-page-true .question-navigation {
@@ -1592,5 +1617,127 @@
     font-size: 1.1rem;
     margin-top: 10px;
     padding-left: 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .first-page-true {
+    margin-top: 40px; /* Adjusted spacing for tablets */
+  }
+}
+
+@media (max-width: 480px) {
+  .first-page-true {
+    margin-top: 30px; /* Adjusted spacing for mobile */
+  }
+}
+
+@media (max-width: 360px) {
+  .first-page-true {
+    margin-top: 25px; /* Adjusted spacing for small mobile devices */
+  }
+}
+
+.scale-extreme-label[lang="zh"],
+[lang="zh"] .scale-extreme-label {
+  font-size: 1.15rem; /* Larger font size for Chinese text */
+}
+
+[lang="zh"] .scale-extreme-label span {
+  font-size: 1.15rem; /* Ensure all spans inherit the larger font size */
+}
+
+/* Responsive adjustments for Chinese labels */
+@media (max-width: 768px) {
+  .scale-extreme-label[lang="zh"],
+  [lang="zh"] .scale-extreme-label {
+    font-size: 1.05rem;
+  }
+  
+  [lang="zh"] .scale-extreme-label span {
+    font-size: 1.05rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .scale-extreme-label[lang="zh"],
+  [lang="zh"] .scale-extreme-label {
+    font-size: 0.95rem;
+  }
+  
+  [lang="zh"] .scale-extreme-label span {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .scale-extreme-label[lang="zh"],
+  [lang="zh"] .scale-extreme-label {
+    font-size: 0.85rem;
+  }
+  
+  [lang="zh"] .scale-extreme-label span {
+    font-size: 0.85rem;
+  }
+}
+
+/* Increase font size for Chinese scale labels */
+[lang="zh"] .scale-extreme-label {
+  font-size: 1.08rem; /* Further reduced size */
+}
+
+[lang="zh"] .scale-extreme-label span {
+  font-size: 1.08rem;
+  line-height: 1.4; /* Slightly reduced line height */
+}
+
+/* Make the dash break more pronounced for Chinese text */
+[lang="zh"] .scale-extreme-label span:first-child::after {
+  height: 8px; /* Slightly smaller space */
+}
+
+/* Responsive adjustments for Chinese labels */
+@media (max-width: 768px) {
+  [lang="zh"] .scale-extreme-label {
+    font-size: 1rem;
+  }
+  
+  [lang="zh"] .scale-extreme-label span {
+    font-size: 1rem;
+    line-height: 1.35;
+  }
+  
+  [lang="zh"] .scale-extreme-label span:first-child::after {
+    height: 7px;
+  }
+}
+
+@media (max-width: 480px) {
+  [lang="zh"] .scale-extreme-label {
+    font-size: 0.9rem;
+  }
+  
+  [lang="zh"] .scale-extreme-label span {
+    font-size: 0.9rem;
+    line-height: 1.3;
+  }
+  
+  [lang="zh"] .scale-extreme-label span:first-child::after {
+    height: 6px;
+  }
+}
+
+@media (max-width: 360px) {
+  [lang="zh"] .scale-extreme-label {
+    font-size: 0.8rem;
+  }
+  
+  [lang="zh"] .scale-extreme-label span {
+    font-size: 0.8rem;
+    line-height: 1.2;
+  }
+  
+  [lang="zh"] .scale-extreme-label span:first-child::after {
+    height: 4px;
   }
 } 
