@@ -57,6 +57,7 @@ interface Translation {
   contact: {
     title: string;
     description: string;
+    comingSoon: string;
     form: {
       name: string;
       email: string;
@@ -144,6 +145,7 @@ const translations: TranslationsType = {
     contact: {
       title: 'Contact Us',
       description: 'Interested in creating a more inclusive environment for mothers in your corporation?',
+      comingSoon: "Contact page coming soon...",
       form: {
         name: 'Name',
         email: 'Email',
@@ -227,6 +229,7 @@ const translations: TranslationsType = {
     contact: {
       title: '联系我们',
       description: '有兴趣在您的企业中为母亲创造更包容的环境吗？',
+      comingSoon: "联系页面即将上线...",
       form: {
         name: '姓名',
         email: '邮箱',
