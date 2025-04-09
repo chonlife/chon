@@ -5,6 +5,10 @@ import LanguageSelector from '../../components/LanguageSelector/LanguageSelector
 import './PersonalityTest.css';
 import BothQuestionnaire from './BothQuestionnaire.tsx';
 import { scrollToNextQuestion, scrollToFirstQuestionOfNextPage } from './ScrollUtils.ts';
+import questionnaireApi, { prepareQuestionResponses, QuestionResponse } from '../../api/questionnaire.ts';
+
+// API Configuration
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
 type IdentityType = 'mother' | 'corporate' | 'both' | 'other';
 type TestStep = 'intro' | 'identity' | 'privacy' | 'questionnaire';
@@ -82,9 +86,14 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   const [showFourthPage, setShowFourthPage] = useState(false);
   const [showFifthPage, setShowFifthPage] = useState(false);
   const [showSixthPage, setShowSixthPage] = useState(false);
-  // 移除不再需要的页面状态变量
   const [showSaveIndicator, setShowSaveIndicator] = useState(false);
-  const [agreePercentage, setAgreePercentage] = useState<number>(65);
+  // 替换静态百分比为动态状态
+  const [introStats, setIntroStats] = useState({
+    yesCount: 0,
+    noCount: 0,
+    yesPercentage: 65, // 默认值，将被API数据替换
+    loading: true
+  });
   // Add state to track current questionnaire type
   const [activeQuestionnaire, setActiveQuestionnaire] = useState<QuestionnaireType | null>(null);
   // Add state to track secondary questionnaire for "both" option
@@ -2757,22 +2766,61 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     }
   }, [step, onWhiteThemeChange, onHideUIChange]);
 
-  // 模拟获取同意/不同意的比例数据
-  useEffect(() => {
-    // 这里可以替换为实际的API调用，获取真实数据
-    // 目前暂时使用硬编码的数值
-    setAgreePercentage(65);
-  }, []);
+  // 添加获取intro统计数据的函数
+  const fetchIntroStats = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/intro-stats`);
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      // 只有在用户已经做出选择时，才更新UI显示
+      setIntroStats({
+        yesCount: data.yes_count,
+        noCount: data.no_count,
+        yesPercentage: data.yes_percentage,
+        loading: false
+      });
+      
+      console.log("Fetched intro stats:", data);
+    } catch (error) {
+      console.error("Error fetching intro stats:", error);
+      setIntroStats(prev => ({...prev, loading: false}));
+    }
+  };
 
-  // Reset userChoice when returning to intro step
+  // 在用户选择yes/no后获取最新统计数据
+  useEffect(() => {
+    if (userChoice) {
+      // 稍微延迟，让后端有时间更新数据
+      const timer = setTimeout(() => {
+        fetchIntroStats();
+      }, 800);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [userChoice]);
+
+  // 在组件挂载或step变为'intro'时进行初始化
   useEffect(() => {
     if (step === 'intro') {
+      // 重置userChoice，确保用户每次回到intro页面时都会看到选项
       setUserChoice(null);
+      
+      // 同时预加载统计数据，但不会影响UI显示
+      fetchIntroStats();
     }
   }, [step]);
-  
+
   const handleOptionClick = (choice: string) => {
     setUserChoice(choice);
+    
+    // 实时保存intro choice到后端
+    questionnaireApi.saveIntroChoice(choice);
+    // 设置loading状态，等待数据更新
+    setIntroStats(prev => ({...prev, loading: true}));
   };
   
   const handleBeginTest = () => {
@@ -2887,13 +2935,13 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       [questionId]: optionId
     });
     
-    // 更新标签得分
+    // Update tag scores
     updateTagScores(questionId, optionId);
     
-    // 添加新功能：自动滚动到下一个问题
+    // Add new feature: auto-scroll to next question
     setTimeout(() => {
       scrollToNextQuestion(questionId);
-    }, 100); // 添加100ms延迟，使滚动反应更快
+    }, 100);
   };
 
   // Handle text input for free text questions
@@ -2908,7 +2956,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     } else {
       // Remove the answer if text is empty to accurately track progress
       const newAnswers = {...currentAnswers};
-        delete newAnswers[questionId];
+      delete newAnswers[questionId];
       setCurrentAnswers(newAnswers);
     }
   };
@@ -2921,13 +2969,13 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       [questionId]: value
     });
     
-    // 更新标签得分
+    // Update tag scores
     updateTagScores(questionId, value);
     
-    // 添加新功能：自动滚动到下一个问题
+    // Add new feature: auto-scroll to next question
     setTimeout(() => {
       scrollToNextQuestion(questionId);
-    }, 100); // 将延迟从300ms减少到100ms，使滚动更快
+    }, 100);
   };
 
   // Helper to get current answers based on which questionnaire is active
@@ -3090,9 +3138,10 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               </div>
             ))}
             
-            <div className="question-navigation">
+            {/* 母亲问卷第一页导航按钮 */}
+            <div className="first-page-navigation">
               <button 
-                className="nav-button next-button"
+                className="nav-button next-button first-page-continue"
                 onClick={() => {
                     setShowFirstPage(false);
                     setShowThirdPage(true);
@@ -3391,7 +3440,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               <button 
                 className="nav-button finish-button"
                 onClick={() => {
-                    // 计算结果并跳转到结果页面
+                    // 完成问卷并跳转到结果页面
                     finishQuestionnaire();
                 }}
                   disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 36 && parseInt(id) <= 48).length < 13}
@@ -3509,9 +3558,9 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                 </div>
               ))}
               
-              <div className="question-navigation">
+              <div className="first-page-navigation">
                 <button 
-                  className="nav-button next-button"
+                  className="nav-button next-button first-page-continue"
                   onClick={() => {
                     setShowFirstPage(false);
                     setShowSecondPage(true);
@@ -3810,7 +3859,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                 <button 
                   className="nav-button finish-button"
                   onClick={() => {
-                    // 计算结果并跳转到结果页面
+                    // 完成问卷并跳转到结果页面
                     finishQuestionnaire();
                   }}
                   disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 32 && parseInt(id) <= 42).length < 11}
@@ -4114,7 +4163,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                 <button 
                   className="nav-button finish-button"
                   onClick={() => {
-                    // 计算结果并跳转到结果页面
+                    // 完成问卷并跳转到结果页面
                     finishQuestionnaire();
                   }}
                   disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 27 && parseInt(id) <= 37).length < 11}
@@ -4161,8 +4210,33 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     // 计算结果并保存
     calculateTagResults();
     
-    // 跳转到结果页面
-    navigate('/results');
+    // 准备提交到后端的回答数据
+    let allResponses: QuestionResponse[] = [];
+    
+    if (activeQuestionnaire === 'both') {
+      // 对于'both'问卷，收集主要和次要回答
+      const primaryQuestions = questionnaires.both.questions;
+      const primaryResponses = prepareQuestionResponses('both', primaryQuestions, primaryAnswers);
+      const secondaryResponses = prepareQuestionResponses('both', primaryQuestions, secondaryAnswers);
+      
+      allResponses = [...primaryResponses, ...secondaryResponses];
+    } else if (activeQuestionnaire) {
+      // 对于单一问卷
+      const questions = questionnaires[activeQuestionnaire].questions;
+      allResponses = prepareQuestionResponses(activeQuestionnaire, questions, answers);
+    }
+    
+    // 一次性保存所有回答
+    questionnaireApi.saveAllQuestionResponses(allResponses)
+      .then(() => {
+        // 保存成功后跳转到结果页面
+        navigate('/results');
+      })
+      .catch((error) => {
+        console.error('Error during questionnaire completion:', error);
+        // 即使保存失败，仍然跳转到结果页面
+        navigate('/results');
+      });
   };
 
   // Exit button that appears only on questionnaire and privacy screens
@@ -4210,55 +4284,64 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   const renderIntroContent = () => {
     const wrappedQuestion = `<span lang="${language}">${language === 'en' ? t.intro.question : '母亲是天生的领导者。'}</span>`;
     
-  return (
-        <div className="intro-content" lang={language}>
-          <h1 className="intro-question" 
-              dangerouslySetInnerHTML={{ __html: wrappedQuestion }}
-              lang={language}>
-          </h1>
-          
-          {!userChoice ? (
-            <div className="test-options" lang={language}>
-              <button 
-                className="test-option-button"
-                onClick={() => handleOptionClick('yes')}
-                lang={language}
-              >
-                {t.intro.yes}
-              </button>
-              <button 
-                className="test-option-button"
-                onClick={() => handleOptionClick('no')}
-                lang={language}
-              >
-                {t.intro.no}
-              </button>
-            </div>
-          ) : (
-            <>
-              <div className="progress-container" lang={language}>
-                <div className="percentage-labels" lang={language}>
-                <span className="agree-label" lang={language}>{t.intro.agree} ({agreePercentage}%)</span>
-                <span className="disagree-label" lang={language}>{t.intro.disagree} ({100 - agreePercentage}%)</span>
-                </div>
-                <div className="progress-bar">
-                  <div 
-                    className="progress-fill" 
-                  style={{ width: `${agreePercentage}%` }}
-                  ></div>
-                </div>
+    return (
+      <div className="intro-content" lang={language}>
+        <h1 className="intro-question" 
+            dangerouslySetInnerHTML={{ __html: wrappedQuestion }}
+            lang={language}>
+        </h1>
+        
+        {!userChoice ? (
+          <div className="test-options" lang={language}>
+            <button 
+              className="test-option-button"
+              onClick={() => handleOptionClick('yes')}
+              lang={language}
+            >
+              {t.intro.yes}
+            </button>
+            <button 
+              className="test-option-button"
+              onClick={() => handleOptionClick('no')}
+              lang={language}
+            >
+              {t.intro.no}
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="progress-container" lang={language}>
+              <div className="percentage-labels" lang={language}>
+                <span className="agree-label" lang={language}>
+                  {t.intro.agree} ({introStats.yesPercentage}%)
+                </span>
+                <span className="disagree-label" lang={language}>
+                  {t.intro.disagree} ({100 - introStats.yesPercentage}%)
+                </span>
               </div>
-              
-              <button 
-                className="begin-test-button" 
-                onClick={handleBeginTest}
-                lang={language}
-              >
-                {t.intro.beginTest}
-              </button>
-            </>
-          )}
-        </div>
+              <div className="progress-bar">
+                <div 
+                  className="progress-fill" 
+                  style={{ width: `${introStats.yesPercentage}%` }}
+                ></div>
+              </div>
+              {introStats.loading && (
+                <div className="loading-indicator">
+                  {language === 'en' ? 'Loading stats...' : '加载统计数据...'}
+                </div>
+              )}
+            </div>
+            
+            <button 
+              className="begin-test-button" 
+              onClick={handleBeginTest}
+              lang={language}
+            >
+              {t.intro.beginTest}
+            </button>
+          </>
+        )}
+      </div>
     );
   };
 
@@ -4269,33 +4352,43 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         <h1 className="identity-title" lang={language}>{t.personalityTest.identity.title}</h1>
         
         <div 
-          className={`identity-option mother ${isIdentitySelected('mother') ? 'selected' : ''}`}
+          className={`option-container ${isIdentitySelected('mother') ? 'selected' : ''}`}
           onClick={() => handleIdentitySelect('mother')}
-          lang={language}
         >
-          <p lang={language}>{t.personalityTest.identity.mother}</p>
+          <div className="identity-checkbox" onClick={(e) => { e.stopPropagation(); handleIdentitySelect('mother'); }}></div>
+          <div 
+            className={`identity-option mother ${isIdentitySelected('mother') ? 'selected' : ''}`}
+            lang={language}
+          >
+            <p lang={language}>{t.personalityTest.identity.mother}</p>
+          </div>
         </div>
         
         <div 
-          className={`identity-option corporate ${isIdentitySelected('corporate') ? 'selected' : ''}`}
+          className={`option-container ${isIdentitySelected('corporate') ? 'selected' : ''}`}
           onClick={() => handleIdentitySelect('corporate')}
-          lang={language}
         >
-          <p lang={language}>
-            {(language === 'en' 
-              ? `Founder / Board Member /
+          <div className="identity-checkbox" onClick={(e) => { e.stopPropagation(); handleIdentitySelect('corporate'); }}></div>
+          <div 
+            className={`identity-option corporate ${isIdentitySelected('corporate') ? 'selected' : ''}`}
+            lang={language}
+          >
+            <p lang={language}>
+              {(language === 'en' 
+                ? `Founder / Board Member /
 C-Suite Executive / President / Managing Director / Partner /
 Vice President / Director / Senior Manager`
-              : `创始人 / 董事会成员 /
+                : `创始人 / 董事会成员 /
 首席执行官 / 总裁 / 董事总经理 / 合伙人 /
 副总裁 / 总监 / 高级经理`
-            ).split('\n').map((line, index, arr) => (
-              <React.Fragment key={index}>
-                {line}
-                {index < arr.length - 1 && <br />}
-              </React.Fragment>
-            ))}
-          </p>
+              ).split('\n').map((line, index, arr) => (
+                <React.Fragment key={index}>
+                  {line}
+                  {index < arr.length - 1 && <br />}
+                </React.Fragment>
+              ))}
+            </p>
+          </div>
         </div>
         
         <div 
@@ -4586,12 +4679,22 @@ Vice President / Director / Senior Manager`
     // 根据问卷类型添加相应的CSS类
     const privacyClass = currentQuestionnaire.type === 'other' ? 'other-privacy' : 'mother-privacy';
     
+    // 添加换行的隐私文本 - 英文版本
+    const privacyTextEn = "Your information will only be used for verification purposes and to formulate your CHON personality test.\n\n" +
+      "It will not be shared, disclosed, or used for any other purpose.\n\n" +
+      "We are committed to protecting your privacy and ensuring the security of your data.";
+    
+    // 中文版本的隐私文本 - 优化中文段落结构
+    const privacyTextZh = "您的信息将仅用于验证目的和制定您的 CHON 性格测试。\n\n" +
+      "您的信息不会被共享、披露或用于任何其他目的。\n\n" +
+      "我们重视您的隐私，并承诺保护您的数据安全。";
+    
     return (
-      <div className={`privacy-statement ${privacyClass}`} lang={language}>
-        <p className="privacy-text" lang={language}>
+      <div className={`privacy-statement ${privacyClass}`} lang={language} style={{ overflowX: 'hidden', maxWidth: '100%' }}>
+        <p className="privacy-text" lang={language} style={{ whiteSpace: 'pre-line' }}>
           {language === 'en' 
-            ? currentQuestionnaire.privacyStatement?.contentEn || "Your information will only be used for verification purposes and to formulate your CHON personality test. It will not be shared, disclosed, or used for any other purpose. We value your honesty and are committed to protecting your privacy and ensuring the security of your data."
-            : currentQuestionnaire.privacyStatement?.contentZh || "您的信息将仅用于验证目的和制定您的 CHON 性格测试。您的信息不会被共享、披露或用于任何其他目的。我们重视您的诚实，并承诺保护您的隐私，确保您的数据安全。"
+            ? currentQuestionnaire.privacyStatement?.contentEn || privacyTextEn
+            : currentQuestionnaire.privacyStatement?.contentZh || privacyTextZh
           }
         </p>
         <button 

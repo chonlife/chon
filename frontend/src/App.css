@@ -281,3 +281,26 @@ div:lang(zh) {
     font-size: 0.7rem;
   }
 }
+
+/* Privacy page specific styles - 解决滚动条问题 */
+.personality-test-container[data-step="privacy"] {
+  overflow-x: hidden !important; 
+  max-width: 100vw !important;
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+}
+
+.personality-test-container[data-step="privacy"] .privacy-statement {
+  width: 100%;
+  max-width: 100%;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* 应用于页面根元素，防止溢出 */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}

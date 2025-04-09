@@ -40,8 +40,20 @@ button,
   
   /* 修复导航按钮 */
   .question-navigation {
-    margin-top: 1rem;
-    padding: 0.5rem 0;
+    display: flex;
+    justify-content: flex-end !important;
+    width: 100%;
+    flex-direction: row;
+  }
+  
+  .first-page-true .question-navigation {
+    justify-content: flex-end !important;
+  }
+  
+  .nav-button {
+    min-width: unset;
+    padding: 0.8rem 1.2rem;
+    font-size: 0.9rem;
   }
   
   /* 更紧凑的问题容器 */
