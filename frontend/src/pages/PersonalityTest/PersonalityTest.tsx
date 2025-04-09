@@ -4392,11 +4392,15 @@ Vice President / Director / Senior Manager`
         </div>
         
         <div 
-          className={`identity-option other ${isIdentitySelected('other') ? 'selected' : ''}`}
+          className={`option-container ${isIdentitySelected('other') ? 'selected' : ''}`}
           onClick={() => handleIdentitySelect('other')}
-          lang={language}
         >
-          <p lang={language}>{t.personalityTest.identity.other}</p>
+          <div 
+            className={`identity-option other ${isIdentitySelected('other') ? 'selected' : ''}`}
+            lang={language}
+          >
+            <p lang={language}>{t.personalityTest.identity.other}</p>
+          </div>
         </div>
 
         <button 
