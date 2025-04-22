@@ -117,6 +117,21 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         {
           id: 2,
           type: 'multiple-choice',
+          textEn: 'Where are you currently based?',
+          textZh: '您目前所在的地区是？',
+          options: [
+            { id: 'A', textEn: 'Asia', textZh: '亚洲' },
+            { id: 'B', textEn: 'North America', textZh: '北美' },
+            { id: 'C', textEn: 'South America', textZh: '南美' },
+            { id: 'D', textEn: 'Europe', textZh: '欧洲' },
+            { id: 'E', textEn: 'Africa', textZh: '非洲' },
+            { id: 'F', textEn: 'Australia/Oceania', textZh: '澳大利亚/大洋洲' },
+            { id: 'G', textEn: 'Antarctica', textZh: '南极洲' }
+          ]
+        },
+        {
+          id: 3,
+          type: 'multiple-choice',
           textEn: 'Have you worked in a for-profit corporate setting, currently or in the past?',
           textZh: '您目前或过去是否在营利性企业环境中工作过？',
           options: [
@@ -125,7 +140,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           ]
         },
         {
-          id: 3,
+          id: 4,
           type: 'multiple-choice',
           textEn: 'How many children do you have or are expecting to have?',
           textZh: '您有或预计有多少个孩子？',
@@ -137,7 +152,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           ]
         },
         {
-          id: 4,
+          id: 5,
           type: 'multiple-choice',
           textEn: 'How many trimesters did you experience noticeable morning sickness?',
           textZh: '您经历了几个妊娠期有明显的孕吐反应？',
@@ -149,13 +164,13 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           ]
         },
         {
-          id: 5,
+          id: 6,
           type: 'text-input',
           textEn: "What was your youngest child's birth weight?",
           textZh: '您第一胎宝宝的出生体重是多少？'
         },
         {
-          id: 6,
+          id: 7,
           type: 'multiple-choice',
           textEn: 'How long was your maternity leave?',
           textZh: '您的产假有多长时间？',
@@ -168,7 +183,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           ]
         },
         {
-          id: 7,
+          id: 8,
           type: 'multiple-choice',
           textEn: 'Did you receive postpartum care or stay at a postpartum center?',
           textZh: '您是否接受了产后护理或入住了月子中心？',
@@ -178,19 +193,19 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           ]
         },
         {
-          id: 8,
+          id: 9,
           type: 'text-input',
           textEn: 'How would you describe your postpartum emotions in one word?',
           textZh: '您能用一个词形容您的产后状态吗？'
         },
         {
-          id: 9,
+          id: 10,
           type: 'text-input',
           textEn: 'How would you describe your motherhood experience in ten words?',
           textZh: '您能用一个词形容您作为母亲的状态吗？'
         },
         {
-          id: 10,
+          id: 11,
           type: 'scale-question',
           textEn: 'How involved do you feel you are with your previous social life from work after pregnancy?',
           textZh: '您觉得怀孕后自己与以往工作的社交联系程度如何？',
@@ -203,7 +218,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 11,
+          id: 12,
           type: 'scale-question',
           textEn: 'How well does your work arrangement after pregnancy support your needs as a working mother?',
           textZh: '您怀孕后的工作安排对作为职场母亲的您有多大支持作用？',
@@ -215,7 +230,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           }
         },
         {
-          id: 12,
+          id: 13,
           type: 'scale-question',
           textEn: 'How connected do you feel to your professional identity since becoming a mother?',
           textZh: '自成为母亲后，您对自己的职业身份感有多强？',
@@ -228,7 +243,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['自我意识']
         },
         {
-          id: 13,
+          id: 14,
           type: 'scale-question',
           textEn: 'How has motherhood impacted your career progression or promotion opportunities?',
           textZh: '母亲身份对您的职业发展或晋升机会有何影响？',
@@ -240,7 +255,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           }
         },
         {
-          id: 14,
+          id: 15,
           type: 'scale-question',
           textEn: 'How capable are you with the current support your employer provides in balancing work and motherhood?',
           textZh: '您如何评价您运用公司提供的兼顾工作和育儿的支持的能力？',
@@ -253,7 +268,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['自我意识']
         },
         {
-          id: 15,
+          id: 16,
           type: 'scale-question',
           textEn: 'How has motherhood influenced your leadership or management style at work?',
           textZh: '母亲身份如何影响了您在工作中的领导或管理风格？',
@@ -266,7 +281,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['情绪调节']
         },
         {
-          id: 16,
+          id: 17,
           type: 'scale-question',
           textEn: 'How effective are you at managing work-related stress since becoming a mother?',
           textZh: '自成为母亲后，您应对工作压力的能力如何？',
@@ -279,7 +294,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['核心耐力', '情绪调节']
         },
         {
-          id: 17,
+          id: 18,
           type: 'scale-question',
           textEn: 'How motivated do you feel to pursue career growth since becoming a mother?',
           textZh: '自成为母亲后，您在职业发展方面的动力有多强？',
@@ -292,7 +307,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['核心耐力']
         },
         {
-          id: 18,
+          id: 19,
           type: 'scale-question',
           textEn: 'What would your satisfaction level with your ability to maintain work-life balance be?',
           textZh: '您对您目前工作与生活平衡的能力感到满意吗？',
@@ -305,7 +320,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['自我意识']
         },
         {
-          id: 19,
+          id: 20,
           type: 'scale-question',
           textEn: 'How often do you feel your needs as a mother are taken into account during important workplace decisions?',
           textZh: '在重要的职场决策中，您觉得作为职场母亲的需求被考虑的频率如何？',
@@ -318,7 +333,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['自我意识']
         },
         {
-          id: 20,
+          id: 21,
           type: 'scale-question',
           textEn: 'How connected do you feel with other mothers through your work?',
           textZh: '您在工作中与其他母亲的联系如何？',
@@ -331,7 +346,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 21,
+          id: 22,
           type: 'scale-question',
           textEn: 'Are you actively seeking more opportunities to connect with other mothers through your profession?',
           textZh: '您是否主动在工作中寻求更多与其他职场母亲建立联系的机会？',
@@ -344,7 +359,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 22,
+          id: 23,
           type: 'multiple-choice',
           textEn: 'If you were the god or goddess of the business world and could change or create one thing from the following, what would it be?',
           textZh: '如果您是商业世界的创造神，并且可以创造或改变以下任何一件事，您会改变什么？',
@@ -358,7 +373,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           ]
         },
         {
-          id: 23,
+          id: 24,
           type: 'scale-question',
           textEn: 'How well do you think enhanced abstract logical thinking would address emotional and life concerns?',
           textZh: '您认为加强抽象逻辑思维对解决情感和生活问题有多大帮助？',
@@ -371,7 +386,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力', '情绪调节']
         },
         {
-          id: 24,
+          id: 25,
           type: 'scale-question',
           textEn: 'To what extent do you believe that true self-love and the ability to care for others require strong objective reasoning to navigate challenges in life?',
           textZh: '你认为真正的自爱和关爱他人的能力在多大程度上需要强大的客观思维来解决生活中的挑战？',
@@ -383,7 +398,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           }
         },
         {
-          id: 25,
+          id: 26,
           type: 'scale-question',
           textEn: 'How valuable do you find having a professional page within our app to showcase your previous work?',
           textZh: '您觉得在应用内拥有一个用于展示以往工作的职业页面有多大价值？',
@@ -396,7 +411,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['自我意识']
         },
         {
-          id: 26,
+          id: 27,
           type: 'scale-question',
           textEn: 'How likely are you to use our app to share completed projects or achievements for deal sourcing or client acquisition?',
           textZh: '您有多大可能使用该应用分享完成的商业项目或工作成就，以寻找合作机会或获取客户？',
@@ -409,7 +424,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力']
         },
         {
-          id: 27,
+          id: 28,
           type: 'scale-question',
           textEn: 'How valuable would you find a feature that helps you to stay updated with trends and knowledge in your professional field?',
           textZh: '您认为一个帮助职场母亲了解其行业领域最新动态的功能有多大用处？',
@@ -422,7 +437,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 28,
+          id: 29,
           type: 'scale-question',
           textEn: 'How likely are you to use the forum to connect with hospitals or other medical resources for medical support?',
           textZh: '您有多大可能使用该论坛与医院或其他医疗资源联系以获得医疗支持？',
@@ -435,7 +450,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 29,
+          id: 30,
           type: 'scale-question',
           textEn: 'How valuable do you think a forum within our app would be in helping you feel less isolated as a working mother?',
           textZh: '您认为该论坛在帮助您增进作为职场母亲与别的职场母亲连接方面有多大价值？',
@@ -448,7 +463,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['自我意识', '社交情商']
         },
         {
-          id: 30,
+          id: 31,
           type: 'scale-question',
           textEn: 'How motivated are you to use visuospatial and logical training modules within our app to strengthen abstract cognitive skills?',
           textZh: '您有多大动力使用应用内的视觉空间和逻辑训练模块？',
@@ -461,7 +476,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力']
         },
         {
-          id: 31,
+          id: 32,
           type: 'scale-question',
           textEn: 'How helpful do you think cognitive training would be in enhancing your problem-solving abilities?',
           textZh: '您认为抽象逻辑训练对提升您解决问题的能力有多大帮助？',
@@ -474,7 +489,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力']
         },
         {
-          id: 32,
+          id: 33,
           type: 'scale-question',
           textEn: 'How engaging do you think it would be to create and interact with a self-designed electronic child avatar in your personal profile?',
           textZh: '您觉得在个人主页中创建并与自定义的"电子小孩"虚拟形象互动的这个功能有多大吸引力？',
@@ -487,7 +502,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 33,
+          id: 34,
           type: 'scale-question',
           textEn: 'How would you evaluate a company-specific AI model offering work-related productivity features for you and other mothers?',
           textZh: '您如何看待一个专门为每家公司定制的职场母亲专用人工智能模型？',
@@ -500,7 +515,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力']
         },
         {
-          id: 34,
+          id: 35,
           type: 'scale-question',
           textEn: 'How do you feel about requiring you to submit a confidential child health-related record to verify that you and other users are active caregivers?',
           textZh: '您如何看待要求您在使用本应用程序之前提交与儿童健康相关的保密记录，以证实您是孩子的照顾者？',
@@ -513,7 +528,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力']
         },
         {
-          id: 35,
+          id: 36,
           type: 'scale-question',
           textEn: 'Do you believe misuse by unintended users (including your partner accessing accounts without permission) could negatively affect trust in the app?',
           textZh: '您认为如果有非目标用户滥用该平台（包括您的生活伴侣未经允许访问账户等情况），是否会对用户对本应用的信任度产生负面影响？',
@@ -525,7 +540,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           }
         },
         {
-          id: 36,
+          id: 37,
           type: 'scale-question',
           textEn: 'How do you feel about your company occasionally verifying through HR that business updates and activities posted on this platform are genuinely by yourself and other mother users, not others misusing their accounts?',
           textZh: '您如何看待由公司人力资源部门核查平台上的业务更新和动态确实由目标用户本人发布，而非他人滥用账户？',
@@ -538,7 +553,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['自我意识']
         },
         {
-          id: 37,
+          id: 38,
           type: 'scale-question',
           textEn: 'How important are empathy, compassion, and selflessness associated with motherhood in leadership and life?',
           textZh: '您认为母亲体现出的同理心、关爱与无私，对成功的领导力和人生有多重要？',
@@ -551,7 +566,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 38,
+          id: 39,
           type: 'scale-question',
           textEn: 'How important are resilience and perseverance associated with motherhood in leadership and life?',
           textZh: '您认为母亲展现出的韧性和毅力对成功的领导力和人生有多重要？',
@@ -564,7 +579,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['核心耐力']
         },
         {
-          id: 39,
+          id: 40,
           type: 'scale-question',
           textEn: 'How valuable are communication and listening associated with motherhood in leadership and life?',
           textZh: '您认为母亲身上的沟通与倾听能力对成功的领导力和人生有多重要？',
@@ -577,7 +592,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 40,
+          id: 41,
           type: 'scale-question',
           textEn: 'How crucial are responsibility and accountability associated with motherhood in leadership and life?',
           textZh: '您认为母亲身上的责任感和担当对成功的领导力和人生有多重要？',
@@ -590,7 +605,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 41,
+          id: 42,
           type: 'scale-question',
           textEn: 'How prepared did you feel for motherhood before becoming a mother?',
           textZh: '在成为母亲之前，您觉得自己对母亲这一角色的准备程度如何？',
@@ -603,7 +618,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['核心耐力']
         },
         {
-          id: 42,
+          id: 43,
           type: 'scale-question',
           textEn: 'How much has motherhood changed your personal values or priorities?',
           textZh: '母亲身份对您的个人价值观或人生优先事项改变有多大？',
@@ -616,7 +631,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['自我意识']
         },
         {
-          id: 43,
+          id: 44,
           type: 'scale-question',
           textEn: 'How supported do you feel by your family or community in your motherhood journey?',
           textZh: '在做母亲的过程中，您觉得家人或社群对您的支持程度如何？',
@@ -629,7 +644,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 44,
+          id: 45,
           type: 'scale-question',
           textEn: 'How much emotional fulfillment has motherhood brought to your life?',
           textZh: '母亲身份为您的生活带来了多少情绪满足感？',
@@ -642,7 +657,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 45,
+          id: 46,
           type: 'scale-question',
           textEn: 'How much do you feel that motherhood has made you more resilient or emotionally strong?',
           textZh: '母亲身份是否让您在情感方面变得更有韧性或更强大？',
@@ -655,7 +670,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['情绪调节', '核心耐力']
         },
         {
-          id: 46,
+          id: 47,
           type: 'scale-question',
           textEn: 'How has motherhood affected your ability to set boundaries (e.g., with work, family, or friends) in life?',
           textZh: '母亲身份对您设定边界（如与工作、家庭或朋友）能力的影响如何？',
@@ -668,7 +683,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['自我意识']
         },
         {
-          id: 47,
+          id: 48,
           type: 'scale-question',
           textEn: 'How often do you feel pressure to meet external expectations of motherhood (e.g., societal, cultural, or family expectations)?',
           textZh: '您多久感受到来自外界对母亲角色（如社会、文化或家庭）的期待压力？',
@@ -681,7 +696,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['自我意识']
         },
         {
-          id: 48,
+          id: 49,
           type: 'scale-question',
           textEn: 'How satisfied are you with the balance between your motherhood role and your sense of self outside of being a mother?',
           textZh: '您对自己平衡母亲这一身份与作为母亲之外的自我身份有多满意？',
@@ -694,7 +709,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['自我意识']
         },
         {
-          id: 49,
+          id: 50,
           type: 'scale-question',
           textEn: 'How much do you feel that your own mother\'s role influenced your early understanding of leadership or responsibility?',
           textZh: '您认为您的母亲在多大程度上影响了童年时期您对领导力或责任感的认知？',
@@ -745,30 +760,45 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         },
         {
           id: 3,
+          type: 'multiple-choice',
+          textEn: 'Where are you currently based?',
+          textZh: '您目前所在的地区是？',
+          options: [
+            { id: 'A', textEn: 'Asia', textZh: '亚洲' },
+            { id: 'B', textEn: 'North America', textZh: '北美' },
+            { id: 'C', textEn: 'South America', textZh: '南美' },
+            { id: 'D', textEn: 'Europe', textZh: '欧洲' },
+            { id: 'E', textEn: 'Africa', textZh: '非洲' },
+            { id: 'F', textEn: 'Australia/Oceania', textZh: '澳大利亚/大洋洲' },
+            { id: 'G', textEn: 'Antarctica', textZh: '南极洲' }
+          ]
+        },
+        {
+          id: 4,
           type: 'text-input',
           textEn: 'What is your current / most recent job position?',
           textZh: '您目前的职位名称是什么？'
         },
         {
-          id: 4,
+          id: 5,
           type: 'text-input',
           textEn: 'What is your professional contact (e.g., email, LinkedIn)?',
           textZh: '请问您的职业联系方式是什么（例如：邮箱、领英）？'
         },
         {
-          id: 5,
+          id: 6,
           type: 'text-input',
           textEn: 'How many years of experience do you have in a managerial or leadership role?',
           textZh: '您在管理或领导岗位上有多少年的工作经验？'
         },
         {
-          id: 6,
+          id: 7,
           type: 'text-input',
           textEn: 'Which industry or business sector does your company operate in?',
           textZh: '贵公司属于哪个行业或业务领域？'
         },
         {
-          id: 7,
+          id: 8,
           type: 'multiple-choice',
           textEn: "What is your company's total employee headcount?",
           textZh: '贵公司的员工总人数是多少？',
@@ -782,7 +812,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           ]
         },
         {
-          id: 8,
+          id: 9,
           type: 'multiple-choice',
           textEn: "What is the approximate annual revenue of your company?",
           textZh: '贵公司的年营收大约是多少？',
@@ -796,7 +826,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           ]
         },
         {
-          id: 9,
+          id: 10,
           type: 'multiple-choice',
           textEn: 'What is the approximate size of your direct span of control?',
           textZh: '您的直接管理团队规模是多少？',
@@ -809,7 +839,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           ]
         },
         {
-          id: 10,
+          id: 11,
           type: 'multiple-choice',
           textEn: 'What is the approximate size of your indirect span of control?',
           textZh: '您简介管理多少人？',
@@ -822,13 +852,13 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           ]
         },
         {
-          id: 11,
+          id: 12,
           type: 'text-input',
           textEn: 'How would you describe the overall reporting structure within your team in ten words?',
           textZh: '请在十字以内描述您团队中的整体报告结构'
         },
         {
-          id: 12,
+          id: 13,
           type: 'scale-question',
           textEn: 'How would you describe the decision-making structure in your organization?',
           textZh: '您如何描述贵公司决策体系的运作方式？',
@@ -840,7 +870,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           }
         },
         {
-          id: 13,
+          id: 14,
           type: 'scale-question',
           textEn: 'In your opinion, what should be the primary basis of decision-making authority in your organization?',
           textZh: '在您看来，贵司的决策权应该主要基于什么？',
@@ -853,7 +883,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力']
         },
         {
-          id: 14,
+          id: 15,
           type: 'scale-question',
           textEn: 'How well-organized would you say your team structure is under your leadership?',
           textZh: '您认为在您的领导下，您的团队结构有多有序和高效？',
@@ -866,7 +896,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力', '核心耐力']
         },
         {
-          id: 15,
+          id: 16,
           type: 'scale-question',
           textEn: 'How would you rate your team\'s level of communication and collaboration under your leadership?',
           textZh: '您认为在您的领导下，您的团队的沟通与协作水平如何？',
@@ -879,7 +909,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力', '社交情商']
         },
         {
-          id: 16,
+          id: 17,
           type: 'scale-question',
           textEn: 'How would you rate your experience in communicating and establishing trust with clients or business partners?',
           textZh: '您如何评价自己在与客户或业务伙伴沟通及建立信任方面的经验？',
@@ -892,7 +922,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交能力', '情商']
         },
         {
-          id: 17,
+          id: 18,
           type: 'scale-question',
           textEn: 'How effective do you believe your organization is at understanding client or market needs?',
           textZh: '您认为贵司在理解客户或市场需求方面的效果如何？',
@@ -905,7 +935,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交能力', '情商']
         },
         {
-          id: 18,
+          id: 19,
           type: 'scale-question',
           textEn: 'How important do you think responsibility is in building successful business projects?',
           textZh: '您认为责任感对商业项目的成功有多重要？',
@@ -918,7 +948,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力', '奉献精神']
         },
         {
-          id: 19,
+          id: 20,
           type: 'scale-question',
           textEn: 'How important do you think empathy and communication are in building successful business relationships?',
           textZh: '您认为同理心和沟通能力在建立成功的商业关系中有多重要？',
@@ -931,7 +961,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神', '社交情商']
         },
         {
-          id: 20,
+          id: 21,
           type: 'scale-question',
           textEn: 'How would you describe the current recognition and utilization of the "soft skills" of kindness, responsibility, empathy, and communication in your company?',
           textZh: '您如何描述贵司目前对软实力（善良、责任心、同理心、沟通能力）的认可和使用情况？',
@@ -944,7 +974,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 21,
+          id: 22,
           type: 'multiple-choice',
           textEn: 'Do you think men and women are equally supported in your industry when it comes to balancing work and family?',
           textZh: '在您的行业中, 您认为男性和女性是否在平衡工作与家庭方面得到了同等支持？',
@@ -955,7 +985,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['男：客观能力', '女：自我意识']
         },
         {
-          id: 22,
+          id: 23,
           type: 'scale-question',
           textEn: 'In your opinion, how important is it for your organization to provide resources in the form of support and social bonding for working mothers?',
           textZh: '在您看来，公司为职场母亲提供情感支持和社交的资源有多重要？',
@@ -968,7 +998,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['男：奉献精神', '女：自我意识']
         },
         {
-          id: 23,
+          id: 24,
           type: 'scale-question',
           textEn: 'How would you describe your organization\'s current approach to supporting working mothers under your leadership?',
           textZh: '您如何描述贵司在您的领导下目前对职场母亲的支持程度？',
@@ -981,7 +1011,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['男：奉献精神', '女：自我意识']
         },
         {
-          id: 24,
+          id: 25,
           type: 'scale-question',
           textEn: 'How effectively do you use technology to support collaboration and productivity within your team?',
           textZh: '您在团队协作和生产力提升方面对科技的使用程度如何？',
@@ -994,7 +1024,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力']
         },
         {
-          id: 25,
+          id: 26,
           type: 'multiple-choice',
           textEn: 'If you were the god or goddess of the business world and could change or create one thing from the following, what would it be?',
           textZh: '如果您是商业世界的创造神，并且可以创造或改变以下任何一件事，您会选择什么？',
@@ -1008,7 +1038,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           ]
         },
         {
-          id: 26,
+          id: 27,
           type: 'scale-question',
           textEn: 'How well do you think enhanced abstract logical thinking would address emotional and life concerns?',
           textZh: '您认为加强抽象逻辑思维对解决情感和生活问题有多大帮助？',
@@ -1021,7 +1051,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力', '情绪调节']
         },
         {
-          id: 27,
+          id: 28,
           type: 'scale-question',
           textEn: 'To what extent do you believe that true self-love and the ability to care for others require strong objective reasoning to navigate challenges in life?',
           textZh: '你认为真正的自爱和关爱他人的能力在多大程度上需要强大的客观思维来解决生活中的挑战？',
@@ -1034,7 +1064,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力']
         },
         {
-          id: 28,
+          id: 29,
           type: 'scale-question',
           textEn: 'How valuable would you find a feature that helps working mothers stay updated with trends and knowledge in their professional field?',
           textZh: '您认为一个帮助职场母亲了解其行业领域最新动态的功能有多大用处？',
@@ -1047,7 +1077,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 29,
+          id: 30,
           type: 'scale-question',
           textEn: 'How valuable would a business opportunity board be, where working mothers on your team could post or access new projects and deals?',
           textZh: '您认为一个帮助职场母亲发布和获取商业交易和商业合作的功能有多大用处？',
@@ -1060,7 +1090,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 30,
+          id: 31,
           type: 'scale-question',
           textEn: 'How do you perceive the value of a forum where mothers can share maternal experiences and emotional support?',
           textZh: '您认为一个帮助职场母亲分享育儿经验、获得情感支持的论坛有多大用处？',
@@ -1073,7 +1103,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 31,
+          id: 32,
           type: 'scale-question',
           textEn: 'How valuable would direct access to external healthcare professionals for medical advice be within such an app?',
           textZh: '您认为提供联系外部医疗专业人士获得医学建议的功能有多大用处？',
@@ -1086,7 +1116,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 32,
+          id: 33,
           type: 'scale-question',
           textEn: 'How beneficial would visuospatial and abstract logical training modules be for enhancing cognitive development?',
           textZh: '您认为视觉空间与数学逻辑训练模块对抽象逻辑发展有多大用处？',
@@ -1099,7 +1129,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力']
         },
         {
-          id: 33,
+          id: 34,
           type: 'scale-question',
           textEn: 'How engaging do you think personalized profiles with interactive "electronic kids" avatars would be for promoting social interaction among working mothers?',
           textZh: '您认为通过个人主页中使用"电子小孩"互动来促进职场母亲之间社交互动的功能有多大用处？',
@@ -1112,7 +1142,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 34,
+          id: 35,
           type: 'scale-question',
           textEn: 'How important would you find mentorship matching that connects new mothers with more experienced mothers within the same company or industry?',
           textZh: '您认为一个将新晋母亲与同一公司或行业内有更多育儿经验的母亲相匹配的功能有多大用处？',
@@ -1125,7 +1155,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 35,
+          id: 36,
           type: 'scale-question',
           textEn: 'How would you evaluate a company-specific AI model offering work-related productivity features for working mothers?',
           textZh: '您如何看待一个专门为每家公司定制的职场母亲专用人工智能模型？',
@@ -1138,7 +1168,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 36,
+          id: 37,
           type: 'scale-question',
           textEn: 'How do you see the role of AI technology evolving to support working parents in the next 5-10 years?',
           textZh: '您如何看待未来5-10年内，人工智能在职场父母方面的角色？',
@@ -1151,7 +1181,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力']
         },
         {
-          id: 37,
+          id: 38,
           type: 'scale-question',
           textEn: 'In your mind, how could an app that incorporates motherhood also serve as a tool for improving client relationships, customer satisfaction, or deal development?',
           textZh: '在您看来，一款引进母亲这一身份的应用程序如何同时成为改善客户关系、提高客户满意度或促进交易发展的工具？',
@@ -1164,7 +1194,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['情绪管理']
         },
         {
-          id: 38,
+          id: 39,
           type: 'scale-question',
           textEn: 'How do you feel about requiring users to submit a confidential child health-related record to verify that they are active caregivers while using this app?',
           textZh: '您如何看待要求用户在使用本应用程序的某些功能之前提交与儿童健康相关的保密记录，以证实她们是儿童的母亲？',
@@ -1177,7 +1207,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力']
         },
         {
-          id: 39,
+          id: 40,
           type: 'scale-question',
           textEn: 'Do you believe misuse by unintended users (including partners of pregnant women and mothers accessing accounts without permission) could negatively affect trust in the app?',
           textZh: '您认为如果有非目标用户滥用该平台（包括孕妇以及母亲的生活伴侣未经允许访问账户等情况），是否会对本应用的信任度产生负面影响？',
@@ -1189,7 +1219,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           }
         },
         {
-          id: 40,
+          id: 41,
           type: 'scale-question',
           textEn: 'How do you feel about companies verifying through HR that business updates and activities posted on this platform are genuinely from the intended mother users and not others misusing their accounts?',
           textZh: '您如何看待由公司人力资源部门核查平台上的业务更新和动态确实由目标用户本人发布，而非他人滥用账户？',
@@ -1202,7 +1232,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['自我意识']
         },
         {
-          id: 41,
+          id: 42,
           type: 'scale-question',
           textEn: 'How important are empathy, compassion, and selflessness associated with motherhood in leadership and life?',
           textZh: '您认为母亲体现出的同理心、关爱与无私，对成功的领导力和人生有多重要？',
@@ -1215,7 +1245,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 42,
+          id: 43,
           type: 'scale-question',
           textEn: 'How important are resilience and perseverance associated with motherhood in leadership and life?',
           textZh: '您认为母亲展现出的韧性和毅力对成功的领导力和人生有多重要？',
@@ -1228,7 +1258,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['核心耐力']
         },
         {
-          id: 43,
+          id: 44,
           type: 'scale-question',
           textEn: 'How valuable are communication and listening associated with motherhood in leadership and life?',
           textZh: '您认为母亲身上的沟通与倾听能力对成功的领导力和人生有多重要？',
@@ -1241,7 +1271,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 44,
+          id: 45,
           type: 'scale-question',
           textEn: 'How crucial are responsibility and accountability associated with motherhood in leadership and life?',
           textZh: '您认为母亲身上的责任感和担当对成功的领导力和人生有多重要？',
@@ -1254,7 +1284,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 45,
+          id: 46,
           type: 'scale-question',
           textEn: 'Have you personally resolved challenges balancing leadership responsibilities with parenting (or caregiving)?',
           textZh: '您是否曾面临平衡领导责任与育儿（或照护他人）之间的挑战？',
@@ -1267,7 +1297,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观实力', '核心耐力']
         },
         {
-          id: 46,
+          id: 47,
           type: 'scale-question',
           textEn: 'How much has becoming a parent (or caregiver) influenced your leadership style?',
           textZh: '成为父母（或照护者）对您的领导风格有多大影响？',
@@ -1280,7 +1310,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 47,
+          id: 48,
           type: 'scale-question',
           textEn: 'How do you believe motherhood impacts leadership effectiveness in the workplace?',
           textZh: '您认为引进母亲这一身份如何影响职场中的领导效果？',
@@ -1293,7 +1323,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 48,
+          id: 49,
           type: 'scale-question',
           textEn: 'How well does your organization integrate leadership traits developed through motherhood into its talent and leadership pipeline?',
           textZh: '您认为贵公司是否在人才培养和领导梯队中，重视并融合了母亲所带来的领导力特质？',
@@ -1306,7 +1336,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 49,
+          id: 50,
           type: 'scale-question',
           textEn: 'How much do you pay attention to the emotional well-being of working mothers around you, especially considering potential scenarios like hormonal changes or postpartum depression?',
           textZh: '您在多大程度上关注身边职场母亲的情绪状态，特别是受到激素变化或产后抑郁等挑战的影响时？',
@@ -1319,7 +1349,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 50,
+          id: 51,
           type: 'scale-question',
           textEn: 'How equipped do you feel to recognize when a mother employee might be experiencing emotional difficulties due to life transitions (e.g., childbirth, parenting stress)?',
           textZh: '您认为自己在识别职场母亲因生活转变（如生育、育儿压力）而产生情绪困难方面的能力如何？',
@@ -1332,7 +1362,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 51,
+          id: 52,
           type: 'scale-question',
           textEn: 'How much do you feel that your mother\'s role influenced your early understanding of leadership or responsibility?',
           textZh: '您认为您的母亲在多大程度上影响了童年时期您对领导力、责任感、同理心的认知？',
@@ -1354,7 +1384,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     },
     other: {
       type: 'other',
-      totalQuestions: 40,
+      totalQuestions: 41,
       questions: [
         {
           id: 1,
@@ -1384,6 +1414,21 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         {
           id: 3,
           type: 'multiple-choice',
+          textEn: 'Where are you currently based?',
+          textZh: '您目前所在的地区是？',
+          options: [
+            { id: 'A', textEn: 'Asia', textZh: '亚洲' },
+            { id: 'B', textEn: 'North America', textZh: '北美' },
+            { id: 'C', textEn: 'South America', textZh: '南美' },
+            { id: 'D', textEn: 'Europe', textZh: '欧洲' },
+            { id: 'E', textEn: 'Africa', textZh: '非洲' },
+            { id: 'F', textEn: 'Australia/Oceania', textZh: '澳大利亚/大洋洲' },
+            { id: 'G', textEn: 'Antarctica', textZh: '南极洲' }
+          ]
+        },
+        {
+          id: 4,
+          type: 'multiple-choice',
           textEn: 'Have you worked in a for-profit corporate setting, currently or in the past?',
           textZh: '您目前或过去是否曾在营利性企业环境中工作过？',
           options: [
@@ -1392,7 +1437,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           ]
         },
         {
-          id: 4,
+          id: 5,
           type: 'scale-question',
           textEn: 'How supportive is your current company or team in fostering both professional growth and overall well-being?',
           textZh: '您认为您所在的组织或团队在支持职业发展和身心健康双方面表现如何？',
@@ -1405,7 +1450,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['自我意识']
         },
         {
-          id: 5,
+          id: 6,
           type: 'scale-question',
           textEn: 'How much opportunity do you have to build meaningful professional relationships within your organization?',
           textZh: '您在组织或团队内建立有意义的合作关系的机会有多少？',
@@ -1418,7 +1463,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交能力', '情商']
         },
         {
-          id: 6,
+          id: 7,
           type: 'scale-question',
           textEn: 'How important do you find emotional intelligence and soft skills (e.g., empathy, patience, communication, active listening) in your day-to-day collaboration with colleagues?',
           textZh: '您觉得在日常协作中，情绪智慧和软实力（如同理心、耐心、倾听）有多重要？',
@@ -1431,7 +1476,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商', '奉献精神']
         },
         {
-          id: 7,
+          id: 8,
           type: 'scale-question',
           textEn: 'How frequently do you experience acts of kindness or supportive behavior in your team or company culture?',
           textZh: '您在团队中感受到来自同事的善意或支持行为有多频繁？',
@@ -1444,7 +1489,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 8,
+          id: 9,
           type: 'scale-question',
           textEn: 'How would you describe your role in terms of providing support or care to colleagues during team interactions or projects?',
           textZh: '在团队合作或项目推进中，您通常会在多大程度上给予同事支持或关心？',
@@ -1457,7 +1502,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 9,
+          id: 10,
           type: 'scale-question',
           textEn: 'How much do you feel your contributions and perspectives are recognized and valued by your team?',
           textZh: '您觉得自己在团队中的意见和贡献被认可的程度如何？',
@@ -1470,7 +1515,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['自我意识']
         },
         {
-          id: 10,
+          id: 11,
           type: 'scale-question',
           textEn: 'To what extent does your organization promote a culture of collaboration built on trust and mutual respect?',
           textZh: '您认为团队在营造基于信任与相互尊重的合作氛围方面做得如何？',
@@ -1483,7 +1528,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力', '奉献精神']
         },
         {
-          id: 11,
+          id: 12,
           type: 'scale-question',
           textEn: 'How comfortable are you with reaching out to colleagues or managers when facing challenges or seeking help?',
           textZh: '面对困难或需要帮助时，您与同事或上级沟通的舒适度如何？',
@@ -1496,7 +1541,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商', '情绪调节']
         },
         {
-          id: 12,
+          id: 13,
           type: 'scale-question',
           textEn: 'How important do you think a people-centered work culture is for maintaining both productivity and team morale?',
           textZh: '您觉得以人为本的企业文化对保持工作效率和团队凝聚力的重要性如何？',
@@ -1509,7 +1554,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 13,
+          id: 14,
           type: 'scale-question',
           textEn: 'How often do you feel that a sense of belonging or team care positively impacts your motivation and job satisfaction?',
           textZh: '您怎么描述您因团队归属感或同事关怀提升工作积极性和满意度的频率？',
@@ -1522,7 +1567,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['情绪调节']
         },
         {
-          id: 14,
+          id: 15,
           type: 'scale-question',
           textEn: 'What role does technology (e.g., collaboration tools, productivity apps) play in helping your team stay efficient and connected?',
           textZh: '您认为技术工具（如协作平台、生产力应用）在提升团队效率与保持联系方面的作用如何？',
@@ -1535,7 +1580,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力']
         },
         {
-          id: 15,
+          id: 16,
           type: 'scale-question',
           textEn: 'How well do you think enhanced abstract logical thinking would address emotional and life concerns?',
           textZh: '您认为加强抽象逻辑思维对解决情感和生活问题有多大帮助？',
@@ -1548,7 +1593,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力', '情绪调节']
         },
         {
-          id: 16,
+          id: 17,
           type: 'scale-question',
           textEn: 'To what extent do you believe that true self-love and the ability to care for others require strong objective reasoning to navigate challenges in life?',
           textZh: '你认为真正的自爱和关爱他人的能力在多大程度上需要强大的客观思维来解决生活中的挑战？',
@@ -1561,7 +1606,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力']
         },
         {
-          id: 17,
+          id: 18,
           type: 'scale-question',
           textEn: 'How valuable would you find a feature that helps working mothers in your team stay updated with trends and knowledge in their professional field?',
           textZh: '您认为一个帮助职场母亲了解其行业领域最新动态的功能有多大用处？',
@@ -1574,7 +1619,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 18,
+          id: 19,
           type: 'scale-question',
           textEn: 'How valuable would a business opportunity board be, where working mothers on your team could post or access new projects and deals?',
           textZh: '您认为一个帮助职场母亲发布和获取商业交易和商业合作的功能有多大用处？',
@@ -1586,7 +1631,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           }
         },
         {
-          id: 19,
+          id: 20,
           type: 'scale-question',
           textEn: 'How do you perceive the value of a forum where mothers can share maternal experiences and emotional support?',
           textZh: '您认为一个帮助职场母亲分享育儿经验、获得情感支持的论坛有多大用处？',
@@ -1599,7 +1644,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 20,
+          id: 21,
           type: 'scale-question',
           textEn: 'How valuable would direct access to external healthcare professionals for medical advice be within such an app?',
           textZh: '您认为提供联系外部医疗专业人士获得医学建议的功能有多大用处？',
@@ -1612,7 +1657,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 21,
+          id: 22,
           type: 'scale-question',
           textEn: 'How beneficial would visuospatial and abstract logical training modules be for enhancing cognitive development?',
           textZh: '您认为视觉空间与数学逻辑训练模块对抽象逻辑发展有多大用处？',
@@ -1625,7 +1670,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力']
         },
         {
-          id: 22,
+          id: 23,
           type: 'scale-question',
           textEn: 'How engaging do you think personalized profiles with interactive "electronic kids" avatars would be for promoting social interaction among working mothers?',
           textZh: '您认为通过个人主页中使用"电子小孩"互动来促进职场母亲之间社交互动的功能有多大用处？',
@@ -1638,7 +1683,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 23,
+          id: 24,
           type: 'scale-question',
           textEn: 'How important would you find mentorship matching that connects new mothers with more experienced mothers within the same company or industry?',
           textZh: '您认为一个将新晋母亲与同一公司或行业内有更多育儿经验的母亲相匹配的功能有多大用处？',
@@ -1651,7 +1696,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 24,
+          id: 25,
           type: 'scale-question',
           textEn: 'How would you evaluate a company-specific AI model offering work-related productivity features for working mothers?',
           textZh: '您如何看待一个专门为每家公司定制的职场母亲专用人工智能模型？',
@@ -1664,7 +1709,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 25,
+          id: 26,
           type: 'scale-question',
           textEn: 'How do you see the role of AI technology evolving to support working parents in the next 5-10 years?',
           textZh: '您如何看待未来5-10年内，人工智能在职场父母方面的角色？',
@@ -1677,7 +1722,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力']
         },
         {
-          id: 26,
+          id: 27,
           type: 'scale-question',
           textEn: 'In your mind, how could an app that incorporates motherhood also serve as a tool for improving client relationships, customer satisfaction, or deal development?',
           textZh: '在您看来，一款引进母亲这一身份的应用程序如何同时成为改善客户关系、提高客户满意度或促进交易发展的工具？',
@@ -1690,7 +1735,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['情绪管理']
         },
         {
-          id: 27,
+          id: 28,
           type: 'scale-question',
           textEn: 'How do you feel about requiring users to submit a confidential child health-related record to verify that they are active caregivers before using this app?',
           textZh: '您如何看待要求用户在使用本应用程序的某些功能之前提交与儿童健康相关的保密记录，以证实她们是儿童的母亲？',
@@ -1703,7 +1748,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观能力']
         },
         {
-          id: 28,
+          id: 29,
           type: 'scale-question',
           textEn: 'Do you believe misuse by unintended users (including partners of pregnant women and mothers accessing accounts without permission) could negatively affect trust in the app?',
           textZh: '您认为如果有非目标用户滥用该平台（包括孕妇以及母亲的生活伴侣未经允许访问账户等情况），是否会对本应用的信任度产生负面影响？',
@@ -1715,7 +1760,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           }
         },
         {
-          id: 29,
+          id: 30,
           type: 'scale-question',
           textEn: 'How do you feel about companies verifying through HR that business updates and activities posted on this platform are genuinely from the intended mother users and not others misusing their accounts?',
           textZh: '您如何看待由公司人力资源部门核查平台上的业务更新和动态确实由目标用户本人发布，而非他人滥用账户？',
@@ -1728,7 +1773,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['自我意识']
         },
         {
-          id: 30,
+          id: 31,
           type: 'scale-question',
           textEn: 'How important are empathy, compassion, and selflessness associated with motherhood in work and life?',
           textZh: '您认为母亲常体现出的同理心、关爱与无私，对成功的工作和人生有多重要？',
@@ -1741,7 +1786,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 31,
+          id: 32,
           type: 'scale-question',
           textEn: 'How important are resilience and perseverance associated with motherhood in work and life?',
           textZh: '您认为母亲展现出的韧性和毅力对成功的工作和人生有多重要？',
@@ -1754,7 +1799,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['核心耐力']
         },
         {
-          id: 32,
+          id: 33,
           type: 'scale-question',
           textEn: 'How valuable are communication and listening associated with motherhood in work and life?',
           textZh: '您认为母亲身上的沟通与倾听能力对成功的工作和人生有多重要？',
@@ -1767,7 +1812,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 33,
+          id: 34,
           type: 'scale-question',
           textEn: 'How crucial are responsibility and accountability associated with motherhood in work and life?',
           textZh: '您认为母亲身上的责任感和担当对成功的工作和人生有多重要？',
@@ -1780,7 +1825,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 34,
+          id: 35,
           type: 'scale-question',
           textEn: 'Have you personally resolved challenges balancing leadership responsibilities with caregiving?',
           textZh: '您是否曾面临平衡领导责任与照护他人之间的挑战？',
@@ -1793,7 +1838,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['客观实力', '核心耐力']
         },
         {
-          id: 35,
+          id: 36,
           type: 'scale-question',
           textEn: 'How much has becoming a caregiver of any kind influenced your work style?',
           textZh: '成为照护他人的人对您的工作处事风格有多大影响？',
@@ -1806,7 +1851,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 36,
+          id: 37,
           type: 'scale-question',
           textEn: 'How do you believe motherhood impacts leadership effectiveness in the workplace?',
           textZh: '您认为母亲身份如何影响职场中的领导效果？',
@@ -1819,7 +1864,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 37,
+          id: 38,
           type: 'scale-question',
           textEn: 'How well does your organization integrate leadership traits developed through motherhood into its talent and leadership pipeline?',
           textZh: '您认为您所在的公司是否在人才培养和领导梯队中，重视并融合了母亲所带来的领导力特质？',
@@ -1832,7 +1877,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 38,
+          id: 39,
           type: 'scale-question',
           textEn: 'How much do you pay attention to the emotional well-being of working mothers around you, especially considering potential scenarios like hormonal changes or postpartum depression?',
           textZh: '您在多大程度上关注身边职场母亲的情绪状态，特别是受到激素变化或产后抑郁等潜在挑战的影响时？',
@@ -1845,7 +1890,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['社交情商']
         },
         {
-          id: 39,
+          id: 40,
           type: 'scale-question',
           textEn: 'How equipped do you feel to recognize when a mother colleague might be experiencing emotional difficulties due to life transitions (e.g., childbirth, parenting stress)?',
           textZh: '您认为自己在识别职场母亲因生活转变（如生育、育儿压力）而产生情绪困难方面的能力如何？',
@@ -1858,7 +1903,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           tags: ['奉献精神']
         },
         {
-          id: 40,
+          id: 41,
           type: 'scale-question',
           textEn: 'How much do you feel that your mother\'s role influenced your early understanding of leadership or responsibility?',
           textZh: '您认为您的母亲在多大程度上影响了童年时期您对领导力、责任感、同理心的认知？',
@@ -2241,7 +2286,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           showFirstPage ? (
             // 第1页: ID 1-8，无标题，只有问题
             <div className="first-page-questions first-page-true">
-              {questions.slice(0, 8).map((question) => (
+              {questions.slice(0, 10).map((question) => (
               <div key={question.id} className="question-container">
                 {renderQuestionText(question)}
                 
@@ -2318,7 +2363,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
             </div>
           </div>
           ) : showThirdPage ? (
-            // 第2页: ID 9-21，标题"I. About Work-Life Balance / 关于工作与生活的平衡"
+            // 第2页: ID 11-23，标题"I. About Work-Life Balance / 关于工作与生活的平衡"
           <div className="first-page-questions">
               <h1 className="section-title">
                           {language === 'en' 
@@ -2326,7 +2371,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                   : 'I. 关于工作与生活的平衡'}
               </h1>
               
-              {questions.slice(8, 21).map((question) => (
+              {questions.slice(10, 23).map((question) => (
               <div key={question.id} className="question-container">
                 {renderQuestionText(question)}
                 
@@ -2413,7 +2458,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
             </div>
           </div>
           ) : showFourthPage ? (
-            // 第3页: ID 22-35，标题"II. About Us, CHON / 关于我们"
+            // 第3页: ID 24-37，标题"II. About Us, CHON / 关于我们"
           <div className="first-page-questions">
             <h1 className="section-title">
               {language === 'en' 
@@ -2421,7 +2466,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                 : 'II. 关于我们'}
             </h1>
             
-              {questions.slice(21, 35).map((question) => (
+              {questions.slice(23, 37).map((question) => (
               <div key={question.id} className="question-container">
                 {renderQuestionText(question)}
                 
@@ -2508,7 +2553,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
             </div>
           </div>
           ) : showFifthPage ? (
-            // 第4页: ID 36-48，标题"III. About Motherhood"
+            // 第4页: ID 38-50，标题"III. About Motherhood"
           <div className="first-page-questions">
               <h1 className="section-title">
                 {language === 'en' 
@@ -2516,7 +2561,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                   : 'III. 关于母亲'}
               </h1>
             
-              {questions.slice(35, 48).map((question) => (
+              {questions.slice(37, 50).map((question) => (
               <div key={question.id} className="question-container">
                 {renderQuestionText(question)}
                 
@@ -3093,9 +3138,9 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         {/* 企业问卷分页内容 */}
         {
           showFirstPage ? (
-            // 第1页: ID 1-7，无标题
+            // 第1页: ID 1-12，无标题
             <div className="first-page-questions first-page-true">
-              {questions.slice(0, 7).map((question) => (
+              {questions.slice(0, 12).map((question) => (
                 <div key={question.id} className="question-container">
                   {renderQuestionText(question)}
                   
@@ -3172,7 +3217,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               </div>
             </div>
           ) : showSecondPage ? (
-            // 第2页: ID 8-21，标题"I. 关于您的领导力 / About Your Leadership"
+            // 第2页: ID 13-26，标题"I. 关于您的领导力 / About Your Leadership"
             <div className="first-page-questions">
               <h1 className="section-title">
                 {language === 'en' 
@@ -3180,7 +3225,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                   : 'I. 关于您的领导力'}
               </h1>
               
-              {questions.slice(7, 21).map((question) => (
+              {questions.slice(12, 26).map((question) => (
                 <div key={question.id} className="question-container">
                   {renderQuestionText(question)}
                   
@@ -3267,7 +3312,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               </div>
             </div>
           ) : showThirdPage ? (
-            // 第3页: ID 22-36，标题"II. About Us, CHON / 关于我们"
+            // 第3页: ID 27-41，标题"II. About Us, CHON / 关于我们"
             <div className="first-page-questions">
               <h1 className="section-title">
                 {language === 'en' 
@@ -3275,7 +3320,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                   : 'II. 关于我们'}
               </h1>
               
-              {questions.slice(21, 36).map((question) => (
+              {questions.slice(26, 41).map((question) => (
                 <div key={question.id} className="question-container">
                   {renderQuestionText(question)}
                   
@@ -3362,7 +3407,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               </div>
             </div>
           ) : showFourthPage ? (
-            // 第4页: ID 37-47，标题"III. About Motherhood 关于母亲"
+            // 第4页: ID 42-52，标题"III. About Motherhood 关于母亲"
             <div className="first-page-questions">
               <h1 className="section-title">
                 {language === 'en' 
@@ -3370,7 +3415,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                   : 'III. 关于母亲'}
               </h1>
               
-              {questions.slice(36, 47).map((question) => (
+              {questions.slice(41, 52).map((question) => (
                 <div key={question.id} className="question-container">
                   {renderQuestionText(question)}
                   
@@ -3477,9 +3522,88 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         </div>
         
         {/* 其他问卷分页内容 */}
-        {
+        { 
           showFirstPage ? (
-            // 第1页: ID 1-11，标题"I. About Professional Work / 关于职业工作"
+            // 第1页: ID 1-4，无标题
+            <div className="first-page-questions first-page-true">
+              {questions.slice(0, 4).map((question) => (
+                <div key={question.id} className="question-container">
+                  {renderQuestionText(question)}
+                  
+                  {question.type === 'multiple-choice' && (
+                    <div className="answer-options">
+                      {question.options?.map(option => (
+                        <div 
+                          key={option.id}
+                          className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
+                          onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
+                        >
+                          <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  {question.type === 'text-input' && (
+                    <div className="text-input-container">
+                      <input
+                        type="text"
+                        className="text-answer-input"
+                        value={getCurrentAnswers()[question.id] || ''}
+                        onChange={(e) => handleTextAnswer(question.id, e.target.value)}
+                        placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
+                      />
+                    </div>
+                  )}
+                  
+                  {question.type === 'scale-question' && (
+                    <div className="scale-question-container">
+                      <div className="scale-labels-wrapper">
+                        <div className="scale-extreme-labels">
+                          <span className="scale-extreme-label">
+                            {language === 'en' 
+                              ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                              : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                          </span>
+                          <span className="scale-extreme-label">
+                            {language === 'en' 
+                              ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
+                              : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
+                          </span>
+                        </div>
+                        <div className="scale-options">
+                          {['1', '2', '3', '4', '5'].map((value) => (
+                            <div 
+                              key={value}
+                              className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
+                              onClick={() => handleScaleAnswer(question.id, value)}
+                            >
+                              <div className="scale-circle"></div>
+                              <span className="scale-value">{value}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+              
+              <div className="question-navigation">
+                <button 
+                  className="nav-button next-button"
+                  onClick={() => {
+                    setShowFirstPage(false);
+                    setShowSecondPage(true);
+                  }}
+                  disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 1 && parseInt(id) <= 7).length < 7}
+                >
+                  {language === 'en' ? 'Continue' : '继续'}
+                </button>
+              </div>
+            </div>
+          ) : showSecondPage ? (
+            // 第2页: ID 5-15，标题"I. About Professional Work / 关于职业工作"
             <div className="first-page-questions first-page-true">
               <h1 className="section-title">
                 {language === 'en' 
@@ -3487,7 +3611,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                   : 'I. 关于职业工作'}
               </h1>
               
-              {questions.slice(0, 11).map((question) => (
+              {questions.slice(4, 15).map((question) => (
                 <div key={question.id} className="question-container">
                   {renderQuestionText(question)}
                   
@@ -3564,7 +3688,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               </div>
             </div>
           ) : showSecondPage ? (
-            // 第2页: ID 12-26，标题"II. About Us / 关于我们"
+            // 第2页: ID 16-30，标题"II. About Us / 关于我们"
             <div className="first-page-questions">
               <h1 className="section-title">
                 {language === 'en' 
@@ -3572,7 +3696,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                   : 'II. 关于我们'}
               </h1>
               
-              {questions.slice(11, 26).map((question) => (
+              {questions.slice(15, 30).map((question) => (
                 <div key={question.id} className="question-container">
                   {renderQuestionText(question)}
                   
@@ -3659,7 +3783,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               </div>
             </div>
           ) : showThirdPage ? (
-            // 第3页: ID 27-37，标题"III. About Motherhood / 关于母亲"
+            // 第3页: ID 31-41，标题"III. About Motherhood / 关于母亲"
             <div className="first-page-questions">
               <h1 className="section-title">
                 {language === 'en' 
@@ -3667,7 +3791,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                   : 'III. 关于母亲'}
               </h1>
               
-              {questions.slice(26, 37).map((question) => (
+              {questions.slice(30, 41).map((question) => (
                 <div key={question.id} className="question-container">
                   {renderQuestionText(question)}
                   
