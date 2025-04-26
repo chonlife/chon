@@ -10,7 +10,8 @@ export type QuestionType = 'multiple-choice' | 'text-input' | 'scale-question';
 // 回答格式定义
 export interface QuestionResponse {
   questionnaire_type: QuestionnaireType;
-  question_id: number;
+  question_id: number | string; // 唯一ID
+  original_question_id: number; // 原始问题ID
   question_type: QuestionType;
   response_value: string;
 }
@@ -69,16 +70,19 @@ export const saveAllQuestionResponses = async (responses: QuestionResponse[]): P
 /**
  * 准备问卷回答数据
  * 将本地答案转换为后端API所需的格式
+ * 如果存在uniqueIdMapping，则使用它将问题ID映射到唯一ID
  * 
  * @param questionnaireType 问卷类型
  * @param questions 问题列表，用于获取问题类型
  * @param answers 用户的回答
+ * @param uniqueIdMapping 可选，问题ID到唯一ID的映射
  * @returns 准备好发送到后端的回答数组
  */
 export const prepareQuestionResponses = (
   questionnaireType: QuestionnaireType,
   questions: Array<{id: number, type: QuestionType}>,
-  answers: Record<number, string>
+  answers: Record<number, string>,
+  uniqueIdMapping?: Record<string, number>
 ): QuestionResponse[] => {
   const responses: QuestionResponse[] = [];
   
@@ -86,9 +90,17 @@ export const prepareQuestionResponses = (
     // 查找问题以获取其类型
     const question = questions.find(q => q.id === parseInt(questionId));
     if (question) {
+      // 使用uniqueIdMapping如果存在
+      let mappingKey = `${questionnaireType} ${questionId}`;
+      
+      const mappedId = uniqueIdMapping ? 
+        uniqueIdMapping[mappingKey] || parseInt(questionId) :
+        parseInt(questionId);
+        
       responses.push({
         questionnaire_type: questionnaireType,
-        question_id: parseInt(questionId),
+        question_id: mappedId,
+        original_question_id: parseInt(questionId),
         question_type: question.type,
         response_value: value
       });

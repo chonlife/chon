@@ -94,7 +94,8 @@ def store_question_response():
     Store a response for a questionnaire question
     Expects JSON: {
         "questionnaire_type": "mother/corporate/other/both",
-        "question_id": 1,
+        "question_id": 1,     # 可以是数字或字符串
+        "original_question_id": 1,  # 原始问题ID
         "question_type": "multiple-choice/scale-question/text-input",
         "response_value": "A" or "1" or "text response"
     }
@@ -102,7 +103,7 @@ def store_question_response():
     data = request.json
     
     # Validate required fields
-    required_fields = ['questionnaire_type', 'question_id', 'question_type', 'response_value']
+    required_fields = ['questionnaire_type', 'question_id', 'original_question_id', 'question_type', 'response_value']
     missing_fields = [field for field in required_fields if field not in data]
     
     if missing_fields:
@@ -110,7 +111,8 @@ def store_question_response():
     
     # Extract data
     questionnaire_type = data['questionnaire_type']
-    question_id = data['question_id']
+    question_id = str(data['question_id'])  # 确保以字符串形式存储
+    original_question_id = int(data['original_question_id'])  # 原始问题ID
     question_type = data['question_type']
     response_value = data['response_value']
     
@@ -129,6 +131,7 @@ def store_question_response():
                 supabase.table('question_responses').insert({
                     'questionnaire_type': questionnaire_type,
                     'question_id': question_id,
+                    'original_question_id': original_question_id,
                     'question_type': question_type,
                     'response_value': response_value,
                     'count': 1
@@ -141,6 +144,7 @@ def store_question_response():
             supabase.table('text_responses').insert({
                 'questionnaire_type': questionnaire_type,
                 'question_id': question_id,
+                'original_question_id': original_question_id,
                 'response_text': response_value
             }).execute()
             
@@ -162,7 +166,8 @@ def batch_save_question_responses():
         "responses": [
             {
                 "questionnaire_type": "mother",
-                "question_id": 1,
+                "question_id": 1,     # 唯一ID，可以是数字或字符串
+                "original_question_id": 1,  # 原始问题ID
                 "question_type": "multiple-choice",
                 "response_value": "A"
             },
@@ -179,9 +184,14 @@ def batch_save_question_responses():
     try:
         # 使用Supabase批量插入
         for response in responses:
+            # 确保question_id以字符串形式存储
+            question_id = str(response.get('question_id'))
+            original_question_id = int(response.get('original_question_id'))
+            
             supabase.table('question_responses').insert({
                 'questionnaire_type': response.get('questionnaire_type'),
-                'question_id': response.get('question_id'),
+                'question_id': question_id,
+                'original_question_id': original_question_id,
                 'question_type': response.get('question_type'),
                 'response_value': response.get('response_value')
             }).execute()
@@ -202,23 +212,30 @@ def get_question_stats():
     Get statistics for a specific question
     Query parameters:
     - questionnaire_type: mother/corporate/other/both
-    - question_id: number
+    - question_id: number or string (唯一ID)
+    - original_question_id: number (可选，原始问题ID)
     """
     questionnaire_type = request.args.get('questionnaire_type')
     question_id = request.args.get('question_id')
+    original_question_id = request.args.get('original_question_id')
     
-    if not questionnaire_type or not question_id:
-        return jsonify({"error": "Missing required parameters: questionnaire_type and question_id"}), 400
+    if not questionnaire_type:
+        return jsonify({"error": "Missing required parameter: questionnaire_type"}), 400
+    
+    if not question_id and not original_question_id:
+        return jsonify({"error": "Missing required parameter: either question_id or original_question_id must be provided"}), 400
     
     try:
-        # Convert question_id to integer
-        question_id = int(question_id)
+        # 构建查询
+        query = supabase.table('question_responses').select('*').eq('questionnaire_type', questionnaire_type)
         
-        result = supabase.table('question_responses')\
-            .select('*')\
-            .eq('questionnaire_type', questionnaire_type)\
-            .eq('question_id', question_id)\
-            .execute()
+        # 根据提供的ID类型进行查询
+        if question_id:
+            query = query.eq('question_id', question_id)
+        elif original_question_id:
+            query = query.eq('original_question_id', int(original_question_id))
+            
+        result = query.execute()
             
         return jsonify({"data": result.data}), 200
     except Exception as e:

@@ -12,7 +12,8 @@ INSERT INTO intro_choices (choice, count) VALUES ('no', 0) ON CONFLICT (choice) 
 CREATE TABLE IF NOT EXISTS question_responses (
     id SERIAL PRIMARY KEY,
     questionnaire_type VARCHAR(20) NOT NULL CHECK (questionnaire_type IN ('mother', 'corporate', 'other', 'both')),
-    question_id INTEGER NOT NULL,
+    question_id VARCHAR(50) NOT NULL, -- 唯一ID
+    original_question_id INTEGER NOT NULL, -- 原始问题ID
     question_type VARCHAR(20) NOT NULL CHECK (question_type IN ('multiple-choice', 'scale-question')),
     response_value VARCHAR(50) NOT NULL,
     count INTEGER NOT NULL DEFAULT 1,
@@ -25,7 +26,8 @@ CREATE TABLE IF NOT EXISTS question_responses (
 CREATE TABLE IF NOT EXISTS text_responses (
     id SERIAL PRIMARY KEY,
     questionnaire_type VARCHAR(20) NOT NULL CHECK (questionnaire_type IN ('mother', 'corporate', 'other', 'both')),
-    question_id INTEGER NOT NULL,
+    question_id VARCHAR(50) NOT NULL, -- 唯一ID
+    original_question_id INTEGER NOT NULL, -- 原始问题ID
     response_text TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
