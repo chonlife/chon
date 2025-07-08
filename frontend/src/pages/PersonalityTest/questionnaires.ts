@@ -670,7 +670,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
     privacyStatement: {
       titleEn: 'Privacy Statement',
       titleZh: '隐私声明',
-      contentEn: 'Your information will only be used for verification purposes and to formulate your CHON personality test. It will not be shared, disclosed, or used for any other purpose. We are committed to protecting your privacy and ensuring the security of your data.',
+      contentEn: 'At CHON, your privacy is fundamental. We only collect the information necessary to deliver meaningful insights, and we protect it with the highest standards of security and integrity. \n For individual participants, your personal information will be used solely for the following purposes: \n To verify your eligibility for specific sections of the survey \n To support demographic and statistical analysis \n To generate your personalized CHON personality profile \n We do not sell, share, or disclose your individual data under any circumstances. All responses are securely stored and accessible only to authorized research personnel. \nFor Corporate and Institutional Users All data shared for organizational use will be: \nFully de-identified, with all personally identifiable information removed \nPresented in statistical form only \nCovered by strict data use and licensing agreements',
       contentZh: '您的信息将仅用于验证目的和制定您的 CHON 性格测试。您的信息不会被共享、披露或用于任何其他目的。我们重视您的隐私，并承诺保护您的数据安全。'
     },
     uniqueIdMapping: {
@@ -980,7 +980,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
         id: 21,
         type: 'scale-question',
         textEn: 'How would you describe the current recognition and utilization of the "soft skills" of kindness, responsibility, empathy, and communication in your company?',
-        textZh: '您如何描述贵司目前对软实力（善良、责任心、同理心、沟通能力）的认可和使用情况？',
+        textZh: '您如何描述贵司目前对"软实力"（善良、责任心、同理心、沟通能力）的认可和使用情况？',
         scaleLabels: {
           minEn: 'Not recognized at all',
           minZh: '完全不认可',
@@ -1394,7 +1394,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
     privacyStatement: {
       titleEn: 'Privacy Statement',
       titleZh: '隐私声明',
-      contentEn: 'Your information will only be used for verification purposes and to formulate your CHON personality test. It will not be shared, disclosed, or used for any other purpose. We are committed to protecting your privacy and ensuring the security of your data.',
+      contentEn: 'At CHON, your privacy is fundamental. We only collect the information necessary to deliver meaningful insights, and we protect it with the highest standards of security and integrity. \n For individual participants, your personal information will be used solely for the following purposes: \n To verify your eligibility for specific sections of the survey \n To support demographic and statistical analysis \n To generate your personalized CHON personality profile \n We do not sell, share, or disclose your individual data under any circumstances. All responses are securely stored and accessible only to authorized research personnel. \nFor Corporate and Institutional Users All data shared for organizational use will be: \nFully de-identified, with all personally identifiable information removed \nPresented in statistical form only \nCovered by strict data use and licensing agreements',
       contentZh: '您的信息将仅用于验证目的和制定您的 CHON 性格测试。您的信息不会被共享、披露或用于任何其他目的。我们重视您的隐私，并承诺保护您的数据安全。'
     },
     uniqueIdMapping: {
@@ -1989,7 +1989,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
     privacyStatement: {
       titleEn: 'Privacy Statement',
       titleZh: '隐私声明',
-      contentEn: 'Your information will only be used for verification purposes and to formulate your CHON personality test. It will not be shared, disclosed, or used for any other purpose. We are committed to protecting your privacy and ensuring the security of your data.',
+      contentEn: 'At CHON, your privacy is fundamental. We only collect the information necessary to deliver meaningful insights, and we protect it with the highest standards of security and integrity. \n For individual participants, your personal information will be used solely for the following purposes: \n To verify your eligibility for specific sections of the survey \n To support demographic and statistical analysis \n To generate your personalized CHON personality profile \n We do not sell, share, or disclose your individual data under any circumstances. All responses are securely stored and accessible only to authorized research personnel. \nFor Corporate and Institutional Users All data shared for organizational use will be: \nFully de-identified, with all personally identifiable information removed \nPresented in statistical form only \nCovered by strict data use and licensing agreements',
       contentZh: '您的信息将仅用于验证目的和制定您的 CHON 性格测试。您的信息不会被共享、披露或用于任何其他目的。我们重视您的隐私，并承诺保护您的数据安全。'
     },
     uniqueIdMapping: {
@@ -2847,7 +2847,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       privacyStatement: {
         titleEn: 'Privacy Statement',
         titleZh: '隐私声明',
-        contentEn: 'Your information will only be used for verification purposes and to formulate your CHON personality test. It will not be shared, disclosed, or used for any other purpose. We are committed to protecting your privacy and ensuring the security of your data.',
+        contentEn: 'At CHON, your privacy is fundamental. We only collect the information necessary to deliver meaningful insights, and we protect it with the highest standards of security and integrity. \n For individual participants, your personal information will be used solely for the following purposes: \n To verify your eligibility for specific sections of the survey \n To support demographic and statistical analysis \n To generate your personalized CHON personality profile \n We do not sell, share, or disclose your individual data under any circumstances. All responses are securely stored and accessible only to authorized research personnel. \nFor Corporate and Institutional Users All data shared for organizational use will be: \nFully de-identified, with all personally identifiable information removed \nPresented in statistical form only \nCovered by strict data use and licensing agreements',
         contentZh: '您的信息将仅用于验证目的和制定您的 CHON 性格测试。您的信息不会被共享、披露或用于任何其他目的。我们重视您的隐私，并承诺保护您的数据安全。'
       }
     }
