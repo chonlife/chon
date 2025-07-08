@@ -104,10 +104,11 @@ const HexagonChart: React.FC<{
     };
   };
 
-  // 获取分数标签的位置
+  // 获取分数标签的位置 - 响应式调整
   const getScorePosition = (center: [number, number], size: number, tagIndex: number, score: number) => {
     // 从30度开始，每隔60度一个顶点
     const angle = (Math.PI / 6) + (Math.PI / 3 * tagIndex);
+    
     // 计算分数位置 - 在数据点和中心点之间
     const scaledSize = (size * score) / 100 * 0.7; // 略微靠近中心点，用0.7比例
     
@@ -129,6 +130,19 @@ const HexagonChart: React.FC<{
   };
 
   const [animated, setAnimated] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  
+  // 使用useEffect监听窗口大小变化
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   
   // 使用useEffect监听animationKey变化，重置动画状态
   useEffect(() => {
@@ -171,6 +185,28 @@ const HexagonChart: React.FC<{
 
   // 添加刻度值 - 调整位置以匹配新的角度
   const scaleValues = ["0", "25", "50", "75", "100"];
+  
+  // 根据屏幕尺寸调整分数气泡和标签的大小
+  const getBubbleSize = () => {
+    if (windowWidth <= 380) return 16;
+    if (windowWidth <= 480) return 17;
+    if (windowWidth <= 768) return 18;
+    return 18;
+  };
+  
+  const getScoreFontSize = () => {
+    if (windowWidth <= 380) return 10;
+    if (windowWidth <= 480) return 11;
+    if (windowWidth <= 768) return 11;
+    return 12;
+  };
+  
+  const getLabelWidth = () => {
+    if (windowWidth <= 380) return 100;
+    if (windowWidth <= 480) return 110;
+    if (windowWidth <= 768) return 120;
+    return 130;
+  };
 
   return (
     <div className="svg-hexagon-chart">
@@ -277,6 +313,9 @@ const HexagonChart: React.FC<{
         
         {/* 分数值气泡 */}
         {tagPositions.map((item, index) => {
+          const bubbleSize = getBubbleSize();
+          const fontSize = getScoreFontSize();
+          
           return (
             <g 
               key={`score-bubble-${item.key}`} 
@@ -289,7 +328,7 @@ const HexagonChart: React.FC<{
               <circle
                 cx={item.scoreX}
                 cy={item.scoreY}
-                r="18"
+                r={bubbleSize}
                 fill="rgba(10,10,10,0.8)"
                 stroke="#F0BDC0"
                 strokeWidth="1.5"
@@ -304,7 +343,7 @@ const HexagonChart: React.FC<{
                 textAnchor="middle"
                 dominantBaseline="middle"
                 fill="#F0BDC0"
-                fontSize="12"
+                fontSize={fontSize}
                 fontWeight="bold"
               >
                 {item.score}%
@@ -319,6 +358,9 @@ const HexagonChart: React.FC<{
             ? (language === 'en' ? labels[item.key].en : labels[item.key].zh) 
             : item.key;
           
+          // 获取响应式标签宽度
+          const labelWidth = getLabelWidth();
+          
           return (
             <g 
               key={`label-${item.key}`}
@@ -329,9 +371,9 @@ const HexagonChart: React.FC<{
             >
               {/* 标签文本背景 */}
               <rect
-                x={item.labelX - 65}
+                x={item.labelX - labelWidth / 2}
                 y={item.labelY - 12}
-                width="130"
+                width={labelWidth}
                 height="24"
                 rx="12"
                 ry="12"
@@ -348,7 +390,7 @@ const HexagonChart: React.FC<{
                 textAnchor="middle" 
                 dominantBaseline="middle"
                 fill="white"
-                fontSize="13"
+                fontSize={windowWidth <= 480 ? 11 : 13}
                 fontWeight="bold"
                 className="label-text"
               >
@@ -551,34 +593,6 @@ const Results: React.FC = () => {
         coreEndurance: [80, 100]
       },
       image: '/images/characters/nuwa.jpg'
-    },
-    {
-      id: 'athena',
-      name: {
-        en: 'Athena',
-        zh: '雅典娜'
-      },
-      title: {
-        en: 'The Strategic Thinker',
-        zh: '战略思想家'
-      },
-      description: {
-        en: 'As Athena, you possess a commanding presence in any professional setting. Your sharp intellect, strategic mindset, and high objectivity make you an exceptional problem-solver and decision-maker. You are highly independent, thriving in environments that value expertise and autonomy. While you may not always prioritize emotional or social connection with others, your ability to assess situations logically and act decisively ensures long-term success. Your resilience and endurance make you well-suited for roles in strategy, governance, research, and executive leadership, where rationality and long-term planning drive impact.',
-        zh: '作为雅典娜，你在任何专业场合都自带强大气场。敏锐的思维、卓越的战略眼光和高度客观性，使你成为出色的问题解决者和决策者。你拥有极强的独立性，在重视专业能力和自主权的工作环境中如鱼得水。虽然你未必总是把情感联结放在首位，但凭借冷静分析局势和果断行动的能力，你总能确保长期成功。你的韧性和持久力，让你特别适合战略规划、管理决策、研究分析和高层领导等岗位。在这些需要理性思考和长远布局的领域，你的优势将得到最大发挥。'
-      },
-      mythology: {
-        en: "Athena, the Greek goddess of wisdom, war, and craft, was born fully armored from Zeus's head, embodying intelligence and strategy from the start. Athena is the master of calculated warfare. She is also the patron of artisans and architects, inspiring both battle plans and brilliant innovations. Symbolized by the owl and the olive tree, Athena represents rationality, justice, and the pursuit of excellence.",
-        zh: '雅典娜是希腊神话中的智慧、战争和工艺女神，她全身铠甲地从宙斯的头颅中诞生，从出生就体现了智慧和战略。雅典娜是谋略战争的大师。她也是工匠和建筑师的守护神，激励着人们制定作战计划和进行杰出的创新。雅典娜以猫头鹰和橄榄树为象征，代表理性、正义和追求卓越。'
-      },
-      tagRanges: {
-        selfAwareness: [80, 100],
-        dedication: [0, 60],
-        socialIntelligence: [60, 90],
-        emotionalRegulation: [60, 80],
-        objectivity: [70, 100],
-        coreEndurance: [80, 100]
-      },
-      image: '/images/characters/athena.jpg'
     },
     {
       id: 'venus',

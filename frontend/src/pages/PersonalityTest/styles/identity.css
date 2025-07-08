@@ -9,7 +9,7 @@
   margin: 0 auto;
   position: relative;
   z-index: 1;
-  padding: 1rem;
+  padding: 1rem 1.5rem;
   flex: 1;
   width: 100%;
   box-sizing: border-box;
@@ -25,6 +25,16 @@
   width: 100%;
 }
 
+.option-container {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.6rem;
+  cursor: pointer;
+  padding-left: 35px; /* Space for checkbox */
+}
+
 .identity-option {
   width: 100%;
   padding: 1rem;
@@ -35,7 +45,10 @@
   background-color: white;
   border: none;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 0.6rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .identity-option.selected {
@@ -54,6 +67,7 @@
   margin: 0;
   color: black;
   transition: all 0.3s ease;
+  flex: 1;
 }
 
 .identity-option:hover {
@@ -93,6 +107,51 @@
   color: white;
 }
 
+/* Checkbox styles for identity options */
+.identity-checkbox {
+  width: 22px;
+  height: 22px;
+  border: 2px solid white;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.option-container:hover .identity-checkbox {
+  border-color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.option-container.selected .identity-checkbox {
+  background-color: transparent;
+  border-color: #F0BDC0;
+}
+
+.option-container.selected .identity-checkbox::after {
+  content: "✓";
+  font-size: 16px;
+  color: #F0BDC0;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Special handling for the last option (Other) which doesn't need a checkbox */
+.option-container:last-child .identity-checkbox {
+  display: none;
+}
+
 .continue-button {
   margin-top: 2rem;
   background-color: white;
@@ -122,4 +181,38 @@
   opacity: 0.5;
   cursor: not-allowed;
   background-color: #ccc;
+}
+
+/* Media queries for smaller screens */
+@media (max-width: 768px) {
+  .identity-selection {
+    padding: 1rem;
+  }
+  
+  .option-container {
+    padding-left: 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  .identity-title {
+    font-size: 1.8rem;
+  }
+  
+  .option-container {
+    padding-left: 30px;
+  }
+  
+  .identity-checkbox {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .identity-option {
+    padding: 0.9rem;
+  }
+  
+  .identity-option p {
+    font-size: 1rem;
+  }
 } 
