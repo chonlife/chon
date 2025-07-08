@@ -8,8 +8,9 @@
   flex-direction: column;
   color: white;
   font-family: 'Kaisei Decol', serif;
-  background-color: #0A0A0A;
+  background-color: #000 !important;
   position: relative;
+  background: #000 !important;
 }
 
 /* 中文文本的特定样式 */
