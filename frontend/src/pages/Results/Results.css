@@ -8,9 +8,10 @@
   flex-direction: column;
   color: white;
   font-family: 'Kaisei Decol', serif;
-  background-color: #000 !important;
+  background-color: #0A0A0A;
   position: relative;
   background: #000 !important;
+  background-color: #000 !important;
 }
 
 /* 中文文本的特定样式 */
@@ -45,8 +46,10 @@
 
 .character-portrait {
   width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  overflow: hidden;
   max-width: 350px;
-  height: auto;
   margin: 0 auto;
   border: none;
   box-shadow: none;
@@ -56,7 +59,7 @@
 
 .character-portrait img {
   width: 100%;
-  height: auto;
+  height: 100%;
   object-fit: contain;
   border-radius: 0;
 }
@@ -539,7 +542,7 @@
     margin-bottom: 1rem;
   }
 
-  .character-portrait {
+  .character-portrait, .hexagon-chart {
     max-width: 250px;
     margin: 0;
   }
@@ -699,6 +702,11 @@
 
   .character-portrait {
     max-width: 150px;
+  }
+  
+  .svg-hexagon-chart {
+    max-width: 300px;
+    padding: 0.6rem;
   }
 
   .character-cards-dock {
