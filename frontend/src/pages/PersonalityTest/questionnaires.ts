@@ -70,8 +70,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
           { id: 'C', textEn: 'South America', textZh: '南美' },
           { id: 'D', textEn: 'Europe', textZh: '欧洲' },
           { id: 'E', textEn: 'Africa', textZh: '非洲' },
-          { id: 'F', textEn: 'Australia/Oceania', textZh: '澳大利亚/大洋洲' },
-          { id: 'G', textEn: 'Antarctica', textZh: '南极洲' }
+          { id: 'F', textEn: 'Australia/Oceania', textZh: '澳大利亚/大洋洲' }
         ]
       },
       {
@@ -99,7 +98,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 5,
         type: 'multiple-choice',
-        textEn: 'How many trimesters did you experience noticeable morning sickness?',
+        textEn: 'How many weeks did you experience noticeable morning sickness?',
         textZh: '您经历了几个妊娠期有明显的孕吐反应？',
         options: [
           { id: 'A', textEn: 'None', textZh: '无' },
@@ -130,7 +129,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 8,
         type: 'multiple-choice',
-        textEn: 'Did you receive postpartum care or stay at a postpartum center?',
+        textEn: 'Did you receive any postpartum care services?',
         textZh: '您是否接受了产后护理或入住了月子中心？',
         options: [
           { id: 'A', textEn: 'Yes', textZh: '是' },
@@ -140,19 +139,19 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 9,
         type: 'text-input',
-        textEn: 'How would you describe your postpartum emotions in one word?',
-        textZh: '您能用一个词形容您的产后状态吗？'
+        textEn: 'Your postpartum emotions in one word',
+        textZh: '一个词形容您的产后状态'
       },
       {
         id: 10,
         type: 'text-input',
-        textEn: 'How would you describe your motherhood experience in ten words?',
-        textZh: '您能用一个词形容您作为母亲的状态吗？'
+        textEn: 'Motherhood experience in ten words',
+        textZh: '十词形容您作为母亲的经历'
       },
       {
         id: 11,
         type: 'scale-question',
-        textEn: 'How involved do you feel you are with your previous social life from work after pregnancy?',
+        textEn: 'How involved are you with previous social life from work after pregnancy?',
         textZh: '您觉得怀孕后自己与以往工作的社交联系程度如何？',
         scaleLabels: {
           minEn: 'Not involved at all',
@@ -165,8 +164,8 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 12,
         type: 'scale-question',
-        textEn: 'How well does your work arrangement after pregnancy support your needs as a working mother?',
-        textZh: '您怀孕后的工作安排对作为职场母亲的您有多大支持作用？',
+        textEn: 'How well does your work arrangement support your needs?',
+        textZh: '您怀孕后的工作安排对您有多大支持作用？',
         scaleLabels: {
           minEn: 'Not supportive at all',
           minZh: '完全不支持',
@@ -177,8 +176,8 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 13,
         type: 'scale-question',
-        textEn: 'How connected do you feel to your professional identity since becoming a mother?',
-        textZh: '自成为母亲后，您对自己的职业身份感有多强？',
+        textEn: 'How connected do you feel to your professional identity?',
+        textZh: '您对自己的职业身份感有多强？',
         scaleLabels: {
           minEn: 'Not connected - motherhood is full priority',
           minZh: '完全不强 - 母亲角色优先',
@@ -191,7 +190,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
         id: 14,
         type: 'scale-question',
         textEn: 'How has motherhood impacted your career progression or promotion opportunities?',
-        textZh: '母亲身份对您的职业发展或晋升机会有何影响？',
+        textZh: '母亲身份对您的职业发展机会有何影响？',
         scaleLabels: {
           minEn: 'Very negative - significantly hindered',
           minZh: '非常负面 - 明显阻碍',
@@ -202,13 +201,13 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 15,
         type: 'scale-question',
-        textEn: 'How capable are you with the current support your employer provides in balancing work and motherhood?',
-        textZh: '您如何评价您运用公司提供的兼顾工作和育儿的支持的能力？',
+        textEn: 'How capable are you with the current support your employer provides?',
+        textZh: '您运用公司提供的支持的能力如何？',
         scaleLabels: {
           minEn: 'Not capable of being supported',
-          minZh: '完全不能被支持',
+          minZh: '完全不能运用',
           maxEn: 'Extremely supported',
-          maxZh: '非常能被支持'
+          maxZh: '非常能运用'
         },
         tags: ['自我意识']
       },
@@ -254,7 +253,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 19,
         type: 'scale-question',
-        textEn: 'What would your satisfaction level with your ability to maintain work-life balance be?',
+        textEn: 'How satisfy are you with your ability to maintain work-life balance?',
         textZh: '您对您目前工作与生活平衡的能力感到满意吗？',
         scaleLabels: {
           minEn: 'Very dissatisfied',
@@ -293,8 +292,8 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 22,
         type: 'scale-question',
-        textEn: 'Are you actively seeking more opportunities to connect with other mothers through your profession?',
-        textZh: '您是否主动在工作中寻求更多与其他职场母亲建立联系的机会？',
+        textEn: 'Do you seek more opportunities to connect with other mothers through your profession?',
+        textZh: '您是否寻求更多与其他职场母亲建立联系的机会？',
         scaleLabels: {
           minEn: 'Never',
           minZh: '从不',
@@ -320,7 +319,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 24,
         type: 'scale-question',
-        textEn: 'How well do you think enhanced abstract logical thinking would address emotional and life concerns?',
+        textEn: 'How well do you think logical thinking would address emotional and life concerns?',
         textZh: '您认为加强抽象逻辑思维对解决情感和生活问题有多大帮助？',
         scaleLabels: {
           minEn: 'Not well - No link with emotions',
@@ -333,8 +332,8 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 25,
         type: 'scale-question',
-        textEn: 'To what extent do you believe that true self-love and the ability to care for others require strong objective reasoning to navigate challenges in life?',
-        textZh: '你认为真正的自爱和关爱他人的能力在多大程度上需要强大的客观思维来解决生活中的挑战？',
+        textEn: 'Do you believe that self-love and the ability to care for others require strong logic to navigate challenges in life?',
+        textZh: '你认为自爱和关爱他人的能力在多大程度上需要逻辑思维来解决生活中的挑战？',
         scaleLabels: {
           minEn: 'Strongly disagree',
           minZh: '非常不同意',
@@ -371,8 +370,8 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 28,
         type: 'scale-question',
-        textEn: 'How valuable would you find a feature that helps you to stay updated with trends and knowledge in your professional field?',
-        textZh: '您认为一个帮助职场母亲了解其行业领域最新动态的功能有多大用处？',
+        textEn: 'How valuable would you find a feature to stay updated with trends in your professional field?',
+        textZh: '您认为一个帮助了解其行业领域最新动态的功能有多大用处？',
         scaleLabels: {
           minEn: 'Not valuable',
           minZh: '毫无价值 - 毫无益处',
@@ -384,8 +383,8 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 29,
         type: 'scale-question',
-        textEn: 'How likely are you to use the forum to connect with hospitals or other medical resources for medical support?',
-        textZh: '您有多大可能使用该论坛与医院或其他医疗资源联系以获得医疗支持？',
+        textEn: 'How likely are you to use a forum to connect with medical resources for health support?',
+        textZh: '您有多大可能使用与医疗资源联系的论坛以获得医疗支持？',
         scaleLabels: {
           minEn: 'Very unlikely',
           minZh: '完全不可能',
@@ -397,8 +396,8 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 30,
         type: 'scale-question',
-        textEn: 'How valuable do you think a forum within our app would be in helping you feel less isolated as a working mother?',
-        textZh: '您认为该论坛在帮助您增进作为职场母亲与别的职场母亲连接方面有多大价值？',
+        textEn: 'How valuable do you think a forum would be in helping you feel less isolated as a working mother?',
+        textZh: '您认为论坛在帮助您增进作为职场母亲与别的职场母亲连接方面有多大价值？',
         scaleLabels: {
           minEn: 'Not valuable at all',
           minZh: '完全没有价值',
@@ -410,7 +409,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 31,
         type: 'scale-question',
-        textEn: 'How motivated are you to use visuospatial and logical training modules within our app to strengthen abstract cognitive skills?',
+        textEn: 'How motivated are you to use visuospatial training modules within our app to strengthen logical thinking?',
         textZh: '您有多大动力使用应用内的视觉空间和逻辑训练模块？',
         scaleLabels: {
           minEn: 'Not motivated at all',
@@ -423,8 +422,8 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 32,
         type: 'scale-question',
-        textEn: 'How helpful do you think cognitive training would be in enhancing your problem-solving abilities?',
-        textZh: '您认为抽象逻辑训练对提升您解决问题的能力有多大帮助？',
+        textEn: 'How helpful do you think the training would be in enhancing your problem-solving abilities?',
+        textZh: '您认为此训练对提升您解决问题的能力有多大帮助？',
         scaleLabels: {
           minEn: 'Not helpful at all',
           minZh: '完全无帮助',
@@ -436,7 +435,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 33,
         type: 'scale-question',
-        textEn: 'How engaging do you think it would be to create and interact with a self-designed electronic child avatar in your personal profile?',
+        textEn: 'How engaging do you think it would be to create and interact with an electronic child avatar in your personal profile?',
         textZh: '您觉得在个人主页中创建并与自定义的"电子小孩"虚拟形象互动的这个功能有多大吸引力？',
         scaleLabels: {
           minEn: 'Not engaging at all',
@@ -449,7 +448,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 34,
         type: 'scale-question',
-        textEn: 'How would you evaluate a company-specific AI model offering work-related productivity features for you and other mothers?',
+        textEn: 'How would you like a company-specific AI model offering work-related productivity features for you and other mothers?',
         textZh: '您如何看待一个专门为每家公司定制的职场母亲专用人工智能模型？',
         scaleLabels: {
           minEn: 'Not valuable -- completely unnecessary',
@@ -475,7 +474,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 36,
         type: 'scale-question',
-        textEn: 'Do you believe misuse by unintended users (including your partner accessing accounts without permission) could negatively affect trust in the app?',
+        textEn: 'Do you believe misuse by unintended users (including your partner without permission) could negatively affect trust in the app?',
         textZh: '您认为如果有非目标用户滥用该平台（包括您的生活伴侣未经允许访问账户等情况），是否会对用户对本应用的信任度产生负面影响？',
         scaleLabels: {
           minEn: 'Definitely no -- no trust risk',
@@ -487,7 +486,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 37,
         type: 'scale-question',
-        textEn: 'How do you feel about your company occasionally verifying through HR that business updates and activities posted on this platform are genuinely by yourself and other mother users, not others misusing their accounts?',
+        textEn: 'How do you feel about your company verifying through HR that business updates and activities posted on this platform are by yourself and other mother users, not others misusing their accounts?',
         textZh: '您如何看待由公司人力资源部门核查平台上的业务更新和动态确实由目标用户本人发布，而非他人滥用账户？',
         scaleLabels: {
           minEn: 'Strongly oppose',
@@ -670,7 +669,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
     privacyStatement: {
       titleEn: 'Privacy Statement',
       titleZh: '隐私声明',
-      contentEn: 'At CHON, your privacy is fundamental. We only collect the information necessary to deliver meaningful insights, and we protect it with the highest standards of security and integrity. \n For individual participants, your personal information will be used solely for the following purposes: \n To verify your eligibility for specific sections of the survey \n To support demographic and statistical analysis \n To generate your personalized CHON personality profile \n We do not sell, share, or disclose your individual data under any circumstances. All responses are securely stored and accessible only to authorized research personnel. \nFor Corporate and Institutional Users All data shared for organizational use will be: \nFully de-identified, with all personally identifiable information removed \nPresented in statistical form only \nCovered by strict data use and licensing agreements',
+      contentEn: 'At CHON, your privacy is fundamental. We only collect the information necessary to deliver meaningful insights, and we protect it with the highest standards of security and integrity. \n For individual participants, your personal information will be used solely for the following purposes: \n 1) To verify your eligibility for specific sections of the survey \n 2) To support demographic and statistical analysis \n 3)To generate your personalized CHON personality profile \n We do not sell, share, or disclose your individual data under any circumstances. All responses are securely stored and accessible only to authorized research personnel. \nFor Corporate and Institutional Users All data shared for organizational use will be: \n 1)Fully de-identified, with all personally identifiable information removed \n2) Presented in statistical form only \n 3) Covered by strict data use and licensing agreements',
       contentZh: '您的信息将仅用于验证目的和制定您的 CHON 性格测试。您的信息不会被共享、披露或用于任何其他目的。我们重视您的隐私，并承诺保护您的数据安全。'
     },
     uniqueIdMapping: {
@@ -767,7 +766,6 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
           { id: 'D', textEn: 'Europe', textZh: '欧洲' },
           { id: 'E', textEn: 'Africa', textZh: '非洲' },
           { id: 'F', textEn: 'Australia/Oceania', textZh: '澳大利亚/大洋洲' },
-          { id: 'G', textEn: 'Antarctica', textZh: '南极洲' }
         ]
       },
       {
@@ -847,11 +845,11 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
         textEn: 'What is the approximate size of your direct span of control?',
         textZh: '您的直接管理团队规模是多少？',
         options: [
-          { id: 'A', textEn: 'No direct reports', textZh: '没有直接下属' },
-          { id: 'B', textEn: '1-5 people', textZh: '1-5人' },
-          { id: 'C', textEn: '6-15 people', textZh: '6-15人' },
-          { id: 'D', textEn: '16-30 people', textZh: '16-30人' },
-          { id: 'E', textEn: 'More than 30 people', textZh: '30人以上' }
+          { id: 'A', textEn: '1-5 people', textZh: '1-5人' },
+          { id: 'B', textEn: '6-15 people', textZh: '6-15人' },
+          { id: 'C', textEn: '16-30 people', textZh: '16-30人' },
+          { id: 'D', textEn: '30-50 people', textZh: '30-50人' },
+          { id: 'E', textEn: 'More than 50 people', textZh: '50人以上' }
         ]
       },
       {
@@ -860,17 +858,17 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
         textEn: 'What is the approximate size of your indirect span of control?',
         textZh: '您简介管理多少人？',
         options: [
-          { id: 'A', textEn: 'No indirect reports', textZh: '没有间接下属' },
-          { id: 'B', textEn: '1-10 people', textZh: '1-10人' },
-          { id: 'C', textEn: '11-50 people', textZh: '11-50人' },
-          { id: 'D', textEn: '51-200 people', textZh: '51-200人' },
-          { id: 'E', textEn: 'More than 200 people', textZh: '200人以上' }
+          { id: 'A', textEn: '1-15 people', textZh: '1-15人' },
+          { id: 'B', textEn: '16-50 people', textZh: '11-50人' },
+          { id: 'C', textEn: '51-200 people', textZh: '51-200人' },
+          { id: 'D', textEn: '200-500 people', textZh: '200-500人' },
+          { id: 'E', textEn: 'More than 500 people', textZh: '500人以上' }
         ]
       },
       {
         id: 12,
         type: 'text-input',
-        textEn: 'How would you describe the overall reporting structure within your team in ten words?',
+        textEn: 'Describe the overall reporting structure within your team in ten words',
         textZh: '请在十字以内描述您团队中的整体报告结构'
       },
       {
@@ -1069,7 +1067,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 28,
         type: 'scale-question',
-        textEn: 'To what extent do you believe that true self-love and the ability to care for others require strong objective reasoning to navigate challenges in life?',
+        textEn: 'Do you believe that self-love and the ability to care for others require strong logic to navigate challenges in life?',
         textZh: '你认为真正的自爱和关爱他人的能力在多大程度上需要强大的客观思维来解决生活中的挑战？',
         scaleLabels: {
           minEn: 'Strongly disagree',
@@ -1121,8 +1119,8 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 32,
         type: 'scale-question',
-        textEn: 'How valuable would direct access to external healthcare professionals for medical advice be within such an app?',
-        textZh: '您认为提供联系外部医疗专业人士获得医学建议的功能有多大用处？',
+        textEn: 'How valuable would direct access to external medical resouces for healthcare advice be within such an app?',
+        textZh: '您认为提供联系外部医疗资源获得医学建议的功能有多大用处？',
         scaleLabels: {
           minEn: 'Not valuable',
           minZh: '毫无价值 - 完全不需要',
@@ -1354,8 +1352,8 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 50,
         type: 'scale-question',
-        textEn: 'How much do you pay attention to the emotional well-being of working mothers around you, especially considering potential scenarios like hormonal changes or postpartum depression?',
-        textZh: '您在多大程度上关注身边职场母亲的情绪状态，特别是受到激素变化或产后抑郁等挑战的影响时？',
+        textEn: 'How much do you pay attention to the emotional well-being of working mothers around you?',
+        textZh: '您在多大程度上关注身边职场母亲的情绪状态？',
         scaleLabels: {
           minEn: 'Not at all -- I don\'t pay attention to this',
           minZh: '完全不关注 - 不曾留意',
@@ -1367,7 +1365,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 51,
         type: 'scale-question',
-        textEn: 'How equipped do you feel to recognize when a mother employee might be experiencing emotional difficulties due to life transitions (e.g., childbirth, parenting stress)?',
+        textEn: 'How equipped do you feel to recognize when a mother employee might be experiencing emotional difficulties due to life transitions?',
         textZh: '您认为自己在识别职场母亲因生活转变（如生育、育儿压力）而产生情绪困难方面的能力如何？',
         scaleLabels: {
           minEn: 'Not equipped at all -- I never consider this',
@@ -1394,7 +1392,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
     privacyStatement: {
       titleEn: 'Privacy Statement',
       titleZh: '隐私声明',
-      contentEn: 'At CHON, your privacy is fundamental. We only collect the information necessary to deliver meaningful insights, and we protect it with the highest standards of security and integrity. \n For individual participants, your personal information will be used solely for the following purposes: \n To verify your eligibility for specific sections of the survey \n To support demographic and statistical analysis \n To generate your personalized CHON personality profile \n We do not sell, share, or disclose your individual data under any circumstances. All responses are securely stored and accessible only to authorized research personnel. \nFor Corporate and Institutional Users All data shared for organizational use will be: \nFully de-identified, with all personally identifiable information removed \nPresented in statistical form only \nCovered by strict data use and licensing agreements',
+      contentEn: 'At CHON, your privacy is fundamental. We only collect the information necessary to deliver meaningful insights, and we protect it with the highest standards of security and integrity. \n For individual participants, your personal information will be used solely for the following purposes: \n 1) To verify your eligibility for specific sections of the survey \n 2) To support demographic and statistical analysis \n 3)To generate your personalized CHON personality profile \n We do not sell, share, or disclose your individual data under any circumstances. All responses are securely stored and accessible only to authorized research personnel. \nFor Corporate and Institutional Users All data shared for organizational use will be: \n 1)Fully de-identified, with all personally identifiable information removed \n2) Presented in statistical form only \n 3) Covered by strict data use and licensing agreements',
       contentZh: '您的信息将仅用于验证目的和制定您的 CHON 性格测试。您的信息不会被共享、披露或用于任何其他目的。我们重视您的隐私，并承诺保护您的数据安全。'
     },
     uniqueIdMapping: {
@@ -1459,8 +1457,8 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 1,
         type: 'multiple-choice',
-        textEn: "What's your biological sex at birth?",
-        textZh: '您出生时的生理性别是什么？',
+        textEn: "What's your biological sex?",
+        textZh: '您的性别是什么？',
         options: [
           { id: 'A', textEn: 'Female', textZh: '女' },
           { id: 'B', textEn: 'Male', textZh: '男' }
@@ -1493,7 +1491,6 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
           { id: 'D', textEn: 'Europe', textZh: '欧洲' },
           { id: 'E', textEn: 'Africa', textZh: '非洲' },
           { id: 'F', textEn: 'Australia/Oceania', textZh: '澳大利亚/大洋洲' },
-          { id: 'G', textEn: 'Antarctica', textZh: '南极洲' }
         ]
       },
       {
@@ -1561,7 +1558,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 9,
         type: 'scale-question',
-        textEn: 'How would you describe your role in terms of providing support or care to colleagues during team interactions or projects?',
+        textEn: 'How would you describe your role of providing support or care to colleagues during team interactions or projects?',
         textZh: '在团队合作或项目推进中，您通常会在多大程度上给予同事支持或关心？',
         scaleLabels: {
           minEn: 'Do not engage in offering support',
@@ -1639,7 +1636,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 15,
         type: 'scale-question',
-        textEn: 'What role does technology (e.g., collaboration tools, productivity apps) play in helping your team stay efficient and connected?',
+        textEn: 'What role does technology play in helping your team stay efficient and connected?',
         textZh: '您认为技术工具（如协作平台、生产力应用）在提升团队效率与保持联系方面的作用如何？',
         scaleLabels: {
           minEn: 'No role',
@@ -1665,7 +1662,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 17,
         type: 'scale-question',
-        textEn: 'To what extent do you believe that true self-love and the ability to care for others require strong objective reasoning to navigate challenges in life?',
+        textEn: 'Do you believe that self-love and the ability to care for others require strong logic to navigate challenges in life?',
         textZh: '你认为真正的自爱和关爱他人的能力在多大程度上需要强大的客观思维来解决生活中的挑战？',
         scaleLabels: {
           minEn: 'Strongly disagree',
@@ -1716,7 +1713,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 21,
         type: 'scale-question',
-        textEn: 'How valuable would direct access to external healthcare professionals for medical advice be within such an app?',
+        textEn: 'How valuable would direct access to external medical resouces for healthcare advice be within such an app?',
         textZh: '您认为提供联系外部医疗专业人士获得医学建议的功能有多大用处？',
         scaleLabels: {
           minEn: 'Not valuable',
@@ -1949,7 +1946,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 39,
         type: 'scale-question',
-        textEn: 'How much do you pay attention to the emotional well-being of working mothers around you, especially considering potential scenarios like hormonal changes or postpartum depression?',
+        textEn: 'How much do you pay attention to the emotional well-being of working mothers around you?',
         textZh: '您在多大程度上关注身边职场母亲的情绪状态，特别是受到激素变化或产后抑郁等潜在挑战的影响时？',
         scaleLabels: {
           minEn: 'Not at all -- I don\'t pay attention to this',
@@ -1962,7 +1959,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       {
         id: 40,
         type: 'scale-question',
-        textEn: 'How equipped do you feel to recognize when a mother colleague might be experiencing emotional difficulties due to life transitions (e.g., childbirth, parenting stress)?',
+        textEn: 'How equipped do you feel to recognize when a mother colleague might be experiencing emotional difficulties due to life transitions?',
         textZh: '您认为自己在识别职场母亲因生活转变（如生育、育儿压力）而产生情绪困难方面的能力如何？',
         scaleLabels: {
           minEn: 'Not equipped at all -- I never consider this',
@@ -1989,7 +1986,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
     privacyStatement: {
       titleEn: 'Privacy Statement',
       titleZh: '隐私声明',
-      contentEn: 'At CHON, your privacy is fundamental. We only collect the information necessary to deliver meaningful insights, and we protect it with the highest standards of security and integrity. \n For individual participants, your personal information will be used solely for the following purposes: \n To verify your eligibility for specific sections of the survey \n To support demographic and statistical analysis \n To generate your personalized CHON personality profile \n We do not sell, share, or disclose your individual data under any circumstances. All responses are securely stored and accessible only to authorized research personnel. \nFor Corporate and Institutional Users All data shared for organizational use will be: \nFully de-identified, with all personally identifiable information removed \nPresented in statistical form only \nCovered by strict data use and licensing agreements',
+      contentEn: 'At CHON, your privacy is fundamental. We only collect the information necessary to deliver meaningful insights, and we protect it with the highest standards of security and integrity. \n For individual participants, your personal information will be used solely for the following purposes: \n 1) To verify your eligibility for specific sections of the survey \n 2) To support demographic and statistical analysis \n 3)To generate your personalized CHON personality profile \n We do not sell, share, or disclose your individual data under any circumstances. All responses are securely stored and accessible only to authorized research personnel. \nFor Corporate and Institutional Users All data shared for organizational use will be: \n 1)Fully de-identified, with all personally identifiable information removed \n2) Presented in statistical form only \n 3) Covered by strict data use and licensing agreements',
       contentZh: '您的信息将仅用于验证目的和制定您的 CHON 性格测试。您的信息不会被共享、披露或用于任何其他目的。我们重视您的隐私，并承诺保护您的数据安全。'
     },
     uniqueIdMapping: {
@@ -2155,16 +2152,17 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
           textEn: 'How long was your maternity leave?',
           textZh: '您的产假有多长时间？',
           options: [
-            { id: 'A', textEn: 'Less than 1 month', textZh: '少于 1 个月' },
-            { id: 'B', textEn: '1-3 months', textZh: '1-3 个月' },
-            { id: 'C', textEn: '3-6 months', textZh: '3-6 个月' },
-            { id: 'D', textEn: 'More than 6 months', textZh: '6 个月以上' },
+            { id: 'A', textEn: '<8 weeks', textZh: '少于8周' },
+            { id: 'B', textEn: '8-14 weeks', textZh: '8-14周' },
+            { id: 'C', textEn: '15-26 weeks', textZh: '15-26周' },
+            { id: 'D', textEn: '27-52 weeks', textZh: '27-52周' },
+            { id: 'E', textEn: '>1 year', textZh: '超过1年' }
           ]
         },
         {
           id: 13,
           type: 'multiple-choice',
-          textEn: 'Did you receive postpartum care or stay at a postpartum center?',
+          textEn: 'Did you receive postpartum care services?',
           textZh: '您是否接受了产后护理或入住了月子中心？',
           options: [
             { id: 'A', textEn: 'Yes', textZh: '是' },
@@ -2174,14 +2172,14 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
         {
           id: 14,
           type: 'text-input',
-          textEn: 'How would you describe your postpartum emotions in ten words?',
-          textZh: '您能用十个词形容您的产后状态吗？',
+          textEn: 'Describe your postpartum emotions in one word',
+          textZh: '用十个词形容您的产后状态',
         },
         {
           id: 15,
           type: 'text-input',
-          textEn: 'How would you describe your motherhood experience in ten words?',
-          textZh: '您能用十个词形容您作为母亲的状态吗？',
+          textEn: 'Describe your motherhood experience in ten words',
+          textZh: '用十个词形容您作为母亲的状态吗？',
         },
         // Page 3 - Leadership
         {
@@ -2536,7 +2534,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
         {
           id: 43,
           type: 'scale-question',
-          textEn: 'To what extent do you believe that true self-love and the ability to care for others require strong objective reasoning to navigate challenges in life?',
+          textEn: 'Do you believe that self-love and the ability to care for others require strong logic to navigate challenges in life?',
           textZh: '你认为真正的自爱和关爱他人的能力在多大程度上需要强大的客观思维来解决生活中的挑战？',
           scaleLabels: {
             minEn: 'Strongly disagree',
@@ -2847,7 +2845,7 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       privacyStatement: {
         titleEn: 'Privacy Statement',
         titleZh: '隐私声明',
-        contentEn: 'At CHON, your privacy is fundamental. We only collect the information necessary to deliver meaningful insights, and we protect it with the highest standards of security and integrity. \n For individual participants, your personal information will be used solely for the following purposes: \n To verify your eligibility for specific sections of the survey \n To support demographic and statistical analysis \n To generate your personalized CHON personality profile \n We do not sell, share, or disclose your individual data under any circumstances. All responses are securely stored and accessible only to authorized research personnel. \nFor Corporate and Institutional Users All data shared for organizational use will be: \nFully de-identified, with all personally identifiable information removed \nPresented in statistical form only \nCovered by strict data use and licensing agreements',
+        contentEn: 'At CHON, your privacy is fundamental. We only collect the information necessary to deliver meaningful insights, and we protect it with the highest standards of security and integrity. \n For individual participants, your personal information will be used solely for the following purposes: \n 1) To verify your eligibility for specific sections of the survey \n 2) To support demographic and statistical analysis \n 3)To generate your personalized CHON personality profile \n We do not sell, share, or disclose your individual data under any circumstances. All responses are securely stored and accessible only to authorized research personnel. \nFor Corporate and Institutional Users All data shared for organizational use will be: \n 1)Fully de-identified, with all personally identifiable information removed \n2) Presented in statistical form only \n 3) Covered by strict data use and licensing agreements',
         contentZh: '您的信息将仅用于验证目的和制定您的 CHON 性格测试。您的信息不会被共享、披露或用于任何其他目的。我们重视您的隐私，并承诺保护您的数据安全。'
       }
     }
