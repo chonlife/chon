@@ -12,7 +12,17 @@ import { questionnaires, Question, QuestionType, QuestionnaireType, Questionnair
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
 type IdentityType = 'mother' | 'corporate' | 'both' | 'other';
-type TestStep = 'intro' | 'identity' | 'privacy' | 'questionnaire';
+type CorporateRole = 
+  | 'founder' 
+  | 'board_member' 
+  | 'c_suite_executive' 
+  | 'president' 
+  | 'managing_director'
+  | 'partner'
+  | 'vice_president'
+  | 'director'
+  | 'senior_manager';
+type TestStep = 'intro' | 'identity' | 'corporate_role' | 'privacy' | 'questionnaire';
 
 interface PersonalityTestProps {
   onWhiteThemeChange?: (isWhite: boolean) => void;
@@ -46,6 +56,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   const [step, setStep] = useState<TestStep>('intro');
   const [userChoice, setUserChoice] = useState<string | null>(null);
   const [selectedIdentities, setSelectedIdentities] = useState<Set<IdentityType>>(new Set());
+  const [corporateRole, setCorporateRole] = useState<CorporateRole | null>(null);
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [showFirstPage, setShowFirstPage] = useState(true);
   const [showSecondPage, setShowSecondPage] = useState(false);
@@ -284,7 +295,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   };
 
   const handleIdentitySelect = (identity: IdentityType) => {
-    // 创建一个新的集合来保存所选身份
+    // Create a new set to save selected identities
     const newSelectedIdentities = new Set(selectedIdentities);
 
     // If 'other' is selected, clear all other selections
@@ -296,19 +307,29 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         newSelectedIdentities.add('other');
         setActiveQuestionnaire('other');
       }
+      setCorporateRole(null); // Reset corporate role
+    } else if (identity === 'corporate') {
+      if (newSelectedIdentities.has('corporate')) {
+        newSelectedIdentities.delete('corporate');
+        setCorporateRole(null); // Reset corporate role when unselecting corporate
+      } else {
+        newSelectedIdentities.delete('other');
+        newSelectedIdentities.add('corporate');
+        setActiveQuestionnaire('corporate');
+      }
     } else {
-      // Handle mother/corporate selection
+      // Handle mother/both selection
       if (newSelectedIdentities.has(identity)) {
         newSelectedIdentities.delete(identity);
       } else {
-        newSelectedIdentities.delete('other'); // Remove 'other' if it was selected
+        newSelectedIdentities.delete('other');
         newSelectedIdentities.add(identity);
       }
+      setCorporateRole(null); // Reset corporate role for other identities
     }
 
     // Update active questionnaire based on selections
     if (newSelectedIdentities.has('mother') && newSelectedIdentities.has('corporate')) {
-      // If both mother and corporate are selected, set 'both' questionnaire
       setActiveQuestionnaire('both');
     } else if (newSelectedIdentities.has('mother')) {
       setActiveQuestionnaire('mother');
@@ -317,11 +338,9 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     } else if (newSelectedIdentities.has('other')) {
       setActiveQuestionnaire('other');
     } else {
-      // If no identity is selected, clear the active questionnaire
       setActiveQuestionnaire(null);
     }
 
-    // 更新状态
     setSelectedIdentities(newSelectedIdentities);
   };
 
@@ -330,9 +349,14 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       return;
     }
 
+    // If corporate is selected alone (not part of 'both'), go to role selection
+    if (selectedIdentities.has('corporate') && !selectedIdentities.has('mother')) {
+      setStep('corporate_role');
+      return;
+    }
+
     // Set active questionnaire type based on selected identity
     if (selectedIdentities.has('mother') && selectedIdentities.has('corporate')) {
-      // For "both" option, set the 'both' questionnaire
       setActiveQuestionnaire('both');
       setSecondaryQuestionnaire(null);
     } else if (selectedIdentities.has('mother')) {
@@ -1971,12 +1995,8 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           >
             <p lang={language}>
               {(language === 'en' 
-                ? `Founder / Board Member /
-C-Suite Executive / President / Managing Director / Partner /
-Vice President / Director / Senior Manager`
-                : `创始人 / 董事会成员 /
-首席执行官 / 总裁 / 董事总经理 / 合伙人 /
-副总裁 / 总监 / 高级经理`
+                ? `Corporate Manager`
+                : `企业管理人员`
               ).split('\n').map((line, index, arr) => (
                 <React.Fragment key={index}>
                   {line}
@@ -2003,6 +2023,61 @@ Vice President / Director / Senior Manager`
           className="continue-button"
           onClick={handleContinue}
           disabled={selectedIdentities.size === 0}
+          lang={language}
+        >
+          {language === 'en' ? 'CONTINUE →' : '继续 →'}
+        </button>
+      </div>
+    );
+  };
+
+  const renderCorporateRoleSelection = () => {
+    const roles = [
+      { id: 'founder', en: 'Founder', zh: '创始人' },
+      { id: 'board_member', en: 'Board Member', zh: '董事会成员' },
+      { id: 'c_suite_executive', en: 'C-Suite Executive', zh: '首席执行官' },
+      { id: 'president', en: 'President', zh: '总裁' },
+      { id: 'managing_director', en: 'Managing Director', zh: '董事总经理' },
+      { id: 'partner', en: 'Partner', zh: '合伙人' },
+      { id: 'vice_president', en: 'Vice President', zh: '副总裁' },
+      { id: 'director', en: 'Director', zh: '总监' },
+      { id: 'senior_manager', en: 'Senior Manager', zh: '高级经理' }
+    ];
+
+    return (
+      <div className="identity-selection" lang={language}>
+        <h1 className="identity-title" lang={language}>
+          {language === 'en' ? 'Select Your Role' : '选择您的角色'}
+        </h1>
+        
+        {roles.map(role => (
+          <div 
+            key={role.id}
+            className={`option-container ${corporateRole === role.id ? 'selected' : ''}`}
+            onClick={() => setCorporateRole(role.id as CorporateRole)}
+          >
+            <div 
+              className="identity-checkbox" 
+              onClick={(e) => { 
+                e.stopPropagation(); 
+                setCorporateRole(role.id as CorporateRole); 
+              }}
+            ></div>
+            <div 
+              className={`identity-option corporate ${corporateRole === role.id ? 'selected' : ''}`}
+              lang={language}
+            >
+              <p lang={language}>
+                {language === 'en' ? role.en : role.zh}
+              </p>
+            </div>
+          </div>
+        ))}
+
+        <button 
+          className="continue-button"
+          onClick={() => setStep('privacy')}
+          disabled={!corporateRole}
           lang={language}
         >
           {language === 'en' ? 'CONTINUE →' : '继续 →'}
@@ -2316,6 +2391,8 @@ Vice President / Director / Senior Manager`
         return renderIntroContent();
       case 'identity':
         return renderIdentitySelection();
+      case 'corporate_role':
+        return renderCorporateRoleSelection();
       case 'privacy':
         return renderPrivacyStatement();
       case 'questionnaire':

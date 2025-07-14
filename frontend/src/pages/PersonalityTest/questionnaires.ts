@@ -2041,28 +2041,28 @@ export const questionnaires: Record<QuestionnaireType, QuestionnaireContext> = {
       totalQuestions: 66,
       questions: [
         // Page 1 - Corporate background
-        {
-          id: 1,
-          type: 'multiple-choice',
-          textEn: 'What is your current / most recent job position?',
-          textZh: '您目前的职位名称是什么？',
-          options: [
-            { id: 'A', textEn: 'Senior Manager', textZh: '高级经理' },
-            { id: 'B', textEn: 'Director', textZh: '总监' },
-            { id: 'C', textEn: 'Vice President', textZh: '副总裁' },
-            { id: 'D', textEn: 'Managing Director', textZh: '董事总经理' },
-            { id: 'E', textEn: 'Partner', textZh: '合伙人' },
-            { id: 'F', textEn: 'President', textZh: '总裁' },
-            { id: 'G', textEn: 'C-suite Executives (CEO, CFO, COO, etc)', textZh: 'C级高管 (CEO, CFO, COO等)' },
-            { id: 'H', textEn: 'Board of Directors', textZh: '董事会成员' }
-          ]
-        },
-        {
-          id: 2,
-          type: 'text-input',
-          textEn: 'What is your professional contact (e.g., email, LinkedIn)?',
-          textZh: '请问您的职业联系方式是什么（例如：邮箱、领英）？',
-        },
+        // {
+        //   id: 1,
+        //   type: 'multiple-choice',
+        //   textEn: 'What is your current / most recent job position?',
+        //   textZh: '您目前的职位名称是什么？',
+        //   options: [
+        //     { id: 'A', textEn: 'Senior Manager', textZh: '高级经理' },
+        //     { id: 'B', textEn: 'Director', textZh: '总监' },
+        //     { id: 'C', textEn: 'Vice President', textZh: '副总裁' },
+        //     { id: 'D', textEn: 'Managing Director', textZh: '董事总经理' },
+        //     { id: 'E', textEn: 'Partner', textZh: '合伙人' },
+        //     { id: 'F', textEn: 'President', textZh: '总裁' },
+        //     { id: 'G', textEn: 'C-suite Executives (CEO, CFO, COO, etc)', textZh: 'C级高管 (CEO, CFO, COO等)' },
+        //     { id: 'H', textEn: 'Board of Directors', textZh: '董事会成员' }
+        //   ]
+        // },
+        // {
+        //   id: 2,
+        //   type: 'text-input',
+        //   textEn: 'What is your professional contact (e.g., email, LinkedIn)?',
+        //   textZh: '请问您的职业联系方式是什么（例如：邮箱、领英）？',
+        // },
         {
           id: 3,
           type: 'multiple-choice',
