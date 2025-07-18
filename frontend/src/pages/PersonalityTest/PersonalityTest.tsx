@@ -7,6 +7,7 @@ import BothQuestionnaire from './BothQuestionnaire.tsx';
 import { scrollToNextQuestion, scrollToFirstQuestionOfNextPage } from './ScrollUtils.ts';
 import questionnaireApi, { prepareQuestionResponses, QuestionResponse } from '../../api/questionnaire.ts';
 import { questionnaires, Question, QuestionType, QuestionnaireType, QuestionnaireContext } from './questionnaires.ts';
+import QuestionBlock from './QuestionBlock';
 
 // API Configuration
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
@@ -596,66 +597,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
             // 第1页: 根据分支逻辑获取问题
             <div className="first-page-questions first-page-true">
               {getQuestionsForCurrentPage(0, 10).map((question) => (
-                <div key={question.id} id={`question-${question.id}`} className="question-container">
-                  {renderQuestionText(question)}
-                  
-                  {question.type === 'multiple-choice' && (
-                    <div className="answer-options">
-                      {question.options?.map(option => (
-                        <div 
-                          key={option.id}
-                          className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                          onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                        >
-                          <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {question.type === 'text-input' && (
-                    <div className="text-input-container">
-                      <input
-                        type="text"
-                        className="text-answer-input"
-                        value={getCurrentAnswers()[question.id] || ''}
-                        onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                        placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                      />
-                    </div>
-                  )}
-                  
-                  {question.type === 'scale-question' && (
-                    <div className="scale-question-container">
-                      <div className="scale-labels-wrapper">
-                        <div className="scale-options">
-                          {['1', '2', '3', '4', '5'].map((value) => (
-                            <div 
-                              key={value}
-                              className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                              onClick={() => handleScaleAnswer(question.id, value)}
-                            >
-                              <div className="scale-circle"></div>
-                              <span className="scale-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="scale-extreme-labels">
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <QuestionBlock
+                  key={question.id}
+                  question={question}
+                  currentAnswer={getCurrentAnswers()[question.id]}
+                  language={language}
+                  onMultipleChoice={handleMultipleChoiceAnswer}
+                  onTextInput={handleTextAnswer}
+                  onScale={handleScaleAnswer}
+                />
               ))}
               
               {/* 母亲问卷第一页导航按钮 */}
@@ -684,66 +634,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               </h1>
               
               {getQuestionsForCurrentPage(10, 23).map((question) => (
-                <div key={question.id} id={`question-${question.id}`} className="question-container">
-                  {renderQuestionText(question)}
-                  
-                  {question.type === 'multiple-choice' && (
-                    <div className="answer-options">
-                      {question.options?.map(option => (
-                        <div 
-                          key={option.id}
-                          className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                          onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                        >
-                          <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {question.type === 'text-input' && (
-                    <div className="text-input-container">
-                      <input
-                        type="text"
-                        className="text-answer-input"
-                        value={getCurrentAnswers()[question.id] || ''}
-                        onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                        placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                      />
-                    </div>
-                  )}
-                  
-                  {question.type === 'scale-question' && (
-                    <div className="scale-question-container">
-                      <div className="scale-labels-wrapper">
-                        <div className="scale-options">
-                          {['1', '2', '3', '4', '5'].map((value) => (
-                            <div 
-                              key={value}
-                              className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                              onClick={() => handleScaleAnswer(question.id, value)}
-                            >
-                              <div className="scale-circle"></div>
-                              <span className="scale-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="scale-extreme-labels">
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <QuestionBlock
+                  key={question.id}
+                  question={question}
+                  currentAnswer={getCurrentAnswers()[question.id]}
+                  language={language}
+                  onMultipleChoice={handleMultipleChoiceAnswer}
+                  onTextInput={handleTextAnswer}
+                  onScale={handleScaleAnswer}
+                />
               ))}
               
               <div className="question-navigation">
@@ -783,66 +682,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               </h1>
               
               {getQuestionsForCurrentPage(23, 37).map((question) => (
-                <div key={question.id} id={`question-${question.id}`} className="question-container">
-                  {renderQuestionText(question)}
-                  
-                  {question.type === 'multiple-choice' && (
-                    <div className="answer-options">
-                      {question.options?.map(option => (
-                        <div 
-                          key={option.id}
-                          className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                          onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                        >
-                          <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {question.type === 'text-input' && (
-                    <div className="text-input-container">
-                      <input
-                        type="text"
-                        className="text-answer-input"
-                        value={getCurrentAnswers()[question.id] || ''}
-                        onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                        placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                      />
-                    </div>
-                  )}
-                  
-                  {question.type === 'scale-question' && (
-                    <div className="scale-question-container">
-                      <div className="scale-labels-wrapper">
-                        <div className="scale-options">
-                          {['1', '2', '3', '4', '5'].map((value) => (
-                            <div 
-                              key={value}
-                              className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                              onClick={() => handleScaleAnswer(question.id, value)}
-                            >
-                              <div className="scale-circle"></div>
-                              <span className="scale-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="scale-extreme-labels">
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <QuestionBlock
+                  key={question.id}
+                  question={question}
+                  currentAnswer={getCurrentAnswers()[question.id]}
+                  language={language}
+                  onMultipleChoice={handleMultipleChoiceAnswer}
+                  onTextInput={handleTextAnswer}
+                  onScale={handleScaleAnswer}
+                />
               ))}
               
               <div className="question-navigation">
@@ -882,66 +730,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               </h1>
               
               {getQuestionsForCurrentPage(37, 50).map((question) => (
-                <div key={question.id} id={`question-${question.id}`} className="question-container">
-                  {renderQuestionText(question)}
-                  
-                  {question.type === 'multiple-choice' && (
-                    <div className="answer-options">
-                      {question.options?.map(option => (
-                        <div 
-                          key={option.id}
-                          className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                          onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                        >
-                          <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {question.type === 'text-input' && (
-                    <div className="text-input-container">
-                      <input
-                        type="text"
-                        className="text-answer-input"
-                        value={getCurrentAnswers()[question.id] || ''}
-                        onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                        placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                      />
-                    </div>
-                  )}
-                  
-                  {question.type === 'scale-question' && (
-                    <div className="scale-question-container">
-                      <div className="scale-labels-wrapper">
-                        <div className="scale-options">
-                          {['1', '2', '3', '4', '5'].map((value) => (
-                            <div 
-                              key={value}
-                              className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                              onClick={() => handleScaleAnswer(question.id, value)}
-                            >
-                              <div className="scale-circle"></div>
-                              <span className="scale-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="scale-extreme-labels">
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <QuestionBlock
+                  key={question.id}
+                  question={question}
+                  currentAnswer={getCurrentAnswers()[question.id]}
+                  language={language}
+                  onMultipleChoice={handleMultipleChoiceAnswer}
+                  onTextInput={handleTextAnswer}
+                  onScale={handleScaleAnswer}
+                />
               ))}
               
               <div className="question-navigation">
@@ -1016,66 +813,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
             // 第1页: ID 1-12，无标题
             <div className="first-page-questions first-page-true">
               {questions.slice(0, 12).map((question) => (
-                <div key={question.id} id={`question-${question.id}`} className="question-container">
-                  {renderQuestionText(question)}
-                  
-                  {question.type === 'multiple-choice' && (
-                    <div className="answer-options">
-                      {question.options?.map(option => (
-                        <div 
-                          key={option.id}
-                          className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                          onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                        >
-                          <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {question.type === 'text-input' && (
-                    <div className="text-input-container">
-                      <input
-                        type="text"
-                        className="text-answer-input"
-                        value={getCurrentAnswers()[question.id] || ''}
-                        onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                        placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                      />
-                    </div>
-                  )}
-                  
-                  {question.type === 'scale-question' && (
-                    <div className="scale-question-container">
-                      <div className="scale-labels-wrapper">
-                        <div className="scale-options">
-                          {['1', '2', '3', '4', '5'].map((value) => (
-                            <div 
-                              key={value}
-                              className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                              onClick={() => handleScaleAnswer(question.id, value)}
-                            >
-                              <div className="scale-circle"></div>
-                              <span className="scale-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="scale-extreme-labels">
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <QuestionBlock
+                  key={question.id}
+                  question={question}
+                  currentAnswer={getCurrentAnswers()[question.id]}
+                  language={language}
+                  onMultipleChoice={handleMultipleChoiceAnswer}
+                  onTextInput={handleTextAnswer}
+                  onScale={handleScaleAnswer}
+                />
               ))}
               
               <div className="first-page-navigation">
@@ -1103,66 +849,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               </h1>
               
               {questions.slice(12, 26).map((question) => (
-                <div key={question.id} id={`question-${question.id}`} className="question-container">
-                  {renderQuestionText(question)}
-                  
-                  {question.type === 'multiple-choice' && (
-                    <div className="answer-options">
-                      {question.options?.map(option => (
-                        <div 
-                          key={option.id}
-                          className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                          onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                        >
-                          <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {question.type === 'text-input' && (
-                    <div className="text-input-container">
-                      <input
-                        type="text"
-                        className="text-answer-input"
-                        value={getCurrentAnswers()[question.id] || ''}
-                        onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                        placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                      />
-                    </div>
-                  )}
-                  
-                  {question.type === 'scale-question' && (
-                    <div className="scale-question-container">
-                      <div className="scale-labels-wrapper">
-                        <div className="scale-options">
-                          {['1', '2', '3', '4', '5'].map((value) => (
-                            <div 
-                              key={value}
-                              className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                              onClick={() => handleScaleAnswer(question.id, value)}
-                            >
-                              <div className="scale-circle"></div>
-                              <span className="scale-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="scale-extreme-labels">
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <QuestionBlock
+                  key={question.id}
+                  question={question}
+                  currentAnswer={getCurrentAnswers()[question.id]}
+                  language={language}
+                  onMultipleChoice={handleMultipleChoiceAnswer}
+                  onTextInput={handleTextAnswer}
+                  onScale={handleScaleAnswer}
+                />
               ))}
               
               <div className="question-navigation">
@@ -1202,66 +897,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               </h1>
               
               {questions.slice(26, 41).map((question) => (
-                <div key={question.id} id={`question-${question.id}`} className="question-container">
-                  {renderQuestionText(question)}
-                  
-                  {question.type === 'multiple-choice' && (
-                    <div className="answer-options">
-                      {question.options?.map(option => (
-                        <div 
-                          key={option.id}
-                          className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                          onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                        >
-                          <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {question.type === 'text-input' && (
-                    <div className="text-input-container">
-                      <input
-                        type="text"
-                        className="text-answer-input"
-                        value={getCurrentAnswers()[question.id] || ''}
-                        onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                        placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                      />
-                    </div>
-                  )}
-                  
-                  {question.type === 'scale-question' && (
-                    <div className="scale-question-container">
-                      <div className="scale-labels-wrapper">
-                        <div className="scale-options">
-                          {['1', '2', '3', '4', '5'].map((value) => (
-                            <div 
-                              key={value}
-                              className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                              onClick={() => handleScaleAnswer(question.id, value)}
-                            >
-                              <div className="scale-circle"></div>
-                              <span className="scale-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="scale-extreme-labels">
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <QuestionBlock
+                  key={question.id}
+                  question={question}
+                  currentAnswer={getCurrentAnswers()[question.id]}
+                  language={language}
+                  onMultipleChoice={handleMultipleChoiceAnswer}
+                  onTextInput={handleTextAnswer}
+                  onScale={handleScaleAnswer}
+                />
               ))}
               
               <div className="question-navigation">
@@ -1301,66 +945,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               </h1>
               
               {questions.slice(41, 52).map((question) => (
-                <div key={question.id} id={`question-${question.id}`} className="question-container">
-                  {renderQuestionText(question)}
-                  
-                  {question.type === 'multiple-choice' && (
-                    <div className="answer-options">
-                      {question.options?.map(option => (
-                        <div 
-                          key={option.id}
-                          className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                          onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                        >
-                          <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {question.type === 'text-input' && (
-                    <div className="text-input-container">
-                      <input
-                        type="text"
-                        className="text-answer-input"
-                        value={getCurrentAnswers()[question.id] || ''}
-                        onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                        placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                      />
-                    </div>
-                  )}
-                  
-                  {question.type === 'scale-question' && (
-                    <div className="scale-question-container">
-                      <div className="scale-labels-wrapper">
-                        <div className="scale-options">
-                          {['1', '2', '3', '4', '5'].map((value) => (
-                            <div 
-                              key={value}
-                              className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                              onClick={() => handleScaleAnswer(question.id, value)}
-                            >
-                              <div className="scale-circle"></div>
-                              <span className="scale-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="scale-extreme-labels">
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <QuestionBlock
+                  key={question.id}
+                  question={question}
+                  currentAnswer={getCurrentAnswers()[question.id]}
+                  language={language}
+                  onMultipleChoice={handleMultipleChoiceAnswer}
+                  onTextInput={handleTextAnswer}
+                  onScale={handleScaleAnswer}
+                />
               ))}
               
               <div className="question-navigation">
@@ -1413,66 +1006,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
             // 第1页: ID 1-4，无标题
             <div className="first-page-questions first-page-true">
               {questions.slice(0, 4).map((question) => (
-                <div key={question.id} id={`question-${question.id}`} className="question-container">
-                  {renderQuestionText(question)}
-                  
-                  {question.type === 'multiple-choice' && (
-                    <div className="answer-options">
-                      {question.options?.map(option => (
-                        <div 
-                          key={option.id}
-                          className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                          onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                        >
-                          <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {question.type === 'text-input' && (
-                    <div className="text-input-container">
-                      <input
-                        type="text"
-                        className="text-answer-input"
-                        value={getCurrentAnswers()[question.id] || ''}
-                        onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                        placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                      />
-                    </div>
-                  )}
-                  
-                  {question.type === 'scale-question' && (
-                    <div className="scale-question-container">
-                      <div className="scale-labels-wrapper">
-                        <div className="scale-options">
-                          {['1', '2', '3', '4', '5'].map((value) => (
-                            <div 
-                              key={value}
-                              className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                              onClick={() => handleScaleAnswer(question.id, value)}
-                            >
-                              <div className="scale-circle"></div>
-                              <span className="scale-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="scale-extreme-labels">
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <QuestionBlock
+                  key={question.id}
+                  question={question}
+                  currentAnswer={getCurrentAnswers()[question.id]}
+                  language={language}
+                  onMultipleChoice={handleMultipleChoiceAnswer}
+                  onTextInput={handleTextAnswer}
+                  onScale={handleScaleAnswer}
+                />
               ))}
               
               <div className="question-navigation">
@@ -1500,66 +1042,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               </h1>
               
               {questions.slice(4, 15).map((question) => (
-                <div key={question.id} id={`question-${question.id}`} className="question-container">
-                  {renderQuestionText(question)}
-                  
-                  {question.type === 'multiple-choice' && (
-                    <div className="answer-options">
-                      {question.options?.map(option => (
-                        <div 
-                          key={option.id}
-                          className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                          onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                        >
-                          <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {question.type === 'text-input' && (
-                    <div className="text-input-container">
-                      <input
-                        type="text"
-                        className="text-answer-input"
-                        value={getCurrentAnswers()[question.id] || ''}
-                        onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                        placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                      />
-                    </div>
-                  )}
-                  
-                  {question.type === 'scale-question' && (
-                    <div className="scale-question-container">
-                      <div className="scale-labels-wrapper">
-                        <div className="scale-options">
-                          {['1', '2', '3', '4', '5'].map((value) => (
-                            <div 
-                              key={value}
-                              className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                              onClick={() => handleScaleAnswer(question.id, value)}
-                            >
-                              <div className="scale-circle"></div>
-                              <span className="scale-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="scale-extreme-labels">
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <QuestionBlock
+                  key={question.id}
+                  question={question}
+                  currentAnswer={getCurrentAnswers()[question.id]}
+                  language={language}
+                  onMultipleChoice={handleMultipleChoiceAnswer}
+                  onTextInput={handleTextAnswer}
+                  onScale={handleScaleAnswer}
+                />
               ))}
               
               <div className="question-navigation">
@@ -1599,66 +1090,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               </h1>
               
               {questions.slice(15, 30).map((question) => (
-                <div key={question.id} id={`question-${question.id}`} className="question-container">
-                  {renderQuestionText(question)}
-                  
-                  {question.type === 'multiple-choice' && (
-                    <div className="answer-options">
-                      {question.options?.map(option => (
-                        <div 
-                          key={option.id}
-                          className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                          onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                        >
-                          <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {question.type === 'text-input' && (
-                    <div className="text-input-container">
-                      <input
-                        type="text"
-                        className="text-answer-input"
-                        value={getCurrentAnswers()[question.id] || ''}
-                        onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                        placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                      />
-                    </div>
-                  )}
-                  
-                  {question.type === 'scale-question' && (
-                    <div className="scale-question-container">
-                      <div className="scale-labels-wrapper">
-                        <div className="scale-options">
-                          {['1', '2', '3', '4', '5'].map((value) => (
-                            <div 
-                              key={value}
-                              className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                              onClick={() => handleScaleAnswer(question.id, value)}
-                            >
-                              <div className="scale-circle"></div>
-                              <span className="scale-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="scale-extreme-labels">
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <QuestionBlock
+                  key={question.id}
+                  question={question}
+                  currentAnswer={getCurrentAnswers()[question.id]}
+                  language={language}
+                  onMultipleChoice={handleMultipleChoiceAnswer}
+                  onTextInput={handleTextAnswer}
+                  onScale={handleScaleAnswer}
+                />
               ))}
               
               <div className="question-navigation">
@@ -1698,66 +1138,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               </h1>
               
               {questions.slice(30, 41).map((question) => (
-                <div key={question.id} id={`question-${question.id}`} className="question-container">
-                  {renderQuestionText(question)}
-                  
-                  {question.type === 'multiple-choice' && (
-                    <div className="answer-options">
-                      {question.options?.map(option => (
-                        <div 
-                          key={option.id}
-                          className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                          onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                        >
-                          <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                  
-                  {question.type === 'text-input' && (
-                    <div className="text-input-container">
-                      <input
-                        type="text"
-                        className="text-answer-input"
-                        value={getCurrentAnswers()[question.id] || ''}
-                        onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                        placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                      />
-                    </div>
-                  )}
-                  
-                  {question.type === 'scale-question' && (
-                    <div className="scale-question-container">
-                      <div className="scale-labels-wrapper">
-                        <div className="scale-options">
-                          {['1', '2', '3', '4', '5'].map((value) => (
-                            <div 
-                              key={value}
-                              className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                              onClick={() => handleScaleAnswer(question.id, value)}
-                            >
-                              <div className="scale-circle"></div>
-                              <span className="scale-value">{value}</span>
-                            </div>
-                          ))}
-                        </div>
-                        <div className="scale-extreme-labels">
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.minEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.minZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                          <span className="scale-extreme-label">
-                            {language === 'en' 
-                              ? question.scaleLabels?.maxEn.split(' – ').map((part, i) => <span key={i}>{part}</span>) 
-                              : question.scaleLabels?.maxZh.split(' – ').map((part, i) => <span key={i}>{part}</span>)}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <QuestionBlock
+                  key={question.id}
+                  question={question}
+                  currentAnswer={getCurrentAnswers()[question.id]}
+                  language={language}
+                  onMultipleChoice={handleMultipleChoiceAnswer}
+                  onTextInput={handleTextAnswer}
+                  onScale={handleScaleAnswer}
+                />
               ))}
               
               <div className="question-navigation">
