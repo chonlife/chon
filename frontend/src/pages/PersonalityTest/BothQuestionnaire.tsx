@@ -1,5 +1,8 @@
 import React from 'react';
 import { questionnaires } from './questionnaires';
+import QuestionBlock from './QuestionBlock';
+import QuestionNavigation from './QuestionNavigation';
+import ProgressBar from './ProgressBar';
 
 
 // 不使用严格的类型检查，改用更宽松的类型以适应所有问题类型
@@ -89,128 +92,68 @@ const BothQuestionnaire: React.FC<BothQuestionnaireProps> = ({
   return (
     <div className="questionnaire-content both-questionnaire" lang={language}>
       {/* Progress bar */}
-      <div className="question-progress-container">
-        <div className="question-progress-bar">
-          <div 
-            className="question-progress-fill" 
-            style={{ width: `${calculatedQuestionnaireProgress()}%` }}
-          ></div>
-        </div>
-      </div>
+      <ProgressBar progress={calculatedQuestionnaireProgress()} />
       
       {/* Page 1 - Corporate background */}
       {showFirstPage && (
         <div className="first-page-questions first-page-true">
           {page1Questions.map((question) => (
-            <div key={question.id} id={`question-${question.id}`} className="question-container">
-              {renderQuestionText(question)}
-              
-              {question.type === 'multiple-choice' && (
-                <div className="answer-options">
-                  {question.options?.map((option: OptionType) => (
-                    <div 
-                      key={option.id}
-                      className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                      onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                    >
-                      <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-              
-              {question.type === 'text-input' && (
-                <div className="text-input-container">
-                  <input
-                    type="text"
-                    className="text-answer-input"
-                    value={getCurrentAnswers()[question.id] || ''}
-                    onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                    placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                  />
-                </div>
-              )}
-            </div>
+            <QuestionBlock
+              key={question.id}
+              question={question}
+              currentAnswer={getCurrentAnswers()[question.id]}
+              language={language}
+              onMultipleChoice={handleMultipleChoiceAnswer}
+              onTextInput={handleTextAnswer}
+              onScale={handleScaleAnswer}
+            />
           ))}
-          
-          <div className="question-navigation">
-            <button 
-              className="nav-button next-button"
-              onClick={() => {
-                setShowFirstPage(false);
-                setShowSecondPage(true);
-                setTimeout(scrollToFirstQuestionOfNextPage, 100);
-              }}
-              disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 1 && parseInt(id) <= 7).length < 7}
-            >
-              {language === 'en' ? 'Continue' : '继续'}
-            </button>
-          </div>
+          <QuestionNavigation
+            showBack={false}
+            showNext={true}
+            onNext={() => {
+              setShowFirstPage(false);
+              setShowSecondPage(true);
+              setTimeout(scrollToFirstQuestionOfNextPage, 100);
+            }}
+            nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 1 && parseInt(id) <= 7).length < 7}
+            nextLabel={language === 'en' ? 'Continue' : '继续'}
+          />
         </div>
       )}
-
       {/* Page 2 - Mother Background */}
       {showSecondPage && (
         <div className="first-page-questions">
           {page2Questions.map((question) => (
-            <div key={question.id} id={`question-${question.id}`} className="question-container">
-              {renderQuestionText(question)}
-              
-              {question.type === 'multiple-choice' && (
-                <div className="answer-options">
-                  {question.options?.map((option: OptionType) => (
-                    <div 
-                      key={option.id}
-                      className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                      onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                    >
-                      <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-              
-              {question.type === 'text-input' && (
-                <div className="text-input-container">
-                  <input
-                    type="text"
-                    className="text-answer-input"
-                    value={getCurrentAnswers()[question.id] || ''}
-                    onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                    placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                  />
-                </div>
-              )}
-            </div>
+            <QuestionBlock
+              key={question.id}
+              question={question}
+              currentAnswer={getCurrentAnswers()[question.id]}
+              language={language}
+              onMultipleChoice={handleMultipleChoiceAnswer}
+              onTextInput={handleTextAnswer}
+              onScale={handleScaleAnswer}
+            />
           ))}
-          
-          <div className="question-navigation">
-            <button 
-              className="nav-button prev-button"
-              onClick={() => {
-                setShowSecondPage(false);
-                setShowFirstPage(true);
-                setTimeout(scrollToFirstQuestionOfNextPage, 100);
-              }}
-            >
-              {language === 'en' ? 'Back' : '返回'}
-            </button>
-            
-            <button 
-              className="nav-button next-button"
-              onClick={() => {
-                setShowSecondPage(false);
-                setShowThirdPage(true);
-                setTimeout(scrollToFirstQuestionOfNextPage, 100);
-              }}
-              disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 8 && parseInt(id) <= 15).length < 8}
-            >
-              {language === 'en' ? 'Continue' : '继续'}
-            </button>
-          </div>
+          <QuestionNavigation
+            showBack={true}
+            showNext={true}
+            onBack={() => {
+              setShowSecondPage(false);
+              setShowFirstPage(true);
+              setTimeout(scrollToFirstQuestionOfNextPage, 100);
+            }}
+            onNext={() => {
+              setShowSecondPage(false);
+              setShowThirdPage(true);
+              setTimeout(scrollToFirstQuestionOfNextPage, 100);
+            }}
+            nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 8 && parseInt(id) <= 15).length < 8}
+            backLabel={language === 'en' ? 'Back' : '返回'}
+            nextLabel={language === 'en' ? 'Continue' : '继续'}
+          />
         </div>
       )}
-
       {/* Page 3 - Leadership */}
       {showThirdPage && (
         <div className="first-page-questions">
@@ -219,97 +162,36 @@ const BothQuestionnaire: React.FC<BothQuestionnaireProps> = ({
               ? 'I. About Your Leadership' 
               : 'I. 关于您的领导力'}
           </h1>
-          
           {page3Questions.map((question) => (
-            <div key={question.id} id={`question-${question.id}`} className="question-container">
-              {renderQuestionText(question)}
-              
-              {question.type === 'multiple-choice' && (
-                <div className="answer-options">
-                  {question.options?.map((option: OptionType) => (
-                    <div 
-                      key={option.id}
-                      className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                      onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                    >
-                      <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-              
-              {question.type === 'text-input' && (
-                <div className="text-input-container">
-                  <input
-                    type="text"
-                    className="text-answer-input"
-                    value={getCurrentAnswers()[question.id] || ''}
-                    onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                    placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                  />
-                </div>
-              )}
-              
-              {question.type === 'scale-question' && (
-                <div className="scale-question-container">
-                  <div className="scale-labels-wrapper">
-                    <div className="scale-options">
-                      {['1', '2', '3', '4', '5'].map((value) => (
-                        <div 
-                          key={value}
-                          className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                          onClick={() => handleScaleAnswer(question.id, value)}
-                        >
-                          <div className="scale-circle"></div>
-                          <span className="scale-value">{value}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="scale-extreme-labels">
-                      <span className="scale-extreme-label">
-                        {language === 'en' 
-                          ? question.scaleLabels?.minEn.split(' – ').map((part: string, i: number) => <span key={i}>{part}</span>) 
-                          : question.scaleLabels?.minZh.split(' – ').map((part: string, i: number) => <span key={i}>{part}</span>)}
-                      </span>
-                      <span className="scale-extreme-label">
-                        {language === 'en' 
-                          ? question.scaleLabels?.maxEn.split(' – ').map((part: string, i: number) => <span key={i}>{part}</span>) 
-                          : question.scaleLabels?.maxZh.split(' – ').map((part: string, i: number) => <span key={i}>{part}</span>)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+            <QuestionBlock
+              key={question.id}
+              question={question}
+              currentAnswer={getCurrentAnswers()[question.id]}
+              language={language}
+              onMultipleChoice={handleMultipleChoiceAnswer}
+              onTextInput={handleTextAnswer}
+              onScale={handleScaleAnswer}
+            />
           ))}
-          
-          <div className="question-navigation">
-            <button 
-              className="nav-button prev-button"
-              onClick={() => {
-                setShowThirdPage(false);
-                setShowSecondPage(true);
-                setTimeout(scrollToFirstQuestionOfNextPage, 100);
-              }}
-            >
-              {language === 'en' ? 'Back' : '返回'}
-            </button>
-            
-            <button 
-              className="nav-button next-button"
-              onClick={() => {
-                setShowThirdPage(false);
-                setShowFourthPage(true);
-                setTimeout(scrollToFirstQuestionOfNextPage, 100);
-              }}
-              disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 16 && parseInt(id) <= 29).length < 14}
-            >
-              {language === 'en' ? 'Continue' : '继续'}
-            </button>
-          </div>
+          <QuestionNavigation
+            showBack={true}
+            showNext={true}
+            onBack={() => {
+              setShowThirdPage(false);
+              setShowSecondPage(true);
+              setTimeout(scrollToFirstQuestionOfNextPage, 100);
+            }}
+            onNext={() => {
+              setShowThirdPage(false);
+              setShowFourthPage(true);
+              setTimeout(scrollToFirstQuestionOfNextPage, 100);
+            }}
+            nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 16 && parseInt(id) <= 29).length < 14}
+            backLabel={language === 'en' ? 'Back' : '返回'}
+            nextLabel={language === 'en' ? 'Continue' : '继续'}
+          />
         </div>
       )}
-
       {/* Page 4 - Work-Life Balance */}
       {showFourthPage && (
         <div className="first-page-questions">
@@ -318,97 +200,36 @@ const BothQuestionnaire: React.FC<BothQuestionnaireProps> = ({
               ? 'II. About Work-Life Balance' 
               : 'II. 关于工作与生活的平衡'}
           </h1>
-          
           {page4Questions.map((question) => (
-            <div key={question.id} id={`question-${question.id}`} className="question-container">
-              {renderQuestionText(question)}
-              
-              {question.type === 'multiple-choice' && (
-                <div className="answer-options">
-                  {question.options?.map((option: OptionType) => (
-                    <div 
-                      key={option.id}
-                      className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                      onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                    >
-                      <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-              
-              {question.type === 'text-input' && (
-                <div className="text-input-container">
-                  <input
-                    type="text"
-                    className="text-answer-input"
-                    value={getCurrentAnswers()[question.id] || ''}
-                    onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                    placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                  />
-                </div>
-              )}
-              
-              {question.type === 'scale-question' && (
-                <div className="scale-question-container">
-                  <div className="scale-labels-wrapper">
-                    <div className="scale-options">
-                      {['1', '2', '3', '4', '5'].map((value) => (
-                        <div 
-                          key={value}
-                          className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                          onClick={() => handleScaleAnswer(question.id, value)}
-                        >
-                          <div className="scale-circle"></div>
-                          <span className="scale-value">{value}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="scale-extreme-labels">
-                      <span className="scale-extreme-label">
-                        {language === 'en' 
-                          ? question.scaleLabels?.minEn.split(' – ').map((part: string, i: number) => <span key={i}>{part}</span>) 
-                          : question.scaleLabels?.minZh.split(' – ').map((part: string, i: number) => <span key={i}>{part}</span>)}
-                      </span>
-                      <span className="scale-extreme-label">
-                        {language === 'en' 
-                          ? question.scaleLabels?.maxEn.split(' – ').map((part: string, i: number) => <span key={i}>{part}</span>) 
-                          : question.scaleLabels?.maxZh.split(' – ').map((part: string, i: number) => <span key={i}>{part}</span>)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+            <QuestionBlock
+              key={question.id}
+              question={question}
+              currentAnswer={getCurrentAnswers()[question.id]}
+              language={language}
+              onMultipleChoice={handleMultipleChoiceAnswer}
+              onTextInput={handleTextAnswer}
+              onScale={handleScaleAnswer}
+            />
           ))}
-          
-          <div className="question-navigation">
-            <button 
-              className="nav-button prev-button"
-              onClick={() => {
-                setShowFourthPage(false);
-                setShowThirdPage(true);
-                setTimeout(scrollToFirstQuestionOfNextPage, 100);
-              }}
-            >
-              {language === 'en' ? 'Back' : '返回'}
-            </button>
-            
-            <button 
-              className="nav-button next-button"
-              onClick={() => {
-                setShowFourthPage(false);
-                setShowFifthPage(true);
-                setTimeout(scrollToFirstQuestionOfNextPage, 100);
-              }}
-              disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 30 && parseInt(id) <= 41).length < 12}
-            >
-              {language === 'en' ? 'Continue' : '继续'}
-            </button>
-          </div>
+          <QuestionNavigation
+            showBack={true}
+            showNext={true}
+            onBack={() => {
+              setShowFourthPage(false);
+              setShowThirdPage(true);
+              setTimeout(scrollToFirstQuestionOfNextPage, 100);
+            }}
+            onNext={() => {
+              setShowFourthPage(false);
+              setShowFifthPage(true);
+              setTimeout(scrollToFirstQuestionOfNextPage, 100);
+            }}
+            nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 30 && parseInt(id) <= 41).length < 12}
+            backLabel={language === 'en' ? 'Back' : '返回'}
+            nextLabel={language === 'en' ? 'Continue' : '继续'}
+          />
         </div>
       )}
-
       {/* Page 5 - About CHON */}
       {showFifthPage && (
         <div className="first-page-questions">
@@ -417,97 +238,36 @@ const BothQuestionnaire: React.FC<BothQuestionnaireProps> = ({
               ? 'III. About Us, CHON' 
               : 'III. 关于我们'}
           </h1>
-          
           {page5Questions.map((question) => (
-            <div key={question.id} id={`question-${question.id}`} className="question-container">
-              {renderQuestionText(question)}
-              
-              {question.type === 'multiple-choice' && (
-                <div className="answer-options">
-                  {question.options?.map((option: OptionType) => (
-                    <div 
-                      key={option.id}
-                      className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                      onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                    >
-                      <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-              
-              {question.type === 'text-input' && (
-                <div className="text-input-container">
-                  <input
-                    type="text"
-                    className="text-answer-input"
-                    value={getCurrentAnswers()[question.id] || ''}
-                    onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                    placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                  />
-                </div>
-              )}
-              
-              {question.type === 'scale-question' && (
-                <div className="scale-question-container">
-                  <div className="scale-labels-wrapper">
-                    <div className="scale-options">
-                      {['1', '2', '3', '4', '5'].map((value) => (
-                        <div 
-                          key={value}
-                          className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                          onClick={() => handleScaleAnswer(question.id, value)}
-                        >
-                          <div className="scale-circle"></div>
-                          <span className="scale-value">{value}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="scale-extreme-labels">
-                      <span className="scale-extreme-label">
-                        {language === 'en' 
-                          ? question.scaleLabels?.minEn.split(' – ').map((part: string, i: number) => <span key={i}>{part}</span>) 
-                          : question.scaleLabels?.minZh.split(' – ').map((part: string, i: number) => <span key={i}>{part}</span>)}
-                      </span>
-                      <span className="scale-extreme-label">
-                        {language === 'en' 
-                          ? question.scaleLabels?.maxEn.split(' – ').map((part: string, i: number) => <span key={i}>{part}</span>) 
-                          : question.scaleLabels?.maxZh.split(' – ').map((part: string, i: number) => <span key={i}>{part}</span>)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+            <QuestionBlock
+              key={question.id}
+              question={question}
+              currentAnswer={getCurrentAnswers()[question.id]}
+              language={language}
+              onMultipleChoice={handleMultipleChoiceAnswer}
+              onTextInput={handleTextAnswer}
+              onScale={handleScaleAnswer}
+            />
           ))}
-          
-          <div className="question-navigation">
-            <button 
-              className="nav-button prev-button"
-              onClick={() => {
-                setShowFifthPage(false);
-                setShowFourthPage(true);
-                setTimeout(scrollToFirstQuestionOfNextPage, 100);
-              }}
-            >
-              {language === 'en' ? 'Back' : '返回'}
-            </button>
-            
-            <button 
-              className="nav-button next-button"
-              onClick={() => {
-                setShowFifthPage(false);
-                setShowSixthPage(true);
-                setTimeout(scrollToFirstQuestionOfNextPage, 100);
-              }}
-              disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 42 && parseInt(id) <= 55).length < 14}
-            >
-              {language === 'en' ? 'Continue' : '继续'}
-            </button>
-          </div>
+          <QuestionNavigation
+            showBack={true}
+            showNext={true}
+            onBack={() => {
+              setShowFifthPage(false);
+              setShowFourthPage(true);
+              setTimeout(scrollToFirstQuestionOfNextPage, 100);
+            }}
+            onNext={() => {
+              setShowFifthPage(false);
+              setShowSixthPage(true);
+              setTimeout(scrollToFirstQuestionOfNextPage, 100);
+            }}
+            nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 42 && parseInt(id) <= 55).length < 14}
+            backLabel={language === 'en' ? 'Back' : '返回'}
+            nextLabel={language === 'en' ? 'Continue' : '继续'}
+          />
         </div>
       )}
-
       {/* Page 6 - About Motherhood */}
       {showSixthPage && (
         <div className="first-page-questions">
@@ -516,92 +276,30 @@ const BothQuestionnaire: React.FC<BothQuestionnaireProps> = ({
               ? 'IV. About Motherhood' 
               : 'IV. 关于母亲'}
           </h1>
-          
           {page6Questions.map((question) => (
-            <div key={question.id} id={`question-${question.id}`} className="question-container">
-              {renderQuestionText(question)}
-              
-              {question.type === 'multiple-choice' && (
-                <div className="answer-options">
-                  {question.options?.map((option: OptionType) => (
-                    <div 
-                      key={option.id}
-                      className={`answer-option ${getCurrentAnswers()[question.id] === option.id ? 'selected' : ''}`}
-                      onClick={() => handleMultipleChoiceAnswer(question.id, option.id)}
-                    >
-                      <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-              
-              {question.type === 'text-input' && (
-                <div className="text-input-container">
-                  <input
-                    type="text"
-                    className="text-answer-input"
-                    value={getCurrentAnswers()[question.id] || ''}
-                    onChange={(e) => handleTextAnswer(question.id, e.target.value)}
-                    placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
-                  />
-                </div>
-              )}
-              
-              {question.type === 'scale-question' && (
-                <div className="scale-question-container">
-                  <div className="scale-labels-wrapper">
-                    <div className="scale-options">
-                      {['1', '2', '3', '4', '5'].map((value) => (
-                        <div 
-                          key={value}
-                          className={`scale-option ${getCurrentAnswers()[question.id] === value ? 'selected' : ''}`}
-                          onClick={() => handleScaleAnswer(question.id, value)}
-                        >
-                          <div className="scale-circle"></div>
-                          <span className="scale-value">{value}</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div className="scale-extreme-labels">
-                      <span className="scale-extreme-label">
-                        {language === 'en' 
-                          ? question.scaleLabels?.minEn.split(' – ').map((part: string, i: number) => <span key={i}>{part}</span>) 
-                          : question.scaleLabels?.minZh.split(' – ').map((part: string, i: number) => <span key={i}>{part}</span>)}
-                      </span>
-                      <span className="scale-extreme-label">
-                        {language === 'en' 
-                          ? question.scaleLabels?.maxEn.split(' – ').map((part: string, i: number) => <span key={i}>{part}</span>) 
-                          : question.scaleLabels?.maxZh.split(' – ').map((part: string, i: number) => <span key={i}>{part}</span>)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+            <QuestionBlock
+              key={question.id}
+              question={question}
+              currentAnswer={getCurrentAnswers()[question.id]}
+              language={language}
+              onMultipleChoice={handleMultipleChoiceAnswer}
+              onTextInput={handleTextAnswer}
+              onScale={handleScaleAnswer}
+            />
           ))}
-          
-          <div className="question-navigation">
-            <button 
-              className="nav-button prev-button"
-              onClick={() => {
-                setShowSixthPage(false);
-                setShowFifthPage(true);
-                setTimeout(scrollToFirstQuestionOfNextPage, 100);
-              }}
-            >
-              {language === 'en' ? 'Back' : '返回'}
-            </button>
-            
-            <button 
-              className="nav-button finish-button"
-              onClick={() => {
-                finishQuestionnaire();
-              }}
-              disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 56 && parseInt(id) <= 66).length < 11}
-            >
-              {language === 'en' ? 'Finish' : '完成'}
-            </button>
-          </div>
+          <QuestionNavigation
+            showBack={true}
+            showFinish={true}
+            onBack={() => {
+              setShowSixthPage(false);
+              setShowFifthPage(true);
+              setTimeout(scrollToFirstQuestionOfNextPage, 100);
+            }}
+            onFinish={finishQuestionnaire}
+            finishDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 56 && parseInt(id) <= 66).length < 11}
+            backLabel={language === 'en' ? 'Back' : '返回'}
+            finishLabel={language === 'en' ? 'Finish' : '完成'}
+          />
         </div>
       )}
     </div>

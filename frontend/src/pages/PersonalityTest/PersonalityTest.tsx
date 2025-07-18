@@ -8,6 +8,9 @@ import { scrollToNextQuestion, scrollToFirstQuestionOfNextPage } from './ScrollU
 import questionnaireApi, { prepareQuestionResponses, QuestionResponse } from '../../api/questionnaire.ts';
 import { questionnaires, Question, QuestionType, QuestionnaireType, QuestionnaireContext } from './questionnaires.ts';
 import QuestionBlock from './QuestionBlock';
+import QuestionNavigation from './QuestionNavigation';
+import ProgressBar from './ProgressBar';
+import QuestionnaireSwitcher from './QuestionnaireSwitcher';
 
 // API Configuration
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
@@ -560,35 +563,16 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     return (
       <div className="questionnaire-content mother-questionnaire" lang={language}>
         {/* Progress bar */}
-        <div className="question-progress-container">
-          <div className="question-progress-bar">
-            <div 
-              className="question-progress-fill" 
-              style={{ width: `${calculatedQuestionnaireProgress()}%` }}
-            ></div>
-          </div>
-        </div>
+        <ProgressBar progress={calculatedQuestionnaireProgress()} />
         
         {/* Show switcher for "both" option */}
         {(selectedIdentities.has('mother') && selectedIdentities.has('corporate')) || activeQuestionnaire === 'both' ? (
-          <div className="questionnaire-switcher">
-            <button 
-              className={`switcher-button ${showingPrimaryQuestionnaire ? 'active' : ''}`}
-              onClick={() => {
-                if (!showingPrimaryQuestionnaire) switchQuestionnaire();
-              }}
-            >
-              {language === 'en' ? 'Mother Questionnaire' : '母亲问卷'}
-            </button>
-            <button 
-              className={`switcher-button ${!showingPrimaryQuestionnaire ? 'active' : ''}`}
-              onClick={() => {
-                if (showingPrimaryQuestionnaire) switchQuestionnaire();
-              }}
-            >
-              {language === 'en' ? 'Corporate Questionnaire' : '企业问卷'}
-            </button>
-          </div>
+          <QuestionnaireSwitcher
+            isPrimaryActive={showingPrimaryQuestionnaire}
+            onSwitch={switchQuestionnaire}
+            primaryLabel={language === 'en' ? 'Mother Questionnaire' : '母亲问卷'}
+            secondaryLabel={language === 'en' ? 'Corporate Questionnaire' : '企业问卷'}
+          />
         ) : null}
         
         {/* 母亲问卷分页内容 */}
@@ -609,20 +593,25 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               ))}
               
               {/* 母亲问卷第一页导航按钮 */}
-              <div className="first-page-navigation">
-                <button 
-                  className="nav-button next-button first-page-continue"
-                  onClick={() => {
-                    setShowFirstPage(false);
-                    setShowThirdPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                  disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 1 && parseInt(id) <= 8).length < 8}
-                >
-                  {language === 'en' ? 'Continue' : '继续'}
-                </button>
-              </div>
+              <QuestionNavigation
+                showBack={false}
+                showNext={true}
+                onBack={() => {
+                  setShowFirstPage(false);
+                  setShowThirdPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                onNext={() => {
+                  setShowFirstPage(false);
+                  setShowThirdPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 1 && parseInt(id) <= 8).length < 8}
+                backLabel={language === 'en' ? 'Back' : '返回'}
+                nextLabel={language === 'en' ? 'Continue' : '继续'}
+              />
             </div>
           ) : showThirdPage ? (
             // 第2页: 根据分支逻辑获取问题
@@ -645,32 +634,25 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                 />
               ))}
               
-              <div className="question-navigation">
-                <button 
-                  className="nav-button prev-button"
-                  onClick={() => {
-                    setShowThirdPage(false);
-                    setShowFirstPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                >
-                  {language === 'en' ? 'Back' : '返回'}
-                </button>
-                
-                <button 
-                  className="nav-button next-button"
-                  onClick={() => {
-                    setShowThirdPage(false);
-                    setShowFourthPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                  disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 9 && parseInt(id) <= 21).length < 13}
-                >
-                  {language === 'en' ? 'Continue' : '继续'}
-                </button>
-              </div>
+              <QuestionNavigation
+                showBack={true}
+                showNext={true}
+                onBack={() => {
+                  setShowThirdPage(false);
+                  setShowFirstPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                onNext={() => {
+                  setShowThirdPage(false);
+                  setShowFourthPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 9 && parseInt(id) <= 21).length < 13}
+                backLabel={language === 'en' ? 'Back' : '返回'}
+                nextLabel={language === 'en' ? 'Continue' : '继续'}
+              />
             </div>
           ) : showFourthPage ? (
             // 第3页: ID 22-35，标题"II. About Us, CHON / 关于我们"
@@ -693,32 +675,25 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                 />
               ))}
               
-              <div className="question-navigation">
-                <button 
-                  className="nav-button prev-button"
-                  onClick={() => {
-                    setShowFourthPage(false);
-                    setShowThirdPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                >
-                  {language === 'en' ? 'Back' : '返回'}
-                </button>
-                
-                <button 
-                  className="nav-button next-button"
-                  onClick={() => {
-                    setShowFourthPage(false);
-                    setShowFifthPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                  disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 22 && parseInt(id) <= 35).length < 14}
-                >
-                  {language === 'en' ? 'Continue' : '继续'}
-                </button>
-              </div>
+              <QuestionNavigation
+                showBack={true}
+                showNext={true}
+                onBack={() => {
+                  setShowFourthPage(false);
+                  setShowThirdPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                onNext={() => {
+                  setShowFourthPage(false);
+                  setShowFifthPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 22 && parseInt(id) <= 35).length < 14}
+                backLabel={language === 'en' ? 'Back' : '返回'}
+                nextLabel={language === 'en' ? 'Continue' : '继续'}
+              />
             </div>
           ) : showFifthPage ? (
             // 第4页: ID 36-48，标题"III. About Motherhood"
@@ -741,30 +716,25 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                 />
               ))}
               
-              <div className="question-navigation">
-                <button 
-                  className="nav-button prev-button"
-                  onClick={() => {
-                    setShowFifthPage(false);
-                    setShowFourthPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                >
-                  {language === 'en' ? 'Back' : '返回'}
-                </button>
-                
-                <button 
-                  className="nav-button finish-button"
-                  onClick={() => {
-                    // 完成问卷并跳转到结果页面
-                    finishQuestionnaire();
-                  }}
-                  disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 36 && parseInt(id) <= 48).length < 13}
-                >
-                  {language === 'en' ? 'Finish' : '完成'}
-                </button>
-              </div>
+              <QuestionNavigation
+                showBack={true}
+                showNext={true}
+                onBack={() => {
+                  setShowFifthPage(false);
+                  setShowFourthPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                onNext={() => {
+                  setShowFifthPage(false);
+                  setShowFourthPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 36 && parseInt(id) <= 48).length < 13}
+                backLabel={language === 'en' ? 'Back' : '返回'}
+                nextLabel={language === 'en' ? 'Continue' : '继续'}
+              />
             </div>
           ) : null
         }
@@ -776,35 +746,16 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     return (
       <div className="questionnaire-content corporate-questionnaire" lang={language}>
         {/* Progress bar */}
-        <div className="question-progress-container">
-          <div className="question-progress-bar">
-            <div 
-              className="question-progress-fill" 
-              style={{ width: `${calculatedQuestionnaireProgress()}%` }}
-            ></div>
-          </div>
-        </div>
+        <ProgressBar progress={calculatedQuestionnaireProgress()} />
         
         {/* Show switcher for "both" option */}
         {(selectedIdentities.has('mother') && selectedIdentities.has('corporate')) || activeQuestionnaire === 'both' ? (
-          <div className="questionnaire-switcher">
-            <button 
-              className={`switcher-button ${showingPrimaryQuestionnaire ? 'active' : ''}`}
-              onClick={() => {
-                if (!showingPrimaryQuestionnaire) switchQuestionnaire();
-              }}
-            >
-              {language === 'en' ? 'Mother Questionnaire' : '母亲问卷'}
-            </button>
-            <button 
-              className={`switcher-button ${!showingPrimaryQuestionnaire ? 'active' : ''}`}
-              onClick={() => {
-                if (showingPrimaryQuestionnaire) switchQuestionnaire();
-              }}
-            >
-              {language === 'en' ? 'Corporate Questionnaire' : '企业问卷'}
-            </button>
-          </div>
+          <QuestionnaireSwitcher
+            isPrimaryActive={showingPrimaryQuestionnaire}
+            onSwitch={switchQuestionnaire}
+            primaryLabel={language === 'en' ? 'Mother Questionnaire' : '母亲问卷'}
+            secondaryLabel={language === 'en' ? 'Corporate Questionnaire' : '企业问卷'}
+          />
         ) : null}
         
         {/* 企业问卷分页内容 */}
@@ -824,20 +775,25 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                 />
               ))}
               
-              <div className="first-page-navigation">
-                <button 
-                  className="nav-button next-button first-page-continue"
-                  onClick={() => {
-                    setShowFirstPage(false);
-                    setShowSecondPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                  disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 1 && parseInt(id) <= 7).length < 7}
-                >
-                  {language === 'en' ? 'Continue' : '继续'}
-                </button>
-              </div>
+              <QuestionNavigation
+                showBack={false}
+                showNext={true}
+                onBack={() => {
+                  setShowFirstPage(false);
+                  setShowSecondPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                onNext={() => {
+                  setShowFirstPage(false);
+                  setShowSecondPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 1 && parseInt(id) <= 7).length < 7}
+                backLabel={language === 'en' ? 'Back' : '返回'}
+                nextLabel={language === 'en' ? 'Continue' : '继续'}
+              />
             </div>
           ) : showSecondPage ? (
             // 第2页: ID 8-21，标题"I. 关于您的领导力 / About Your Leadership"
@@ -860,32 +816,25 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                 />
               ))}
               
-              <div className="question-navigation">
-                <button 
-                  className="nav-button prev-button"
-                  onClick={() => {
-                    setShowSecondPage(false);
-                    setShowFirstPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                >
-                  {language === 'en' ? 'Back' : '返回'}
-                </button>
-                
-                <button 
-                  className="nav-button next-button"
-                  onClick={() => {
-                    setShowSecondPage(false);
-                    setShowThirdPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                  disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 8 && parseInt(id) <= 21).length < 14}
-                >
-                  {language === 'en' ? 'Continue' : '继续'}
-                </button>
-              </div>
+              <QuestionNavigation
+                showBack={true}
+                showNext={true}
+                onBack={() => {
+                  setShowSecondPage(false);
+                  setShowFirstPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                onNext={() => {
+                  setShowSecondPage(false);
+                  setShowThirdPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 8 && parseInt(id) <= 21).length < 14}
+                backLabel={language === 'en' ? 'Back' : '返回'}
+                nextLabel={language === 'en' ? 'Continue' : '继续'}
+              />
             </div>
           ) : showThirdPage ? (
             // 第3页: ID 22-36，标题"II. About Us, CHON / 关于我们"
@@ -908,32 +857,25 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                 />
               ))}
               
-              <div className="question-navigation">
-                <button 
-                  className="nav-button prev-button"
-                  onClick={() => {
-                    setShowThirdPage(false);
-                    setShowSecondPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                >
-                  {language === 'en' ? 'Back' : '返回'}
-                </button>
-                
-                <button 
-                  className="nav-button next-button"
-                  onClick={() => {
-                    setShowThirdPage(false);
-                    setShowFourthPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                  disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 22 && parseInt(id) <= 36).length < 15}
-                >
-                  {language === 'en' ? 'Continue' : '继续'}
-                </button>
-              </div>
+              <QuestionNavigation
+                showBack={true}
+                showNext={true}
+                onBack={() => {
+                  setShowThirdPage(false);
+                  setShowSecondPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                onNext={() => {
+                  setShowThirdPage(false);
+                  setShowFourthPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 22 && parseInt(id) <= 36).length < 15}
+                backLabel={language === 'en' ? 'Back' : '返回'}
+                nextLabel={language === 'en' ? 'Continue' : '继续'}
+              />
             </div>
           ) : showFourthPage ? (
             // 第4页: ID 37-47，标题"III. About Motherhood 关于母亲"
@@ -956,30 +898,25 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                 />
               ))}
               
-              <div className="question-navigation">
-                <button 
-                  className="nav-button prev-button"
-                  onClick={() => {
-                    setShowFourthPage(false);
-                    setShowThirdPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                >
-                  {language === 'en' ? 'Back' : '返回'}
-                </button>
-                
-                <button 
-                  className="nav-button finish-button"
-                  onClick={() => {
-                    // 完成问卷并跳转到结果页面
-                    finishQuestionnaire();
-                  }}
-                  disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 32 && parseInt(id) <= 42).length < 11}
-                >
-                  {language === 'en' ? 'Finish' : '完成'}
-                </button>
-              </div>
+              <QuestionNavigation
+                showBack={true}
+                showNext={true}
+                onBack={() => {
+                  setShowFourthPage(false);
+                  setShowThirdPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                onNext={() => {
+                  setShowFourthPage(false);
+                  setShowFifthPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 32 && parseInt(id) <= 42).length < 11}
+                backLabel={language === 'en' ? 'Back' : '返回'}
+                nextLabel={language === 'en' ? 'Continue' : '继续'}
+              />
             </div>
           ) : null
         }
@@ -991,14 +928,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     return (
       <div className="questionnaire-content other-questionnaire" lang={language}>
         {/* Progress bar */}
-        <div className="question-progress-container">
-          <div className="question-progress-bar">
-            <div 
-              className="question-progress-fill" 
-              style={{ width: `${calculatedQuestionnaireProgress()}%` }}
-            ></div>
-          </div>
-        </div>
+        <ProgressBar progress={calculatedQuestionnaireProgress()} />
         
         {/* 其他问卷分页内容 */}
         {
@@ -1017,20 +947,25 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                 />
               ))}
               
-              <div className="question-navigation">
-                <button 
-                  className="nav-button next-button"
-                  onClick={() => {
-                    setShowFirstPage(false);
-                    setShowSecondPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                  disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 1 && parseInt(id) <= 4).length < 4}
-                >
-                  {language === 'en' ? 'Continue' : '继续'}
-                </button>
-              </div>
+              <QuestionNavigation
+                showBack={false}
+                showNext={true}
+                onBack={() => {
+                  setShowFirstPage(false);
+                  setShowSecondPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                onNext={() => {
+                  setShowFirstPage(false);
+                  setShowSecondPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 1 && parseInt(id) <= 4).length < 4}
+                backLabel={language === 'en' ? 'Back' : '返回'}
+                nextLabel={language === 'en' ? 'Continue' : '继续'}
+              />
             </div>
           ) : showSecondPage ? (
             // 第2页: ID 5-15，标题"I. About Professional Work / 关于职业工作"
@@ -1053,32 +988,25 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                 />
               ))}
               
-              <div className="question-navigation">
-                <button 
-                  className="nav-button prev-button"
-                  onClick={() => {
-                    setShowSecondPage(false);
-                    setShowFirstPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                >
-                  {language === 'en' ? 'Back' : '返回'}
-                </button>
-                
-                <button 
-                  className="nav-button next-button"
-                  onClick={() => {
-                    setShowSecondPage(false);
-                    setShowThirdPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                  disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 5 && parseInt(id) <= 15).length < 11}
-                >
-                  {language === 'en' ? 'Continue' : '继续'}
-                </button>
-              </div>
+              <QuestionNavigation
+                showBack={true}
+                showNext={true}
+                onBack={() => {
+                  setShowSecondPage(false);
+                  setShowFirstPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                onNext={() => {
+                  setShowSecondPage(false);
+                  setShowThirdPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 5 && parseInt(id) <= 15).length < 11}
+                backLabel={language === 'en' ? 'Back' : '返回'}
+                nextLabel={language === 'en' ? 'Continue' : '继续'}
+              />
             </div>
           ) : showThirdPage ? (
             // 第3页: ID 16-30，标题"II. About Us, CHON / 关于我们"
@@ -1101,32 +1029,25 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                 />
               ))}
               
-              <div className="question-navigation">
-                <button 
-                  className="nav-button prev-button"
-                  onClick={() => {
-                    setShowThirdPage(false);
-                    setShowSecondPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                >
-                  {language === 'en' ? 'Back' : '返回'}
-                </button>
-                
-                <button 
-                  className="nav-button next-button"
-                  onClick={() => {
-                    setShowThirdPage(false);
-                    setShowFourthPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                  disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 16 && parseInt(id) <= 30).length < 15}
-                >
-                  {language === 'en' ? 'Continue' : '继续'}
-                </button>
-              </div>
+              <QuestionNavigation
+                showBack={true}
+                showNext={true}
+                onBack={() => {
+                  setShowThirdPage(false);
+                  setShowSecondPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                onNext={() => {
+                  setShowThirdPage(false);
+                  setShowFourthPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 16 && parseInt(id) <= 30).length < 15}
+                backLabel={language === 'en' ? 'Back' : '返回'}
+                nextLabel={language === 'en' ? 'Continue' : '继续'}
+              />
             </div>
           ) : showFourthPage ? (
             // 第4页: ID 31-41，标题"III. About Motherhood / 关于母亲"
@@ -1149,30 +1070,25 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                 />
               ))}
               
-              <div className="question-navigation">
-                <button 
-                  className="nav-button prev-button"
-                  onClick={() => {
-                    setShowFourthPage(false);
-                    setShowThirdPage(true);
-                    // 添加自动滚动功能
-                    setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                  }}
-                >
-                  {language === 'en' ? 'Back' : '返回'}
-                </button>
-                
-                <button 
-                  className="nav-button finish-button"
-                  onClick={() => {
-                    // 完成问卷并跳转到结果页面
-                    finishQuestionnaire();
-                  }}
-                  disabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 31 && parseInt(id) <= 41).length < 11}
-                >
-                  {language === 'en' ? 'Finish' : '完成'}
-                </button>
-              </div>
+              <QuestionNavigation
+                showBack={true}
+                showNext={true}
+                onBack={() => {
+                  setShowFourthPage(false);
+                  setShowThirdPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                onNext={() => {
+                  setShowFourthPage(false);
+                  setShowFifthPage(true);
+                  // 添加自动滚动功能
+                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
+                }}
+                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 31 && parseInt(id) <= 41).length < 11}
+                backLabel={language === 'en' ? 'Back' : '返回'}
+                nextLabel={language === 'en' ? 'Continue' : '继续'}
+              />
             </div>
           ) : null
         }
