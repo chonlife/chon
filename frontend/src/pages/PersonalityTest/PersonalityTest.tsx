@@ -86,13 +86,20 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   const [primaryAnswers, setPrimaryAnswers] = useState<Record<number, string>>({});
   const [secondaryAnswers, setSecondaryAnswers] = useState<Record<number, string>>({});
   // 添加标签得分计算相关的状态
-  const [tagScores, setTagScores] = useState<Record<string, number[]>>({});
+  const [tagScores, setTagScores] = useState<Record<string, Record<number, number>>>();
   
   // Add new state for branch tracking after the existing state declarations
   const [branchingPath, setBranchingPath] = useState<'default' | 'yes-path' | 'no-path'>('default');
   const [hasBranchingQuestion, setHasBranchingQuestion] = useState(false);
   
-  
+  // Add interface definition
+  interface TagStats {
+    userScore: number;
+    totalPossibleScore: number;
+    scorePercentage: number;
+    averageScore: number;
+    answeredQuestions: number;
+  }
 
   // Helper to get current questionnaire
   const getCurrentQuestionnaire = (): QuestionnaireContext | null => {
@@ -1386,96 +1393,47 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     );
   };
 
-  // 当用户回答问题时，更新相应标签的得分
+  // When user answers a question, update tag scores
   const updateTagScores = (questionId: number, value: string) => {
     const question = getCurrentQuestions().find(q => q.id === questionId);
     if (!question || !question.tags || question.tags.length === 0) return;
     
-    console.log(`处理问题 ${questionId} 的回答，值: ${value}, 类型: ${question.type}`);
+    console.log(`处理问题 ${questionId} 的回答，值: ${value}, 类型: ${question.type}, tags: ${question.tags}`);
     
-    // 对于量表问题，处理分数转换
+    // Calculate score for this question
     let score: number;
     if (question.type === 'scale-question') {
       if (['A', 'B', 'C', 'D', 'E'].includes(value)) {
-        // 从"A"到"E"映射为1到5的分数
         const scoreMap: Record<string, number> = {'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5};
         score = scoreMap[value] || 0;
       } else {
-        // 直接将数字字符串转换为数字
         score = parseInt(value, 10) || 0;
       }
-      
-      console.log(`问题 ${questionId} 的分数已转换: ${value} -> ${score}`);
     } else {
-      // 对于多选题，暂时只记录选择了哪个选项，不计算分数
       score = 0;
     }
-    
-    // 为每个标签更新分数
+
+    // Update score for each tag this question belongs to
     const newTagScores = {...tagScores};
-    
-    // 创建问题ID到分数的映射
-    const questionScoreMap: Record<string, Record<number, number>> = {};
-    
-    // 从localStorage加载现有的问题ID-分数映射
     question.tags.forEach(tag => {
-      const savedMap = localStorage.getItem(`questionScores_${tag}`);
-      if (savedMap) {
-        try {
-          questionScoreMap[tag] = JSON.parse(savedMap);
-        } catch (e) {
-          console.error(`解析标签 ${tag} 的问题分数映射出错:`, e);
-          questionScoreMap[tag] = {};
-        }
-      } else {
-        questionScoreMap[tag] = {};
-      }
-      
-      // 更新当前问题的分数
-      questionScoreMap[tag][questionId] = score;
-      
-      // 保存更新后的映射
-      localStorage.setItem(`questionScores_${tag}`, JSON.stringify(questionScoreMap[tag]));
-      
-      // 将所有问题的分数转换为数组
       if (!newTagScores[tag]) {
-        newTagScores[tag] = [];
+        newTagScores[tag] = {};
       }
-      
-      // 将问题分数映射的值填入数组
-      const scoreArray = Object.values(questionScoreMap[tag]);
-      newTagScores[tag] = scoreArray;
-      
-      console.log(`更新标签 ${tag} 的分数，问题 ${questionId}: ${score}`);
-      console.log(`标签 ${tag} 的问题-分数映射:`, questionScoreMap[tag]);
+      // Store score by question ID to avoid counting multiple times
+      newTagScores[tag][questionId] = score;
     });
     
     setTagScores(newTagScores);
-    
-    // 保存标签分数到本地存储
     localStorage.setItem('tagScores', JSON.stringify(newTagScores));
-    
-    // 计算并保存标签总分和比例
     calculateAndSaveTagStats(newTagScores);
-    
-    console.log(`标签分数已更新并保存:`, newTagScores);
   };
 
-  // 计算并保存每个标签的统计数据（总分、平均分、比例等）
-  const calculateAndSaveTagStats = (currentTagScores: Record<string, number[]>) => {
-    // 定义标签统计数据结构
-    interface TagStats {
-      userScore: number;      // 用户实际得分
-      totalPossibleScore: number; // 标签总满分
-      scorePercentage: number;   // 得分比例
-      averageScore: number;    // 平均分
-      answeredQuestions: number; // 已回答问题数
-    }
-    
+  // Calculate final statistics for each tag
+  const calculateAndSaveTagStats = (currentTagScores: Record<string, Record<number, number>>) => {
     const tagStats: Record<string, TagStats> = {};
     const allTags = ['自我意识', '奉献精神', '社交情商', '情绪调节', '客观能力', '核心耐力'];
     
-    // 计算每个标签下有多少量表问题
+    // Count questions per tag
     const tagQuestionCounts: Record<string, number> = {};
     const questions = getCurrentQuestions();
     
@@ -1490,17 +1448,20 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       }
     });
     
-    // 计算每个标签的统计数据
+    // Calculate stats for each tag
     allTags.forEach(tag => {
-      const scores = currentTagScores[tag] || [];
-      // 只计算有效分数（大于0的分数）
-      const validScores = scores.filter(score => score > 0);
-      const userScore = validScores.reduce((sum, score) => sum + score, 0);
-      const answeredQuestions = validScores.length;
-      const totalPossibleQuestions = tagQuestionCounts[tag] || 0;
-      const totalPossibleScore = totalPossibleQuestions * 5; // 每个问题最高5分
-      const scorePercentage = totalPossibleScore > 0 ? (userScore / totalPossibleScore) * 100 : 0;
-      const averageScore = answeredQuestions > 0 ? userScore / answeredQuestions : 0;
+      const questionScores = currentTagScores[tag] || {};
+      const scores = Object.values(questionScores).filter(score => score > 0);
+      const userScore = scores.reduce((sum, score) => sum + score, 0);
+      const answeredQuestions = scores.length;
+      const totalPossibleScore = tagQuestionCounts[tag] * 5; // Each question max score is 5
+      
+      const scorePercentage = totalPossibleScore > 0 
+        ? Math.min(100, Number(((userScore / totalPossibleScore) * 100).toFixed(2))) 
+        : 0;
+      const averageScore = answeredQuestions > 0 
+        ? Number((userScore / answeredQuestions).toFixed(2)) 
+        : 0;
       
       tagStats[tag] = {
         userScore,
@@ -1511,10 +1472,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       };
     });
     
-    // 保存标签统计数据到本地存储
     localStorage.setItem('tagStats', JSON.stringify(tagStats));
-    
-    // 打印统计信息的表格
     console.log('==== 标签得分统计 ====');
     console.table(tagStats);
     
@@ -1539,7 +1497,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   useEffect(() => {
     // 定义所有标签
     const allTags = ['自我意识', '奉献精神', '社交情商', '情绪调节', '客观能力', '核心耐力'];
-    const loadedTagScores: Record<string, number[]> = {};
+    const loadedTagScores: Record<string, Record<number, number>> = {};
     
     // 从问题分数映射中加载标签分数
     allTags.forEach(tag => {
@@ -1548,11 +1506,11 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         try {
           const questionScoreMap = JSON.parse(savedMap);
           // 将问题分数映射的值填入数组
-          loadedTagScores[tag] = Object.values(questionScoreMap);
+          loadedTagScores[tag] = questionScoreMap;
           console.log(`成功加载标签 ${tag} 的问题分数映射:`, questionScoreMap);
         } catch (e) {
           console.error(`解析标签 ${tag} 的问题分数映射出错:`, e);
-          loadedTagScores[tag] = [];
+          loadedTagScores[tag] = {};
         }
       } else {
         // 尝试从旧格式加载
@@ -1563,11 +1521,11 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
             if (parsedScores[tag]) {
               loadedTagScores[tag] = parsedScores[tag];
             } else {
-              loadedTagScores[tag] = [];
+              loadedTagScores[tag] = {};
             }
           } catch (e) {
             console.error('解析旧格式标签分数出错:', e);
-            loadedTagScores[tag] = [];
+            loadedTagScores[tag] = {};
           }
         }
       }
@@ -1589,19 +1547,21 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   const calculateTagResults = () => {
     const results: Record<string, {total: number, average: number, count: number}> = {};
     
-    Object.entries(tagScores).forEach(([tag, scores]) => {
-      // 过滤掉0分(未计分的多选题)
-      const validScores = scores.filter(score => score > 0);
-      const total = validScores.reduce((sum, score) => sum + score, 0);
-      const count = validScores.length;
-      const average = count > 0 ? total / count : 0;
-      
-      results[tag] = {
-        total,
-        average,
-        count
-      };
-    });
+    if (tagScores) {
+      Object.entries(tagScores).forEach(([tag, scores]) => {
+        // 过滤掉0分(未计分的多选题)
+        const validScores = Object.values(scores).filter(score => score > 0);
+        const total = validScores.reduce((sum, score) => sum + score, 0);
+        const count = validScores.length;
+        const average = count > 0 ? total / count : 0;
+        
+        results[tag] = {
+          total,
+          average,
+          count
+        };
+      });
+    }
     
     return results;
   };

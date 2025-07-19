@@ -52,6 +52,7 @@ const HexagonChart: React.FC<{
   language: string,
   animationKey?: number // 添加动画重置键
 }> = ({ scores, labels, language, animationKey }) => {
+  console.log('scores', scores);
   // 六边形的6个顶点 - 调整起始角度为30度，使顶点而非边在正上方
   const getHexagonPoints = (center: [number, number], size: number) => {
     const points = [];
@@ -75,6 +76,7 @@ const HexagonChart: React.FC<{
     for (let i = 0; i < 6; i++) {
       const tag = tagKeys[i];
       const score = scores[tag] || 0;
+      console.log('score', score);
       const scaledSize = (size * score) / 100;
       // 从30度开始，每隔60度一个顶点
       const angle = (Math.PI / 6) + (Math.PI / 3 * i);
@@ -163,6 +165,14 @@ const HexagonChart: React.FC<{
   // 生成同心六边形（刻度线）
   const concentricPolygons = generateConcentric(center, size);
   
+  const mockScores = {
+    selfAwareness: 50,
+    dedication: 55,
+    socialIntelligence: 60,
+    emotionalRegulation: 65,
+    objectivity: 70,
+    coreEndurance: 75,
+  };
   // 获取分数多边形
   const scorePoints = getScorePoints(center, size, scores);
   const scorePolygon = scorePoints.map(point => point.join(',')).join(' ');
@@ -346,7 +356,7 @@ const HexagonChart: React.FC<{
                 fontSize={fontSize}
                 fontWeight="bold"
               >
-                {item.score}%
+                {item.score.toFixed(2)}%
               </text>
             </g>
           );
@@ -628,6 +638,7 @@ const Results: React.FC = () => {
     // 从localStorage获取用户测试结果或使用模拟数据
     const getTagStats = () => {
       const savedStats = localStorage.getItem('tagStats');
+      console.log('savedStats', savedStats);
       if (savedStats) {
         try {
           return JSON.parse(savedStats);
@@ -840,7 +851,7 @@ const Results: React.FC = () => {
                       } as React.CSSProperties}
                     ></div>
                   </div>
-                  <span className="result-value">{score}%</span>
+                  <span className="result-value">{score.toFixed(2)}%</span>
                 </div>
               ))}
             </div>
