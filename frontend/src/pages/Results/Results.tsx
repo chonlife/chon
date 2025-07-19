@@ -50,8 +50,9 @@ const HexagonChart: React.FC<{
   scores: Record<string, number>,
   labels: Record<string, TagTranslations>,
   language: string,
-  animationKey?: number // 添加动画重置键
-}> = ({ scores, labels, language, animationKey }) => {
+  animationKey?: number,
+  selectedCharacter: CardData | null // Add selected character prop
+}> = ({ scores, labels, language, animationKey, selectedCharacter }) => {
   console.log('scores', scores);
   // 六边形的6个顶点 - 调整起始角度为30度，使顶点而非边在正上方
   const getHexagonPoints = (center: [number, number], size: number) => {
@@ -66,8 +67,18 @@ const HexagonChart: React.FC<{
     return points;
   };
 
-  // 定义标准六个指标的顺序，确保数据一致性
-  const tagKeys = ['selfAwareness', 'dedication', 'socialIntelligence', 'emotionalRegulation', 'objectivity', 'coreEndurance'];
+  // Define type for tag keys
+  type TagKey = keyof CardData['tagRanges'];
+  
+  // Define the standard six tag keys
+  const tagKeys: TagKey[] = [
+    'selfAwareness',
+    'dedication',
+    'socialIntelligence',
+    'emotionalRegulation',
+    'objectivity',
+    'coreEndurance'
+  ];
 
   // 根据分数计算多边形顶点
   const getScorePoints = (center: [number, number], size: number, scores: Record<string, number>) => {
@@ -131,6 +142,23 @@ const HexagonChart: React.FC<{
     return polygons;
   };
 
+  // Get points for upper and lower bounds
+  const getBoundPoints = (center: [number, number], size: number, isUpper: boolean) => {
+    const points = [];
+    
+    for (let i = 0; i < 6; i++) {
+      const tag = tagKeys[i];
+      const range = selectedCharacter?.tagRanges[tag] || [0, 100];
+      const boundValue = isUpper ? range[1] : range[0];
+      const scaledSize = (size * boundValue) / 100;
+      const angle = (Math.PI / 6) + (Math.PI / 3 * i);
+      const x = center[0] + scaledSize * Math.cos(angle);
+      const y = center[1] + scaledSize * Math.sin(angle);
+      points.push([x, y]);
+    }
+    return points;
+  };
+
   const [animated, setAnimated] = useState(false);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   
@@ -165,17 +193,15 @@ const HexagonChart: React.FC<{
   // 生成同心六边形（刻度线）
   const concentricPolygons = generateConcentric(center, size);
   
-  const mockScores = {
-    selfAwareness: 50,
-    dedication: 55,
-    socialIntelligence: 60,
-    emotionalRegulation: 65,
-    objectivity: 70,
-    coreEndurance: 75,
-  };
-  // 获取分数多边形
+  // Get points for user scores, upper bound, and lower bound
   const scorePoints = getScorePoints(center, size, scores);
+  const upperBoundPoints = getBoundPoints(center, size, true);
+  const lowerBoundPoints = getBoundPoints(center, size, false);
+
+  // Convert points to SVG path format
   const scorePolygon = scorePoints.map(point => point.join(',')).join(' ');
+  const upperPolygon = upperBoundPoints.map(point => point.join(',')).join(' ');
+  const lowerPolygon = lowerBoundPoints.map(point => point.join(',')).join(' ');
   
   // 为每个位置增加标签和分数位置
   const tagPositions = [];
@@ -289,15 +315,58 @@ const HexagonChart: React.FC<{
           }}
         />
         
-        {/* 分数多边形 */}
+        {/* Shaded area between bounds */}
+        <path
+          d={`M ${upperBoundPoints[0].join(',')} 
+              L ${upperBoundPoints.map(p => p.join(',')).join(' L ')} 
+              L ${upperBoundPoints[0].join(',')} 
+              L ${lowerBoundPoints[0].join(',')} 
+              L ${lowerBoundPoints.map(p => p.join(',')).join(' L ')} 
+              L ${lowerBoundPoints[0].join(',')} Z`}
+          fill="rgba(240,189,192,0.25)"
+          fillRule="evenodd"
+          stroke="none"
+          style={{
+            opacity: animated ? 1 : 0,
+            transition: 'opacity 1s ease 0.5s'
+          }}
+        />
+
+        {/* Upper bound line */}
+        <polygon 
+          points={upperPolygon} 
+          fill="none" 
+          stroke="rgba(240,189,192,0.5)" 
+          strokeWidth="1"
+          strokeDasharray="5,5"
+          style={{
+            opacity: animated ? 1 : 0,
+            transition: 'opacity 0.8s ease 0.5s'
+          }}
+        />
+
+        {/* Lower bound line */}
+        <polygon 
+          points={lowerPolygon} 
+          fill="none" 
+          stroke="rgba(240,189,192,0.5)" 
+          strokeWidth="1"
+          strokeDasharray="5,5"
+          style={{
+            opacity: animated ? 1 : 0,
+            transition: 'opacity 0.8s ease 0.5s'
+          }}
+        />
+
+        {/* User score line (existing) */}
         <polygon 
           points={scorePolygon} 
-          fill="rgba(240,189,192,0.15)" 
+          fill="none"
           stroke="#F0BDC0" 
           strokeWidth="2"
           style={{
             opacity: animated ? 1 : 0,
-            transition: 'opacity 1s ease 0.7s, fill 0.3s ease'
+            transition: 'opacity 1s ease 0.7s'
           }}
         />
 
@@ -812,6 +881,7 @@ const Results: React.FC = () => {
               labels={tagLabels} 
               language={language} 
               animationKey={animationKey} 
+              selectedCharacter={matchedCard}
             />
           </div>
         </div>
