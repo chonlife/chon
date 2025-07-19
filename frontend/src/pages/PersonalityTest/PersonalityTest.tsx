@@ -718,22 +718,17 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               
               <QuestionNavigation
                 showBack={true}
-                showNext={true}
+                showNext={false}
+                showFinish={true}
                 onBack={() => {
                   setShowFifthPage(false);
                   setShowFourthPage(true);
-                  // 添加自动滚动功能
                   setTimeout(scrollToFirstQuestionOfNextPage, 100);
                 }}
-                onNext={() => {
-                  setShowFifthPage(false);
-                  setShowFourthPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 36 && parseInt(id) <= 48).length < 13}
+                onFinish={finishQuestionnaire}
+                finishDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 36 && parseInt(id) <= 48).length < 13}
                 backLabel={language === 'en' ? 'Back' : '返回'}
-                nextLabel={language === 'en' ? 'Continue' : '继续'}
+                finishLabel={language === 'en' ? 'Finish' : '完成'}
               />
             </div>
           ) : null
@@ -900,22 +895,17 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               
               <QuestionNavigation
                 showBack={true}
-                showNext={true}
+                showNext={false}
+                showFinish={true}
                 onBack={() => {
                   setShowFourthPage(false);
                   setShowThirdPage(true);
-                  // 添加自动滚动功能
                   setTimeout(scrollToFirstQuestionOfNextPage, 100);
                 }}
-                onNext={() => {
-                  setShowFourthPage(false);
-                  setShowFifthPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 32 && parseInt(id) <= 42).length < 11}
+                onFinish={finishQuestionnaire}
+                finishDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 32 && parseInt(id) <= 42).length < 11}
                 backLabel={language === 'en' ? 'Back' : '返回'}
-                nextLabel={language === 'en' ? 'Continue' : '继续'}
+                finishLabel={language === 'en' ? 'Finish' : '完成'}
               />
             </div>
           ) : null
@@ -1072,22 +1062,17 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               
               <QuestionNavigation
                 showBack={true}
-                showNext={true}
+                showNext={false}
+                showFinish={true}
                 onBack={() => {
                   setShowFourthPage(false);
                   setShowThirdPage(true);
-                  // 添加自动滚动功能
                   setTimeout(scrollToFirstQuestionOfNextPage, 100);
                 }}
-                onNext={() => {
-                  setShowFourthPage(false);
-                  setShowFifthPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 31 && parseInt(id) <= 41).length < 11}
+                onFinish={finishQuestionnaire}
+                finishDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 31 && parseInt(id) <= 41).length < 11}
                 backLabel={language === 'en' ? 'Back' : '返回'}
-                nextLabel={language === 'en' ? 'Continue' : '继续'}
+                finishLabel={language === 'en' ? 'Finish' : '完成'}
               />
             </div>
           ) : null
