@@ -390,54 +390,12 @@ const HexagonChart: React.FC<{
           />
         ))}
         
-        {/* 分数值气泡 */}
-        {tagPositions.map((item, index) => {
-          const bubbleSize = getBubbleSize();
-          const fontSize = getScoreFontSize();
-          
-          return (
-            <g 
-              key={`score-bubble-${item.key}`} 
-              style={{
-                opacity: animated ? 1 : 0,
-                transition: `opacity 0.5s ease ${1.2 + index * 0.1}s`
-              }}
-            >
-              {/* 分数背景气泡 */}
-              <circle
-                cx={item.scoreX}
-                cy={item.scoreY}
-                r={bubbleSize}
-                fill="rgba(10,10,10,0.8)"
-                stroke="#F0BDC0"
-                strokeWidth="1.5"
-                style={{
-                  filter: "drop-shadow(0 0 3px rgba(240,189,192,0.5))"
-                }}
-              />
-              {/* 分数文本 */}
-              <text
-                x={item.scoreX}
-                y={item.scoreY}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                fill="#F0BDC0"
-                fontSize={fontSize}
-                fontWeight="bold"
-              >
-                {item.score.toFixed(2)}%
-              </text>
-            </g>
-          );
-        })}
-        
-        {/* 标签文本 */}
+        {/* Label text */}
         {tagPositions.map((item, index) => {
           const labelText = labels[item.key] 
             ? (language === 'en' ? labels[item.key].en : labels[item.key].zh) 
             : item.key;
           
-          // 获取响应式标签宽度
           const labelWidth = getLabelWidth();
           
           return (
@@ -448,12 +406,12 @@ const HexagonChart: React.FC<{
                 transition: `opacity 0.5s ease ${1 + index * 0.1}s`
               }}
             >
-              {/* 标签文本背景 */}
+              {/* Label text background */}
               <rect
                 x={item.labelX - labelWidth / 2}
-                y={item.labelY - 12}
+                y={item.labelY - 24}  // Increased height to accommodate score
                 width={labelWidth}
-                height="24"
+                height="48"  // Doubled height for two lines
                 rx="12"
                 ry="12"
                 fill="rgba(0,0,0,0.6)"
@@ -462,18 +420,32 @@ const HexagonChart: React.FC<{
                 className="label-background"
               />
               
-              {/* 标签文本 */}
+              {/* Label text */}
               <text 
                 x={item.labelX} 
-                y={item.labelY} 
+                y={item.labelY - 8}  // Moved up to make room for score
                 textAnchor="middle" 
                 dominantBaseline="middle"
                 fill="white"
-                fontSize={windowWidth <= 480 ? 11 : 13}
+                fontSize={windowWidth <= 480 ? 13 : 15}
                 fontWeight="bold"
                 className="label-text"
               >
                 {labelText}
+              </text>
+
+              {/* Score text */}
+              <text 
+                x={item.labelX} 
+                y={item.labelY + 12}  // Positioned below label
+                textAnchor="middle" 
+                dominantBaseline="middle"
+                fill="#F0BDC0"
+                fontSize={windowWidth <= 480 ? 12 : 14}
+                fontWeight="bold"
+                className="score-text"
+              >
+                {item.score.toFixed(2)}%
               </text>
             </g>
           );
