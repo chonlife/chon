@@ -672,6 +672,34 @@ const Results: React.FC = () => {
         coreEndurance: [20, 50]
       },
       image: '/images/characters/venus.jpg'
+    },
+    {
+      id: 'athena',
+      name: {
+        en: 'Athena',
+        zh: '雅典娜',
+      },
+      title: {
+        en: "The Strategic Thinker",
+        zh: "战略思想者"
+      },
+      description: {
+        en: 'As Athena, you possess a commanding presence in any professional setting. Your sharp intellect, strategic mindset, and high objectivity make you an exceptional problem-solver and decision-maker. You are highly independent, thriving in environments that value expertise and autonomy. While you may not always prioritize emotional or social connection with others, your ability to assess situations logically and act decisively ensures long-term success. Your resilience and endurance make you well-suited for roles in strategy, governance, research, and executive leadership, where rationality and long-term planning drive impact.',
+        zh: '作为雅典娜，你在任何专业场合都自带强大气场。敏锐的思维、卓越的战略眼光和高度客观性，使你成为出色的问题解决者和决策者。你拥有极强的独立性，在重视专业能力和自主权的工作环境中如鱼得水。虽然你未必总是把情感联结放在首位，但凭借冷静分析局势和果断行动的能力，你总能确保长期成功。你的韧性和持久力，让你特别适合战略规划、管理决策、研究分析和高层领导等岗位。在这些需要理性思考和长远布局的领域，你的优势将得到最大发挥。'
+      },
+      mythology: {
+        en: 'Athena, the Greek goddess of wisdom, war, and craft, was born fully armored from Zeus’s head, embodying intelligence and strategy from the start. Athena is the master of calculated warfare. She is also the patron of artisans and architects, inspiring both battle plans and brilliant innovations. Symbolized by the owl and the olive tree, Athena represents rationality, justice, and the pursuit of excellence.',
+        zh: '雅典娜是希腊神话中的智慧、战争和工艺女神，她全身铠甲地从宙斯的头颅中诞生，从出生就体现了智慧和战略。雅典娜是谋略战争的大师。她也是工匠和建筑师的守护神，激励着人们制定作战计划和进行杰出的创新。雅典娜以猫头鹰和橄榄树为象征，代表理性、正义和追求卓越。'
+      },
+      tagRanges: {
+        selfAwareness: [80, 100],
+        dedication: [0, 60],
+        socialIntelligence: [60, 90],
+        emotionalRegulation: [60, 80],
+        objectivity: [70, 100],
+        coreEndurance: [80, 100]
+      },
+      image: '/images/characters/athena.jpg'
     }
   ];
 
