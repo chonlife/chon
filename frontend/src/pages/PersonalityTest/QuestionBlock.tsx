@@ -1,19 +1,21 @@
 import React from 'react';
-import { Question } from './questionnaires';
+import { Question, QuestionnaireType } from './questionnaires';
 
 interface QuestionBlockProps {
   question: Question;
   currentAnswer: string | undefined;
   language: string;
-  onMultipleChoice: (questionId: number, optionId: string) => void;
-  onTextInput: (questionId: number, value: string) => void;
-  onScale: (questionId: number, value: string) => void;
+  identity: QuestionnaireType | null;
+  onMultipleChoice: (question: Question, optionId: string) => void;
+  onTextInput: (question: Question, value: string) => void;
+  onScale: (question: Question, value: string, identity: QuestionnaireType | null) => void;
 }
 
 const QuestionBlock: React.FC<QuestionBlockProps> = ({
   question,
   currentAnswer,
   language,
+  identity,
   onMultipleChoice,
   onTextInput,
   onScale,
@@ -29,7 +31,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
             <div
               key={option.id}
               className={`answer-option ${currentAnswer === option.id ? 'selected' : ''}`}
-              onClick={() => onMultipleChoice(question.id, option.id)}
+              onClick={() => onMultipleChoice(question, option.id)}
             >
               <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
             </div>
@@ -42,7 +44,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
             type="text"
             className="text-answer-input"
             value={currentAnswer || ''}
-            onChange={e => onTextInput(question.id, e.target.value)}
+            onChange={e => onTextInput(question, e.target.value)}
             placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
           />
         </div>
@@ -55,7 +57,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
                 <div
                   key={value}
                   className={`scale-option ${currentAnswer === value ? 'selected' : ''}`}
-                  onClick={() => onScale(question.id, value)}
+                  onClick={() => onScale(question, value, identity)}
                 >
                   <div className="scale-circle"></div>
                   <span className="scale-value">{value}</span>

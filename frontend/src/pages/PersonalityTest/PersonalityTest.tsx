@@ -1,32 +1,18 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext.tsx';
 import LanguageSelector from '../../components/LanguageSelector/LanguageSelector.tsx';
 import './PersonalityTest.css';
-import BothQuestionnaire from './BothQuestionnaire.tsx';
 import { scrollToNextQuestion, scrollToFirstQuestionOfNextPage } from './ScrollUtils.ts';
 import questionnaireApi, { prepareQuestionResponses, QuestionResponse } from '../../api/questionnaire.ts';
-import { questionnaires, Question, QuestionType, QuestionnaireType, QuestionnaireContext } from './questionnaires.ts';
-import QuestionBlock from './QuestionBlock';
-import QuestionNavigation from './QuestionNavigation';
-import ProgressBar from './ProgressBar';
-import QuestionnaireSwitcher from './QuestionnaireSwitcher';
+import { Question, QuestionSection, QuestionnaireType, questionsMenu, QuestionMenu, questions } from './questionnaires.ts';
+import IdentitySelection, { IdentityType } from './IdentitySelection.tsx';
+import QuestionsSection from './QuestionsSection.tsx';
 
 // API Configuration
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
-type IdentityType = 'mother' | 'corporate' | 'both' | 'other';
-type CorporateRole = 
-  | 'founder' 
-  | 'board_member' 
-  | 'c_suite_executive' 
-  | 'president' 
-  | 'managing_director'
-  | 'partner'
-  | 'vice_president'
-  | 'director'
-  | 'senior_manager';
-type TestStep = 'intro' | 'identity' | 'corporate_role' | 'privacy' | 'questionnaire';
+type TestStep = 'intro' | 'identity' | 'privacy' | 'questionnaire';
 
 interface PersonalityTestProps {
   onWhiteThemeChange?: (isWhite: boolean) => void;
@@ -59,15 +45,11 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   const location = useLocation();
   const [step, setStep] = useState<TestStep>('intro');
   const [userChoice, setUserChoice] = useState<string | null>(null);
-  const [selectedIdentities, setSelectedIdentities] = useState<Set<IdentityType>>(new Set());
-  const [corporateRole, setCorporateRole] = useState<CorporateRole | null>(null);
+  const [selectedIdentity, setSelectedIdentity] = useState<QuestionnaireType | null>(null);
+  const [gender, setGender] = useState<string | null>(null);
+  const [workedInCoporate, setWorkedInCoporate] = useState<boolean>(false);
+  const [currentSection, setCurrentSection] = useState<number>(0);
   const [answers, setAnswers] = useState<Record<number, string>>({});
-  const [showFirstPage, setShowFirstPage] = useState(true);
-  const [showSecondPage, setShowSecondPage] = useState(false);
-  const [showThirdPage, setShowThirdPage] = useState(false);
-  const [showFourthPage, setShowFourthPage] = useState(false);
-  const [showFifthPage, setShowFifthPage] = useState(false);
-  const [showSixthPage, setShowSixthPage] = useState(false);
   const [showSaveIndicator, setShowSaveIndicator] = useState(false);
   // 替换静态百分比为动态状态
   const [introStats, setIntroStats] = useState({
@@ -76,22 +58,13 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     yesPercentage: 65, // 默认值，将被API数据替换
     loading: true
   });
-  // Add state to track current questionnaire type
-  const [activeQuestionnaire, setActiveQuestionnaire] = useState<QuestionnaireType | null>(null);
-  // Add state to track secondary questionnaire for "both" option
-  const [secondaryQuestionnaire, setSecondaryQuestionnaire] = useState<QuestionnaireType | null>(null);
-  // Add state to track if we're showing the primary or secondary questionnaire
-  const [showingPrimaryQuestionnaire, setShowingPrimaryQuestionnaire] = useState(true);
-  // Add state to track primary answers separately from secondary
-  const [primaryAnswers, setPrimaryAnswers] = useState<Record<number, string>>({});
-  const [secondaryAnswers, setSecondaryAnswers] = useState<Record<number, string>>({});
   // 添加标签得分计算相关的状态
   const [tagScores, setTagScores] = useState<Record<string, Record<number, number>>>();
   
   // Add new state for branch tracking after the existing state declarations
   const [branchingPath, setBranchingPath] = useState<'default' | 'yes-path' | 'no-path'>('default');
   const [hasBranchingQuestion, setHasBranchingQuestion] = useState(false);
-  
+
   // Add interface definition
   interface TagStats {
     userScore: number;
@@ -101,43 +74,75 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     answeredQuestions: number;
   }
 
-  // Helper to get current questionnaire
-  const getCurrentQuestionnaire = (): QuestionnaireContext | null => {
-    // When both mother and corporate are selected
-    if (selectedIdentities.has('mother') && selectedIdentities.has('corporate')) {
-      if (showingPrimaryQuestionnaire) {
-        return activeQuestionnaire ? questionnaires[activeQuestionnaire] : null;
-      } else {
-        return secondaryQuestionnaire ? questionnaires[secondaryQuestionnaire] : null;
+  const getCurrentQuestions = (identity: QuestionnaireType) => {
+    const menu = questionsMenu.find(menu => menu.identity === identity) || null;
+    if (!menu) {
+      return [];
+    }
+    const allQuestions: Question[] = [];
+    for (const section of menu.sections) {
+      for (const questionId of section.questions) {
+        const question = questions.find(q => q.id === questionId);
+        if (question) {
+          allQuestions.push(question);
+        }
       }
     }
-    
-    // Single selection case
-    return activeQuestionnaire ? questionnaires[activeQuestionnaire] : null;
-  };
+    return allQuestions;
+  }
 
-  // Helper to get current questions
-  const getCurrentQuestions = (): Question[] => {
-    return getCurrentQuestionnaire()?.questions || [];
-  };
-  
-  // Helper to get total questions count
-  const getTotalQuestions = (): number => {
-    return getCurrentQuestionnaire()?.totalQuestions || 0;
-  };
+  const renderQuestionsSection = (identity: QuestionnaireType, currentSection: number) => {
+    const menu = questionsMenu.find(menu => menu.identity === identity) || null;
+    if (!menu) {
+      return null;
+    }
+    const progress = calculatedQuestionnaireProgress(menu);
+    let section: QuestionSection | null = null;
+    if (currentSection < menu.sections.length) {
+      section = menu.sections[currentSection];
+      const showBack = currentSection > 0;
+      const showNext = currentSection < menu.sections.length - 1;
+      const showFinish = currentSection === menu.sections.length - 1;
+      return (
+        <QuestionsSection 
+          key={section.sectionId} 
+          section={section}
+          language={language}
+          identity={selectedIdentity}
+          progress={progress}
+          showBack={showBack}
+          showNext={showNext}
+          showFinish={showFinish}
+          currentAnswers={answers}
+          onMultipleChoice={handleMultipleChoiceAnswer}
+          onTextInput={handleTextAnswer}
+          onScale={handleScaleAnswer}
+          onNext={handleNextSection}
+          onBack={handleBackSection}
+          onFinish={finishQuestionnaire}
+          scrollToFirstQuestionOfNextPage={scrollToFirstQuestionOfNextPage}
+        />
+      )
+    }
+    return null;
+  }
+
+  const handleNextSection = () => {
+    setCurrentSection(currentSection + 1);
+  }
+
+  const handleBackSection = () => {
+    setCurrentSection(currentSection - 1);
+  }
+
+
   
   // 从本地存储加载答案数据
   useEffect(() => {
     const savedAnswers = localStorage.getItem('chon_personality_answers');
     const savedStep = localStorage.getItem('chon_personality_step');
-    const savedIdentities = localStorage.getItem('chon_personality_identities');
+    const savedIdentity = localStorage.getItem('chon_personality_identity');
     const savedUserChoice = localStorage.getItem('chon_personality_user_choice');
-    const savedShowFirstPage = localStorage.getItem('chon_personality_show_first_page');
-    const savedShowSecondPage = localStorage.getItem('chon_personality_show_second_page');
-    const savedShowThirdPage = localStorage.getItem('chon_personality_show_third_page');
-    const savedShowFourthPage = localStorage.getItem('chon_personality_show_fourth_page');
-    const savedShowFifthPage = localStorage.getItem('chon_personality_show_fifth_page');
-    const savedShowSixthPage = localStorage.getItem('chon_personality_show_sixth_page');
     
     if (savedAnswers) {
       setAnswers(JSON.parse(savedAnswers));
@@ -147,37 +152,14 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       setStep(savedStep as TestStep);
     }
     
-    if (savedIdentities) {
-      setSelectedIdentities(new Set(JSON.parse(savedIdentities)));
+    if (savedIdentity) {
+      setSelectedIdentity(JSON.parse(savedIdentity) as QuestionnaireType);
     }
     
     if (savedUserChoice) {
       setUserChoice(savedUserChoice);
     }
-    
-    if (savedShowFirstPage) {
-      setShowFirstPage(savedShowFirstPage === 'true');
-    }
-    
-    if (savedShowSecondPage) {
-      setShowSecondPage(savedShowSecondPage === 'true');
-    }
-    
-    if (savedShowThirdPage) {
-      setShowThirdPage(savedShowThirdPage === 'true');
-    }
-    
-    if (savedShowFourthPage) {
-      setShowFourthPage(savedShowFourthPage === 'true');
-    }
-    
-    if (savedShowFifthPage) {
-      setShowFifthPage(savedShowFifthPage === 'true');
-    }
-    
-    if (savedShowSixthPage) {
-      setShowSixthPage(savedShowSixthPage === 'true');
-    }
+
   }, []);
   
   // 验证步骤值是否有效
@@ -204,8 +186,10 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   
   // 保存身份选择到本地存储
   useEffect(() => {
-    localStorage.setItem('chon_personality_identities', JSON.stringify(Array.from(selectedIdentities)));
-  }, [selectedIdentities]);
+    if (selectedIdentity) {
+      localStorage.setItem('chon_personality_identity', JSON.stringify(selectedIdentity));
+    }
+  }, [selectedIdentity]);
   
   // 保存用户选择到本地存储
   useEffect(() => {
@@ -213,16 +197,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       localStorage.setItem('chon_personality_user_choice', userChoice);
     }
   }, [userChoice]);
-  
-  // 保存问题索引和页面状态到本地存储
-  useEffect(() => {
-    localStorage.setItem('chon_personality_show_first_page', showFirstPage.toString());
-    localStorage.setItem('chon_personality_show_second_page', showSecondPage.toString());
-    localStorage.setItem('chon_personality_show_third_page', showThirdPage.toString());
-    localStorage.setItem('chon_personality_show_fourth_page', showFourthPage.toString());
-    localStorage.setItem('chon_personality_show_fifth_page', showFifthPage.toString());
-    localStorage.setItem('chon_personality_show_sixth_page', showSixthPage.toString());
-  }, [showFirstPage, showSecondPage, showThirdPage, showFourthPage, showFifthPage, showSixthPage]);
 
   // Update white theme state when step changes
   useEffect(() => {
@@ -306,101 +280,35 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   };
 
   const handleIdentitySelect = (identity: IdentityType) => {
-    // Create a new set to save selected identities
-    const newSelectedIdentities = new Set(selectedIdentities);
-
-    // If 'other' is selected, clear all other selections
     if (identity === 'other') {
-      if (newSelectedIdentities.has('other')) {
-        newSelectedIdentities.delete('other');
+      // If other is selected, clear any previous selection
+      setSelectedIdentity(selectedIdentity === 'other' ? null : 'other');
+    } else if (identity === 'mother' || identity === 'corporate') {
+      if (selectedIdentity === 'both') {
+        // If both is selected, clicking one should keep the other selected
+        setSelectedIdentity(identity === 'mother' ? 'corporate' : 'mother');
+      } else if (selectedIdentity === identity) {
+        // Unselect if clicking the same option
+        setSelectedIdentity(null);
+      } else if ((selectedIdentity === 'mother' && identity === 'corporate') || 
+                 (selectedIdentity === 'corporate' && identity === 'mother')) {
+        // If selecting the other option when one is already selected, set to both
+        setSelectedIdentity('both');
       } else {
-        newSelectedIdentities.clear();
-        newSelectedIdentities.add('other');
-        setActiveQuestionnaire('other');
+        // Select the new option
+        setSelectedIdentity(identity);
       }
-      setCorporateRole(null); // Reset corporate role
-    } else if (identity === 'corporate') {
-      if (newSelectedIdentities.has('corporate')) {
-        newSelectedIdentities.delete('corporate');
-        setCorporateRole(null); // Reset corporate role when unselecting corporate
-      } else {
-        newSelectedIdentities.delete('other');
-        newSelectedIdentities.add('corporate');
-        setActiveQuestionnaire('corporate');
-      }
-    } else {
-      // Handle mother/both selection
-      if (newSelectedIdentities.has(identity)) {
-        newSelectedIdentities.delete(identity);
-      } else {
-        newSelectedIdentities.delete('other');
-        newSelectedIdentities.add(identity);
-      }
-      setCorporateRole(null); // Reset corporate role for other identities
     }
-
-    // Update active questionnaire based on selections
-    if (newSelectedIdentities.has('mother') && newSelectedIdentities.has('corporate')) {
-      setActiveQuestionnaire('both');
-    } else if (newSelectedIdentities.has('mother')) {
-      setActiveQuestionnaire('mother');
-    } else if (newSelectedIdentities.has('corporate')) {
-      setActiveQuestionnaire('corporate');
-    } else if (newSelectedIdentities.has('other')) {
-      setActiveQuestionnaire('other');
-    } else {
-      setActiveQuestionnaire(null);
-    }
-
-    setSelectedIdentities(newSelectedIdentities);
   };
 
   const handleContinue = () => {
-    if (selectedIdentities.size === 0) {
+    if (!selectedIdentity) {
       return;
     }
-
-    // If corporate is selected alone (not part of 'both'), go to role selection
-    if (selectedIdentities.has('corporate') && !selectedIdentities.has('mother')) {
-      setStep('corporate_role');
-      return;
-    }
-
-    // Set active questionnaire type based on selected identity
-    if (selectedIdentities.has('mother') && selectedIdentities.has('corporate')) {
-      setActiveQuestionnaire('both');
-      setSecondaryQuestionnaire(null);
-    } else if (selectedIdentities.has('mother')) {
-      setActiveQuestionnaire('mother');
-      setSecondaryQuestionnaire(null);
-    } else if (selectedIdentities.has('corporate')) {
-      setActiveQuestionnaire('corporate');
-      setSecondaryQuestionnaire(null);
-    } else if (selectedIdentities.has('other')) {
-      setActiveQuestionnaire('other');
-      setSecondaryQuestionnaire(null);
-    }
-
-    // Proceed to privacy statement
     setStep('privacy');
   };
 
   const handlePrivacyContinue = () => {
-    // 确保所有页面状态初始化
-    setShowFirstPage(true);
-    setShowSecondPage(false);
-    setShowThirdPage(false);
-    setShowFourthPage(false);
-    setShowFifthPage(false);
-    setShowSixthPage(false);
-    
-    // 如果是both类型，初始化primary和secondary答案容器
-    if (activeQuestionnaire === 'both') {
-      setPrimaryAnswers({});
-      setSecondaryAnswers({});
-      setShowingPrimaryQuestionnaire(true);
-    }
-    
     // 设置为问卷步骤
     setStep('questionnaire');
     
@@ -414,20 +322,16 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     }
   };
 
-  const isIdentitySelected = (identity: IdentityType): boolean => {
-    return selectedIdentities.has(identity);
-  };
-
   // Handle answer selection for multiple choice questions
-  const handleMultipleChoiceAnswer = (questionId: number, optionId: string) => {
-    const currentAnswers = getCurrentAnswers();
-    setCurrentAnswers({
+  const handleMultipleChoiceAnswer = (question: Question, optionId: string) => {
+    const currentAnswers = answers;
+    setAnswers({
       ...currentAnswers,
-      [questionId]: optionId
+      [question.id]: optionId
     });
     
     // Add branching logic for specific question (e.g., question 6)
-    if (questionId === 6) {
+    if (question.id === 6) {
       setHasBranchingQuestion(true);
       if (optionId === 'A') { // Yes
         setBranchingPath('yes-path');
@@ -436,683 +340,47 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       }
     }
     
-    // Update tag scores
-    updateTagScores(questionId, optionId);
-    
     // Add new feature: auto-scroll to next question
     setTimeout(() => {
-      scrollToNextQuestion(questionId);
+      scrollToNextQuestion(question.id);
     }, 100);
   };
 
   // Handle text input for free text questions
-  const handleTextAnswer = (questionId: number, text: string) => {
-    const currentAnswers = getCurrentAnswers();
+  const handleTextAnswer = (question: Question, text: string) => {
+    const currentAnswers = answers;
     // Only update answer when there's text content
     if (text.trim()) {
-      setCurrentAnswers({
+      setAnswers({
         ...currentAnswers,
-        [questionId]: text
+        [question.id]: text
       });
     } else {
       // Remove the answer if text is empty to accurately track progress
       const newAnswers = {...currentAnswers};
-      delete newAnswers[questionId];
-      setCurrentAnswers(newAnswers);
-    }
-  };
-
-  // Handle scale question answer
-  const handleScaleAnswer = (questionId: number, value: string) => {
-    const currentAnswers = getCurrentAnswers();
-    setCurrentAnswers({
-      ...currentAnswers,
-      [questionId]: value
-    });
-    
-    // Update tag scores
-    updateTagScores(questionId, value);
-    
-    // Add new feature: auto-scroll to next question
-    setTimeout(() => {
-      scrollToNextQuestion(questionId);
-    }, 100);
-  };
-
-  // Helper to get current answers based on which questionnaire is active
-  const getCurrentAnswers = (): Record<number, string> => {
-    // When both mother and corporate are selected or 'both' questionnaire is active
-    if ((selectedIdentities.has('mother') && selectedIdentities.has('corporate')) || activeQuestionnaire === 'both') {
-      return showingPrimaryQuestionnaire ? primaryAnswers : secondaryAnswers;
-    }
-    return answers;
-  };
-
-  // Helper to set current answers based on which questionnaire is active
-  const setCurrentAnswers = (newAnswers: Record<number, string>) => {
-    // When both mother and corporate are selected or 'both' questionnaire is active
-    if ((selectedIdentities.has('mother') && selectedIdentities.has('corporate')) || activeQuestionnaire === 'both') {
-      if (showingPrimaryQuestionnaire) {
-        setPrimaryAnswers(newAnswers);
-      } else {
-        setSecondaryAnswers(newAnswers);
-      }
-    } else {
+      delete newAnswers[question.id];
       setAnswers(newAnswers);
     }
   };
 
-  // Add a method to switch between questionnaires for "both" type
-  const switchQuestionnaire = () => {
-    if ((selectedIdentities.has('mother') && selectedIdentities.has('corporate')) || activeQuestionnaire === 'both') {
-      setShowingPrimaryQuestionnaire(!showingPrimaryQuestionnaire);
-      // Reset question index when switching
-      setShowFirstPage(true);
-      setShowSecondPage(false);
-      setShowThirdPage(false);
-      // Reset all page visibility states
-      setShowFourthPage(false);
-      setShowFifthPage(false);
-      setShowSixthPage(false);
+  // Handle scale question answer
+  const handleScaleAnswer = (question: Question, value: string, identity: QuestionnaireType | null) => {
+    if (!identity) {
+      return;
     }
-  };
-
-  const renderQuestionnaireContent = () => {
-    if (!activeQuestionnaire) return null;
-    const questions = getCurrentQuestions();
-    if (!questions || questions.length === 0) return null;
-
-    switch (activeQuestionnaire) {
-      case 'mother':
-        return renderMotherQuestionnaire(questions);
-      case 'corporate':
-        return renderCorporateQuestionnaire(questions);
-      case 'other':
-        return renderOtherQuestionnaire(questions);
-      case 'both':
-        return renderBothQuestionnaire(questions);
-      default:
-        return null;
-    }
-  };
-
-  const renderMotherQuestionnaire = (questions: Question[]) => {
-    // Helper function to get questions based on branching logic
-    const getQuestionsForCurrentPage = (startIndex: number, endIndex: number) => {
-      if (!hasBranchingQuestion || startIndex < 6) {
-        // Before branching question, show all questions normally
-        return questions.slice(startIndex, endIndex);
-      }
-
-      if (startIndex === 6) {
-        // Include branching question
-        return questions.slice(6, 7);
-      }
-
-      if (branchingPath === 'yes-path') {
-        // Questions for "yes" path (e.g., 7-10)
-        return questions.slice(7, 11);
-      }
-
-      if (branchingPath === 'no-path') {
-        // Questions for "no" path (e.g., 11-13)
-        return questions.slice(11, 14);
-      }
-
-      // After branching paths converge (e.g., from question 14 onwards)
-      if (startIndex >= 14) {
-        return questions.slice(startIndex, endIndex);
-      }
-
-      return [];
-    };
-
-    return (
-      <div className="questionnaire-content mother-questionnaire" lang={language}>
-        {/* Progress bar */}
-        <ProgressBar progress={calculatedQuestionnaireProgress()} />
-        
-        {/* Show switcher for "both" option */}
-        {(selectedIdentities.has('mother') && selectedIdentities.has('corporate')) || activeQuestionnaire === 'both' ? (
-          <QuestionnaireSwitcher
-            isPrimaryActive={showingPrimaryQuestionnaire}
-            onSwitch={switchQuestionnaire}
-            primaryLabel={language === 'en' ? 'Mother Questionnaire' : '母亲问卷'}
-            secondaryLabel={language === 'en' ? 'Corporate Questionnaire' : '企业问卷'}
-          />
-        ) : null}
-        
-        {/* 母亲问卷分页内容 */}
-        {
-          showFirstPage ? (
-            // 第1页: 根据分支逻辑获取问题
-            <div className="first-page-questions first-page-true">
-              {getQuestionsForCurrentPage(0, 10).map((question) => (
-                <QuestionBlock
-                  key={question.id}
-                  question={question}
-                  currentAnswer={getCurrentAnswers()[question.id]}
-                  language={language}
-                  onMultipleChoice={handleMultipleChoiceAnswer}
-                  onTextInput={handleTextAnswer}
-                  onScale={handleScaleAnswer}
-                />
-              ))}
-              
-              {/* 母亲问卷第一页导航按钮 */}
-              <QuestionNavigation
-                showBack={false}
-                showNext={true}
-                onBack={() => {
-                  setShowFirstPage(false);
-                  setShowThirdPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                onNext={() => {
-                  setShowFirstPage(false);
-                  setShowThirdPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 1 && parseInt(id) <= 8).length < 8}
-                backLabel={language === 'en' ? 'Back' : '返回'}
-                nextLabel={language === 'en' ? 'Continue' : '继续'}
-              />
-            </div>
-          ) : showThirdPage ? (
-            // 第2页: 根据分支逻辑获取问题
-            <div className="first-page-questions">
-              <h1 className="section-title">
-                {language === 'en' 
-                  ? 'I. About Work-Life Balance' 
-                  : 'I. 关于工作与生活的平衡'}
-              </h1>
-              
-              {getQuestionsForCurrentPage(10, 23).map((question) => (
-                <QuestionBlock
-                  key={question.id}
-                  question={question}
-                  currentAnswer={getCurrentAnswers()[question.id]}
-                  language={language}
-                  onMultipleChoice={handleMultipleChoiceAnswer}
-                  onTextInput={handleTextAnswer}
-                  onScale={handleScaleAnswer}
-                />
-              ))}
-              
-              <QuestionNavigation
-                showBack={true}
-                showNext={true}
-                onBack={() => {
-                  setShowThirdPage(false);
-                  setShowFirstPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                onNext={() => {
-                  setShowThirdPage(false);
-                  setShowFourthPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 9 && parseInt(id) <= 21).length < 13}
-                backLabel={language === 'en' ? 'Back' : '返回'}
-                nextLabel={language === 'en' ? 'Continue' : '继续'}
-              />
-            </div>
-          ) : showFourthPage ? (
-            // 第3页: ID 22-35，标题"II. About Us, CHON / 关于我们"
-            <div className="first-page-questions">
-              <h1 className="section-title">
-                {language === 'en' 
-                  ? 'II. About Us, CHON' 
-                  : 'II. 关于我们'}
-              </h1>
-              
-              {getQuestionsForCurrentPage(23, 37).map((question) => (
-                <QuestionBlock
-                  key={question.id}
-                  question={question}
-                  currentAnswer={getCurrentAnswers()[question.id]}
-                  language={language}
-                  onMultipleChoice={handleMultipleChoiceAnswer}
-                  onTextInput={handleTextAnswer}
-                  onScale={handleScaleAnswer}
-                />
-              ))}
-              
-              <QuestionNavigation
-                showBack={true}
-                showNext={true}
-                onBack={() => {
-                  setShowFourthPage(false);
-                  setShowThirdPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                onNext={() => {
-                  setShowFourthPage(false);
-                  setShowFifthPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 22 && parseInt(id) <= 35).length < 14}
-                backLabel={language === 'en' ? 'Back' : '返回'}
-                nextLabel={language === 'en' ? 'Continue' : '继续'}
-              />
-            </div>
-          ) : showFifthPage ? (
-            // 第4页: ID 36-48，标题"III. About Motherhood"
-            <div className="first-page-questions">
-              <h1 className="section-title">
-                {language === 'en' 
-                  ? 'III. About Motherhood' 
-                  : 'III. 关于母亲'}
-              </h1>
-              
-              {getQuestionsForCurrentPage(37, 50).map((question) => (
-                <QuestionBlock
-                  key={question.id}
-                  question={question}
-                  currentAnswer={getCurrentAnswers()[question.id]}
-                  language={language}
-                  onMultipleChoice={handleMultipleChoiceAnswer}
-                  onTextInput={handleTextAnswer}
-                  onScale={handleScaleAnswer}
-                />
-              ))}
-              
-              <QuestionNavigation
-                showBack={true}
-                showNext={false}
-                showFinish={true}
-                onBack={() => {
-                  setShowFifthPage(false);
-                  setShowFourthPage(true);
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                onFinish={finishQuestionnaire}
-                finishDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 36 && parseInt(id) <= 48).length < 13}
-                backLabel={language === 'en' ? 'Back' : '返回'}
-                finishLabel={language === 'en' ? 'Finish' : '完成'}
-              />
-            </div>
-          ) : null
-        }
-      </div>
-    );
-  };
-
-  const renderCorporateQuestionnaire = (questions: Question[]) => {
-    return (
-      <div className="questionnaire-content corporate-questionnaire" lang={language}>
-        {/* Progress bar */}
-        <ProgressBar progress={calculatedQuestionnaireProgress()} />
-        
-        {/* Show switcher for "both" option */}
-        {(selectedIdentities.has('mother') && selectedIdentities.has('corporate')) || activeQuestionnaire === 'both' ? (
-          <QuestionnaireSwitcher
-            isPrimaryActive={showingPrimaryQuestionnaire}
-            onSwitch={switchQuestionnaire}
-            primaryLabel={language === 'en' ? 'Mother Questionnaire' : '母亲问卷'}
-            secondaryLabel={language === 'en' ? 'Corporate Questionnaire' : '企业问卷'}
-          />
-        ) : null}
-        
-        {/* 企业问卷分页内容 */}
-        {
-          showFirstPage ? (
-            // 第1页: ID 1-12，无标题
-            <div className="first-page-questions first-page-true">
-              {questions.slice(0, 12).map((question) => (
-                <QuestionBlock
-                  key={question.id}
-                  question={question}
-                  currentAnswer={getCurrentAnswers()[question.id]}
-                  language={language}
-                  onMultipleChoice={handleMultipleChoiceAnswer}
-                  onTextInput={handleTextAnswer}
-                  onScale={handleScaleAnswer}
-                />
-              ))}
-              
-              <QuestionNavigation
-                showBack={false}
-                showNext={true}
-                onBack={() => {
-                  setShowFirstPage(false);
-                  setShowSecondPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                onNext={() => {
-                  setShowFirstPage(false);
-                  setShowSecondPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 1 && parseInt(id) <= 7).length < 7}
-                backLabel={language === 'en' ? 'Back' : '返回'}
-                nextLabel={language === 'en' ? 'Continue' : '继续'}
-              />
-            </div>
-          ) : showSecondPage ? (
-            // 第2页: ID 8-21，标题"I. 关于您的领导力 / About Your Leadership"
-            <div className="first-page-questions">
-              <h1 className="section-title">
-                {language === 'en' 
-                  ? 'I. About Your Leadership' 
-                  : 'I. 关于您的领导力'}
-              </h1>
-              
-              {questions.slice(12, 26).map((question) => (
-                <QuestionBlock
-                  key={question.id}
-                  question={question}
-                  currentAnswer={getCurrentAnswers()[question.id]}
-                  language={language}
-                  onMultipleChoice={handleMultipleChoiceAnswer}
-                  onTextInput={handleTextAnswer}
-                  onScale={handleScaleAnswer}
-                />
-              ))}
-              
-              <QuestionNavigation
-                showBack={true}
-                showNext={true}
-                onBack={() => {
-                  setShowSecondPage(false);
-                  setShowFirstPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                onNext={() => {
-                  setShowSecondPage(false);
-                  setShowThirdPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 8 && parseInt(id) <= 21).length < 14}
-                backLabel={language === 'en' ? 'Back' : '返回'}
-                nextLabel={language === 'en' ? 'Continue' : '继续'}
-              />
-            </div>
-          ) : showThirdPage ? (
-            // 第3页: ID 22-36，标题"II. About Us, CHON / 关于我们"
-            <div className="first-page-questions">
-              <h1 className="section-title">
-                {language === 'en' 
-                  ? 'II. About Us, CHON' 
-                  : 'II. 关于我们'}
-              </h1>
-              
-              {questions.slice(26, 41).map((question) => (
-                <QuestionBlock
-                  key={question.id}
-                  question={question}
-                  currentAnswer={getCurrentAnswers()[question.id]}
-                  language={language}
-                  onMultipleChoice={handleMultipleChoiceAnswer}
-                  onTextInput={handleTextAnswer}
-                  onScale={handleScaleAnswer}
-                />
-              ))}
-              
-              <QuestionNavigation
-                showBack={true}
-                showNext={true}
-                onBack={() => {
-                  setShowThirdPage(false);
-                  setShowSecondPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                onNext={() => {
-                  setShowThirdPage(false);
-                  setShowFourthPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 22 && parseInt(id) <= 36).length < 15}
-                backLabel={language === 'en' ? 'Back' : '返回'}
-                nextLabel={language === 'en' ? 'Continue' : '继续'}
-              />
-            </div>
-          ) : showFourthPage ? (
-            // 第4页: ID 37-47，标题"III. About Motherhood 关于母亲"
-            <div className="first-page-questions">
-              <h1 className="section-title">
-                {language === 'en' 
-                  ? 'III. About Motherhood' 
-                  : 'III. 关于母亲'}
-              </h1>
-              
-              {questions.slice(41, 52).map((question) => (
-                <QuestionBlock
-                  key={question.id}
-                  question={question}
-                  currentAnswer={getCurrentAnswers()[question.id]}
-                  language={language}
-                  onMultipleChoice={handleMultipleChoiceAnswer}
-                  onTextInput={handleTextAnswer}
-                  onScale={handleScaleAnswer}
-                />
-              ))}
-              
-              <QuestionNavigation
-                showBack={true}
-                showNext={false}
-                showFinish={true}
-                onBack={() => {
-                  setShowFourthPage(false);
-                  setShowThirdPage(true);
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                onFinish={finishQuestionnaire}
-                finishDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 32 && parseInt(id) <= 42).length < 11}
-                backLabel={language === 'en' ? 'Back' : '返回'}
-                finishLabel={language === 'en' ? 'Finish' : '完成'}
-              />
-            </div>
-          ) : null
-        }
-      </div>
-    );
-  };
-
-  const renderOtherQuestionnaire = (questions: Question[]) => {
-    return (
-      <div className="questionnaire-content other-questionnaire" lang={language}>
-        {/* Progress bar */}
-        <ProgressBar progress={calculatedQuestionnaireProgress()} />
-        
-        {/* 其他问卷分页内容 */}
-        {
-          showFirstPage ? (
-            // 第1页: ID 1-4，无标题
-            <div className="first-page-questions first-page-true">
-              {questions.slice(0, 4).map((question) => (
-                <QuestionBlock
-                  key={question.id}
-                  question={question}
-                  currentAnswer={getCurrentAnswers()[question.id]}
-                  language={language}
-                  onMultipleChoice={handleMultipleChoiceAnswer}
-                  onTextInput={handleTextAnswer}
-                  onScale={handleScaleAnswer}
-                />
-              ))}
-              
-              <QuestionNavigation
-                showBack={false}
-                showNext={true}
-                onBack={() => {
-                  setShowFirstPage(false);
-                  setShowSecondPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                onNext={() => {
-                  setShowFirstPage(false);
-                  setShowSecondPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 1 && parseInt(id) <= 4).length < 4}
-                backLabel={language === 'en' ? 'Back' : '返回'}
-                nextLabel={language === 'en' ? 'Continue' : '继续'}
-              />
-            </div>
-          ) : showSecondPage ? (
-            // 第2页: ID 5-15，标题"I. About Professional Work / 关于职业工作"
-            <div className="first-page-questions">
-              <h1 className="section-title">
-                {language === 'en' 
-                  ? 'I. About Professional Work' 
-                  : 'I. 关于职业工作'}
-              </h1>
-              
-              {questions.slice(4, 15).map((question) => (
-                <QuestionBlock
-                  key={question.id}
-                  question={question}
-                  currentAnswer={getCurrentAnswers()[question.id]}
-                  language={language}
-                  onMultipleChoice={handleMultipleChoiceAnswer}
-                  onTextInput={handleTextAnswer}
-                  onScale={handleScaleAnswer}
-                />
-              ))}
-              
-              <QuestionNavigation
-                showBack={true}
-                showNext={true}
-                onBack={() => {
-                  setShowSecondPage(false);
-                  setShowFirstPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                onNext={() => {
-                  setShowSecondPage(false);
-                  setShowThirdPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 5 && parseInt(id) <= 15).length < 11}
-                backLabel={language === 'en' ? 'Back' : '返回'}
-                nextLabel={language === 'en' ? 'Continue' : '继续'}
-              />
-            </div>
-          ) : showThirdPage ? (
-            // 第3页: ID 16-30，标题"II. About Us, CHON / 关于我们"
-            <div className="first-page-questions">
-              <h1 className="section-title">
-                {language === 'en' 
-                  ? 'II. About Us, CHON' 
-                  : 'II. 关于我们'}
-              </h1>
-              
-              {questions.slice(15, 30).map((question) => (
-                <QuestionBlock
-                  key={question.id}
-                  question={question}
-                  currentAnswer={getCurrentAnswers()[question.id]}
-                  language={language}
-                  onMultipleChoice={handleMultipleChoiceAnswer}
-                  onTextInput={handleTextAnswer}
-                  onScale={handleScaleAnswer}
-                />
-              ))}
-              
-              <QuestionNavigation
-                showBack={true}
-                showNext={true}
-                onBack={() => {
-                  setShowThirdPage(false);
-                  setShowSecondPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                onNext={() => {
-                  setShowThirdPage(false);
-                  setShowFourthPage(true);
-                  // 添加自动滚动功能
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                nextDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 16 && parseInt(id) <= 30).length < 15}
-                backLabel={language === 'en' ? 'Back' : '返回'}
-                nextLabel={language === 'en' ? 'Continue' : '继续'}
-              />
-            </div>
-          ) : showFourthPage ? (
-            // 第4页: ID 31-41，标题"III. About Motherhood / 关于母亲"
-            <div className="first-page-questions">
-              <h1 className="section-title">
-                {language === 'en' 
-                  ? 'III. About Motherhood' 
-                  : 'III. 关于母亲'}
-              </h1>
-              
-              {questions.slice(30, 41).map((question) => (
-                <QuestionBlock
-                  key={question.id}
-                  question={question}
-                  currentAnswer={getCurrentAnswers()[question.id]}
-                  language={language}
-                  onMultipleChoice={handleMultipleChoiceAnswer}
-                  onTextInput={handleTextAnswer}
-                  onScale={handleScaleAnswer}
-                />
-              ))}
-              
-              <QuestionNavigation
-                showBack={true}
-                showNext={false}
-                showFinish={true}
-                onBack={() => {
-                  setShowFourthPage(false);
-                  setShowThirdPage(true);
-                  setTimeout(scrollToFirstQuestionOfNextPage, 100);
-                }}
-                onFinish={finishQuestionnaire}
-                finishDisabled={Object.keys(getCurrentAnswers()).filter(id => parseInt(id) >= 31 && parseInt(id) <= 41).length < 11}
-                backLabel={language === 'en' ? 'Back' : '返回'}
-                finishLabel={language === 'en' ? 'Finish' : '完成'}
-              />
-            </div>
-          ) : null
-        }
-      </div>
-    );
-  };
-
-  const renderBothQuestionnaire = (questions: Question[]) => {
-    return (
-      <BothQuestionnaire
-        language={language}
-        getCurrentAnswers={getCurrentAnswers}
-        handleMultipleChoiceAnswer={handleMultipleChoiceAnswer}
-        handleTextAnswer={handleTextAnswer}
-        handleScaleAnswer={handleScaleAnswer}
-        showFirstPage={showFirstPage}
-        showSecondPage={showSecondPage}
-        showThirdPage={showThirdPage}
-        showFourthPage={showFourthPage}
-        showFifthPage={showFifthPage}
-        showSixthPage={showSixthPage}
-        setShowFirstPage={setShowFirstPage}
-        setShowSecondPage={setShowSecondPage}
-        setShowThirdPage={setShowThirdPage}
-        setShowFourthPage={setShowFourthPage}
-        setShowFifthPage={setShowFifthPage}
-        setShowSixthPage={setShowSixthPage}
-        scrollToFirstQuestionOfNextPage={scrollToFirstQuestionOfNextPage}
-        calculatedQuestionnaireProgress={calculatedQuestionnaireProgress}
-        finishQuestionnaire={finishQuestionnaire}
-      />
-    );
+    const currentAnswers = answers;
+    setAnswers({
+      ...currentAnswers,
+      [question.id]: value
+    });
+    
+    // Update tag scores
+    updateTagScores(question, value, identity);
+    
+    // Auto-scroll to next question
+    setTimeout(() => {
+      scrollToNextQuestion(question.id);
+    }, 100);
   };
 
   // 完成问卷并跳转到结果页面的函数
@@ -1123,23 +391,11 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     // 准备提交到后端的回答数据
     let allResponses: QuestionResponse[] = [];
     
-    if (activeQuestionnaire === 'both') {
-      // 对于'both'问卷，收集主要和次要回答
-      const primaryQuestions = questionnaires.both.questions;
-      const primaryResponses = prepareQuestionResponses('both', primaryQuestions, primaryAnswers);
-      const secondaryResponses = prepareQuestionResponses('both', primaryQuestions, secondaryAnswers);
-      
-      allResponses = [...primaryResponses, ...secondaryResponses];
-    } else if (activeQuestionnaire) {
-      // 对于单一问卷
-      const questions = questionnaires[activeQuestionnaire].questions;
-      const currentQuestionnaire = questionnaires[activeQuestionnaire];
+    if (selectedIdentity) {
       // 使用uniqueIdMapping（如果存在）
       allResponses = prepareQuestionResponses(
-        activeQuestionnaire, 
-        questions, 
+        selectedIdentity, 
         answers,
-        currentQuestionnaire.uniqueIdMapping
       );
     }
     
@@ -1189,11 +445,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     ? 'personality-test-container no-header' 
     : 'personality-test-container';
 
-  // 计算问卷进度
-  const calculatedQuestionnaireProgress = () => {
+  const getTotalQuestions = (menu: QuestionMenu): number => {
+    return menu.sections.reduce((acc, section) => acc + section.questions.length, 0);
+  };
+  
+    // 计算问卷进度
+  const calculatedQuestionnaireProgress = (menu: QuestionMenu) => {
     // For "both" option, calculate progress based on active questionnaire
-    const answeredCount = Object.keys(getCurrentAnswers()).length;
-    const total = getTotalQuestions();
+    const answeredCount = Object.keys(answers).length;
+    const total = getTotalQuestions(menu);
     return total > 0 ? (answeredCount / total) * 100 : 0;
   };
 
@@ -1265,121 +525,11 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   // Render the identity selection UI
   const renderIdentitySelection = () => {
     return (
-      <div className="identity-selection" lang={language}>
-        <h1 className="identity-title" lang={language}>{t.personalityTest.identity.title}</h1>
-        
-        <div 
-          className={`option-container ${isIdentitySelected('mother') ? 'selected' : ''}`}
-          onClick={() => handleIdentitySelect('mother')}
-        >
-          <div className="identity-checkbox" onClick={(e) => { e.stopPropagation(); handleIdentitySelect('mother'); }}></div>
-          <div 
-            className={`identity-option mother ${isIdentitySelected('mother') ? 'selected' : ''}`}
-            lang={language}
-          >
-            <p lang={language}>{t.personalityTest.identity.mother}</p>
-          </div>
-        </div>
-        
-        <div 
-          className={`option-container ${isIdentitySelected('corporate') ? 'selected' : ''}`}
-          onClick={() => handleIdentitySelect('corporate')}
-        >
-          <div className="identity-checkbox" onClick={(e) => { e.stopPropagation(); handleIdentitySelect('corporate'); }}></div>
-          <div 
-            className={`identity-option corporate ${isIdentitySelected('corporate') ? 'selected' : ''}`}
-            lang={language}
-          >
-            <p lang={language}>
-              {(language === 'en' 
-                ? `Corporate Manager`
-                : `企业管理人员`
-              ).split('\n').map((line, index, arr) => (
-                <React.Fragment key={index}>
-                  {line}
-                  {index < arr.length - 1 && <br />}
-                </React.Fragment>
-              ))}
-            </p>
-          </div>
-        </div>
-        
-        <div 
-          className={`option-container ${isIdentitySelected('other') ? 'selected' : ''}`}
-          onClick={() => handleIdentitySelect('other')}
-        >
-          <div 
-            className={`identity-option other ${isIdentitySelected('other') ? 'selected' : ''}`}
-            lang={language}
-          >
-            <p lang={language}>{t.personalityTest.identity.other}</p>
-          </div>
-        </div>
-
-        <button 
-          className="continue-button"
-          onClick={handleContinue}
-          disabled={selectedIdentities.size === 0}
-          lang={language}
-        >
-          {language === 'en' ? 'CONTINUE →' : '继续 →'}
-        </button>
-      </div>
-    );
-  };
-
-  const renderCorporateRoleSelection = () => {
-    const roles = [
-      { id: 'founder', en: 'Founder', zh: '创始人' },
-      { id: 'board_member', en: 'Board Member', zh: '董事会成员' },
-      { id: 'c_suite_executive', en: 'C-Suite Executive', zh: '首席执行官' },
-      { id: 'president', en: 'President', zh: '总裁' },
-      { id: 'managing_director', en: 'Managing Director', zh: '董事总经理' },
-      { id: 'partner', en: 'Partner', zh: '合伙人' },
-      { id: 'vice_president', en: 'Vice President', zh: '副总裁' },
-      { id: 'director', en: 'Director', zh: '总监' },
-      { id: 'senior_manager', en: 'Senior Manager', zh: '高级经理' }
-    ];
-
-    return (
-      <div className="identity-selection" lang={language}>
-        <h1 className="identity-title" lang={language}>
-          {language === 'en' ? 'Select Your Role' : '选择您的角色'}
-        </h1>
-        
-        {roles.map(role => (
-          <div 
-            key={role.id}
-            className={`option-container ${corporateRole === role.id ? 'selected' : ''}`}
-            onClick={() => setCorporateRole(role.id as CorporateRole)}
-          >
-            <div 
-              className="identity-checkbox" 
-              onClick={(e) => { 
-                e.stopPropagation(); 
-                setCorporateRole(role.id as CorporateRole); 
-              }}
-            ></div>
-            <div 
-              className={`identity-option corporate ${corporateRole === role.id ? 'selected' : ''}`}
-              lang={language}
-            >
-              <p lang={language}>
-                {language === 'en' ? role.en : role.zh}
-              </p>
-            </div>
-          </div>
-        ))}
-
-        <button 
-          className="continue-button"
-          onClick={() => setStep('privacy')}
-          disabled={!corporateRole}
-          lang={language}
-        >
-          {language === 'en' ? 'CONTINUE →' : '继续 →'}
-        </button>
-      </div>
+      <IdentitySelection
+        selectedIdentity={selectedIdentity}
+        onIdentitySelect={handleIdentitySelect}
+        onContinue={handleContinue}
+      />
     );
   };
 
@@ -1394,48 +544,43 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   };
 
   // When user answers a question, update tag scores
-  const updateTagScores = (questionId: number, value: string) => {
-    const question = getCurrentQuestions().find(q => q.id === questionId);
-    if (!question || !question.tags || question.tags.length === 0) return;
+  const updateTagScores = (question: Question, value: string, identity: QuestionnaireType) => {
+    if (!question || question.type !== 'scale-question' || !question.tags || question.tags.length === 0) return;
     
-    console.log(`处理问题 ${questionId} 的回答，值: ${value}, 类型: ${question.type}, tags: ${question.tags}`);
+    console.log(`处理问题 ${question.id} 的回答，值: ${value}, 类型: ${question.type}, tags: ${question.tags}`);
     
     // Calculate score for this question
     let score: number;
-    if (question.type === 'scale-question') {
-      if (['A', 'B', 'C', 'D', 'E'].includes(value)) {
-        const scoreMap: Record<string, number> = {'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5};
-        score = scoreMap[value] || 0;
-      } else {
-        score = parseInt(value, 10) || 0;
-      }
+    if (['A', 'B', 'C', 'D', 'E'].includes(value)) {
+      const scoreMap: Record<string, number> = {'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5};
+      score = scoreMap[value] || 0;
     } else {
-      score = 0;
+      score = parseInt(value, 10) || 0;
     }
 
     // Update score for each tag this question belongs to
     const newTagScores = {...tagScores};
-    question.tags.forEach(tag => {
+    question.tags.forEach((tag: string) => {
       if (!newTagScores[tag]) {
         newTagScores[tag] = {};
       }
       // Store score by question ID to avoid counting multiple times
-      newTagScores[tag][questionId] = score;
+      newTagScores[tag][question.id] = score;
     });
     
     setTagScores(newTagScores);
     localStorage.setItem('tagScores', JSON.stringify(newTagScores));
-    calculateAndSaveTagStats(newTagScores);
+    calculateAndSaveTagStats(newTagScores, identity);
   };
 
   // Calculate final statistics for each tag
-  const calculateAndSaveTagStats = (currentTagScores: Record<string, Record<number, number>>) => {
+  const calculateAndSaveTagStats = (currentTagScores: Record<string, Record<number, number>>, identity: QuestionnaireType) => {
     const tagStats: Record<string, TagStats> = {};
     const allTags = ['自我意识', '奉献精神', '社交情商', '情绪调节', '客观能力', '核心耐力'];
     
     // Count questions per tag
     const tagQuestionCounts: Record<string, number> = {};
-    const questions = getCurrentQuestions();
+    const questions = getCurrentQuestions(identity);
     
     questions.forEach(question => {
       if (question.type === 'scale-question' && question.tags) {
@@ -1537,8 +682,8 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       console.log('成功加载所有标签分数:', loadedTagScores);
       
       // 如果有标签分数但没有统计数据，重新计算一次
-      if (!localStorage.getItem('tagStats')) {
-        calculateAndSaveTagStats(loadedTagScores);
+      if (!localStorage.getItem('tagStats') && selectedIdentity) {
+        calculateAndSaveTagStats(loadedTagScores, selectedIdentity);
       }
     }
   }, []);
@@ -1569,10 +714,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   // 导出结果的函数，可以在需要导出用户结果时调用
   const exportResults = () => {
     const tagResults = calculateTagResults();
-    const allAnswers = {
-      primary: primaryAnswers,
-      secondary: secondaryAnswers
-    };
+    const allAnswers = answers;
     
     // 在这里你可以加入导出逻辑，例如发送到服务器或下载为文件
     console.log('Tag Results:', tagResults);
@@ -1595,14 +737,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   };
 
   const renderPrivacyStatement = () => {
-    const currentQuestionnaire = getCurrentQuestionnaire();
-    
-    if (!currentQuestionnaire) {
-      return null;
-    }
-    
-    // 根据问卷类型添加相应的CSS类
-    const privacyClass = currentQuestionnaire.type === 'other' ? 'other-privacy' : 'mother-privacy';
     
     // 添加换行的隐私文本 - 英文版本
     const privacyTextEn = "Your information will only be used for verification purposes and to formulate your CHON personality test.\n\n" +
@@ -1614,12 +748,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       "您的信息不会被共享、披露或用于任何其他目的。\n\n" +
       "我们重视您的隐私，并承诺保护您的数据安全。";
     
+    // Add class based on selectedIdentity
+    const privacyClass = selectedIdentity === 'mother' ? 'mother-privacy' : 'other-privacy';
+    
     return (
       <div className={`privacy-statement ${privacyClass}`} lang={language} style={{ overflowX: 'hidden', maxWidth: '100%' }}>
         <p className="privacy-text" lang={language} style={{ whiteSpace: 'pre-line' }}>
           {language === 'en' 
-            ? currentQuestionnaire.privacyStatement?.contentEn || privacyTextEn
-            : currentQuestionnaire.privacyStatement?.contentZh || privacyTextZh
+            ? privacyTextEn
+            : privacyTextZh
           }
         </p>
         <button 
@@ -1641,12 +778,13 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         return renderIntroContent();
       case 'identity':
         return renderIdentitySelection();
-      case 'corporate_role':
-        return renderCorporateRoleSelection();
       case 'privacy':
         return renderPrivacyStatement();
       case 'questionnaire':
-        return renderQuestionnaireContent();
+        if (selectedIdentity) {
+          return renderQuestionsSection(selectedIdentity, currentSection);
+        }
+        return null;
       default:
         return null;
     }

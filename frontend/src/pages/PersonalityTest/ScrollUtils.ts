@@ -3,30 +3,20 @@
  * @param currentQuestionId 当前问题的ID
  */
 export const scrollToNextQuestion = (currentQuestionId: number): void => {
-  // 计算下一个问题的ID
-  const nextQuestionId = currentQuestionId + 1;
+  // Get all question elements currently in the DOM
+  const questions = document.querySelectorAll('[id^="question-"]');
+  const questionElements = Array.from(questions);
   
-  // 尝试获取下一个问题元素
-  let nextQuestionElement = document.getElementById(`question-${nextQuestionId}`);
+  // Find the current question's index in the DOM order
+  const currentIndex = questionElements.findIndex(
+    el => el.id === `question-${currentQuestionId}`
+  );
   
-  // 如果找不到下一个ID的问题，尝试查找页面上可见的后续问题
-  if (!nextQuestionElement) {
-    const questions = document.querySelectorAll('[id^="question-"]');
-    const questionIds = Array.from(questions).map(el => {
-      const id = el.id.replace('question-', '');
-      return parseInt(id);
-    });
+  // If found and not the last question, get the next element
+  if (currentIndex !== -1 && currentIndex < questionElements.length - 1) {
+    const nextQuestionElement = questionElements[currentIndex + 1];
     
-    // 找到比当前ID大的最小ID
-    const nextIds = questionIds.filter(id => id > currentQuestionId).sort((a, b) => a - b);
-    if (nextIds.length > 0) {
-      nextQuestionElement = document.getElementById(`question-${nextIds[0]}`);
-    }
-  }
-  
-  // 如果找到下一个问题元素，滚动到该元素
-  if (nextQuestionElement) {
-    // 使用一个小延迟确保DOM已更新
+    // Scroll to the next question with a small delay to ensure DOM updates
     setTimeout(() => {
       nextQuestionElement?.scrollIntoView({ 
         behavior: 'smooth', 

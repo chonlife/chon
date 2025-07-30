@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { questions } from '../pages/PersonalityTest/questionnaires';
 
 // API Configuration
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
@@ -80,7 +81,6 @@ export const saveAllQuestionResponses = async (responses: QuestionResponse[]): P
  */
 export const prepareQuestionResponses = (
   questionnaireType: QuestionnaireType,
-  questions: Array<{id: number, type: QuestionType}>,
   answers: Record<number, string>,
   uniqueIdMapping?: Record<string, number>
 ): QuestionResponse[] => {
