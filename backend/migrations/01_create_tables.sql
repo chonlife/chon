@@ -1,10 +1,10 @@
--- Create a simple table for intro choices (yes/no question) with user tracking
+-- Create intro choices table with proper upsert support
 CREATE TABLE IF NOT EXISTS intro_choices (
-    id SERIAL PRIMARY KEY,
-    user_id VARCHAR(100) NOT NULL,
+    id SERIAL,
+    user_id VARCHAR(100) PRIMARY KEY,
     choice VARCHAR(10) CHECK (choice IN ('yes', 'no')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    UNIQUE(user_id)
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Create table for questionnaire submissions
@@ -78,5 +78,11 @@ CREATE TRIGGER update_questionnaire_submissions_modtime
 
 CREATE TRIGGER update_question_answers_modtime
     BEFORE UPDATE ON question_answers
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_modified_column(); 
+
+-- Create trigger for updating timestamp
+CREATE TRIGGER update_intro_choices_modtime
+    BEFORE UPDATE ON intro_choices
     FOR EACH ROW
     EXECUTE PROCEDURE update_modified_column(); 

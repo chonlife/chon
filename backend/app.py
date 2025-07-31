@@ -30,29 +30,48 @@ def update_intro_choice():
         "choice": "yes" or "no"
     }
     """
-    data = request.get_json()
-    
-    if 'choice' not in data or 'user_id' not in data:
-        return jsonify({'error': 'Missing required fields'}), 400
-    
-    choice = data['choice']
-    user_id = data['user_id']
-    
-    if choice not in ['yes', 'no']:
-        return jsonify({'error': 'Invalid choice. Must be "yes" or "no"'}), 400
-    
     try:
-        # Insert or update the user's choice
-        supabase.table('intro_choices').upsert({
-            'user_id': user_id,
-            'choice': choice
-        }).execute()
+        data = request.get_json()
         
-        return jsonify({'success': True, 'message': f'Successfully saved choice for user {user_id}'})
-    
+        if 'choice' not in data or 'user_id' not in data:
+            return jsonify({'error': 'Missing required fields'}), 400
+        
+        choice = data['choice']
+        user_id = data['user_id']
+        
+        if choice not in ['yes', 'no']:
+            return jsonify({'error': 'Invalid choice. Must be "yes" or "no"'}), 400
+        
+        try:
+            # First try to update
+            update_result = supabase.table('intro_choices').update({
+                'choice': choice,
+                'updated_at': 'NOW()'
+            }).eq('user_id', user_id).execute()
+            
+            # If no rows were updated, do an insert
+            if not update_result.data:
+                supabase.table('intro_choices').insert({
+                    'user_id': user_id,
+                    'choice': choice
+                }).execute()
+            
+            return jsonify({
+                'success': True,
+                'message': f'Successfully saved choice for user {user_id}'
+            })
+        
+        except Exception as e:
+            return jsonify({
+                'error': str(e),
+                'message': 'Failed to save choice. Database operation failed.'
+            }), 500
+            
     except Exception as e:
-        print(f"Error saving intro choice: {e}")
-        return jsonify({'error': str(e)}), 500
+        return jsonify({
+            'error': str(e),
+            'message': 'Failed to process request.'
+        }), 500
 
 @app.route('/api/intro-stats', methods=['GET'])
 def get_intro_stats():
