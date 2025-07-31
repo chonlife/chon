@@ -1,75 +1,64 @@
--- Create a simple table for intro choices (yes/no question) with only 2 rows
+-- Create a simple table for intro choices (yes/no question) with user tracking
 CREATE TABLE IF NOT EXISTS intro_choices (
-    choice VARCHAR(10) PRIMARY KEY CHECK (choice IN ('yes', 'no')),
-    count INTEGER NOT NULL DEFAULT 0
-);
-
--- Insert the two fixed rows that will be updated
-INSERT INTO intro_choices (choice, count) VALUES ('yes', 0) ON CONFLICT (choice) DO NOTHING;
-INSERT INTO intro_choices (choice, count) VALUES ('no', 0) ON CONFLICT (choice) DO NOTHING;
-
--- Create table for question responses (multiple-choice and scale questions)
-CREATE TABLE IF NOT EXISTS question_responses (
     id SERIAL PRIMARY KEY,
-    questionnaire_type VARCHAR(20) NOT NULL CHECK (questionnaire_type IN ('mother', 'corporate', 'other', 'both')),
-    question_id VARCHAR(50) NOT NULL, -- 唯一ID
-    original_question_id INTEGER NOT NULL, -- 原始问题ID
-    question_type VARCHAR(20) NOT NULL CHECK (question_type IN ('multiple-choice', 'scale-question')),
-    response_value VARCHAR(50) NOT NULL,
-    count INTEGER NOT NULL DEFAULT 1,
+    user_id VARCHAR(100) NOT NULL,
+    choice VARCHAR(10) CHECK (choice IN ('yes', 'no')),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    UNIQUE(questionnaire_type, question_id, response_value)
+    UNIQUE(user_id)
 );
 
--- Create table for text responses
-CREATE TABLE IF NOT EXISTS text_responses (
+-- Create table for questionnaire submissions
+CREATE TABLE IF NOT EXISTS questionnaire_submissions (
     id SERIAL PRIMARY KEY,
+    user_id VARCHAR(100) NOT NULL,
     questionnaire_type VARCHAR(20) NOT NULL CHECK (questionnaire_type IN ('mother', 'corporate', 'other', 'both')),
-    question_id VARCHAR(50) NOT NULL, -- 唯一ID
-    original_question_id INTEGER NOT NULL, -- 原始问题ID
-    response_text TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Create table for individual answers within a submission
+CREATE TABLE IF NOT EXISTS question_answers (
+    id SERIAL PRIMARY KEY,
+    submission_id INTEGER REFERENCES questionnaire_submissions(id),
+    question_id INTEGER NOT NULL,
+    response_value TEXT NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Create indexes for faster lookups
-CREATE INDEX IF NOT EXISTS idx_question_responses_questionnaire_question 
-ON question_responses(questionnaire_type, question_id);
+CREATE INDEX IF NOT EXISTS idx_intro_choices_user_id 
+ON intro_choices(user_id);
 
-CREATE INDEX IF NOT EXISTS idx_text_responses_questionnaire_question 
-ON text_responses(questionnaire_type, question_id);
+CREATE INDEX IF NOT EXISTS idx_questionnaire_submissions_user_id 
+ON questionnaire_submissions(user_id);
 
--- Add RLS (Row Level Security) policies for production
--- Note: You might want to customize these policies based on your actual auth system
+CREATE INDEX IF NOT EXISTS idx_question_answers_submission 
+ON question_answers(submission_id);
+
+-- Add RLS (Row Level Security) policies
 ALTER TABLE intro_choices ENABLE ROW LEVEL SECURITY;
-ALTER TABLE question_responses ENABLE ROW LEVEL SECURITY;
-ALTER TABLE text_responses ENABLE ROW LEVEL SECURITY;
+ALTER TABLE questionnaire_submissions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE question_answers ENABLE ROW LEVEL SECURITY;
 
--- Create policy that allows anyone to update intro choices
-CREATE POLICY update_intro_choices ON intro_choices FOR UPDATE TO public 
-    USING (true) WITH CHECK (true);
+-- Create policies that allow anyone to insert
+CREATE POLICY insert_intro_choices ON intro_choices FOR INSERT TO public 
+    WITH CHECK (true);
 
--- Create policy that allows anyone to read intro choices
+CREATE POLICY insert_questionnaire_submissions ON questionnaire_submissions FOR INSERT TO public 
+    WITH CHECK (true);
+
+CREATE POLICY insert_question_answers ON question_answers FOR INSERT TO public 
+    WITH CHECK (true);
+
+-- Create policies that allow reading own data
 CREATE POLICY read_intro_choices ON intro_choices FOR SELECT TO public 
     USING (true);
 
--- Create policy that allows anyone to insert
-CREATE POLICY insert_question_responses ON question_responses FOR INSERT TO public 
-    WITH CHECK (true);
-CREATE POLICY insert_text_responses ON text_responses FOR INSERT TO public 
-    WITH CHECK (true);
-
--- Create policy that allows only authenticated users to read
-CREATE POLICY read_question_responses ON question_responses FOR SELECT TO public 
-    USING (true);
-CREATE POLICY read_text_responses ON text_responses FOR SELECT TO public 
+CREATE POLICY read_questionnaire_submissions ON questionnaire_submissions FOR SELECT TO public 
     USING (true);
 
--- Create policy that allows only authenticated admins to update/delete (customize for your setup)
-CREATE POLICY update_question_responses ON question_responses FOR UPDATE TO public 
-    USING (true);
-CREATE POLICY update_text_responses ON text_responses FOR UPDATE TO public 
+CREATE POLICY read_question_answers ON question_answers FOR SELECT TO public 
     USING (true);
 
 -- Create function to automatically update the updated_at timestamp
@@ -82,12 +71,12 @@ END;
 $$ language 'plpgsql';
 
 -- Create triggers to use the function
-CREATE TRIGGER update_question_responses_modtime
-BEFORE UPDATE ON question_responses
-FOR EACH ROW
-EXECUTE PROCEDURE update_modified_column();
+CREATE TRIGGER update_questionnaire_submissions_modtime
+    BEFORE UPDATE ON questionnaire_submissions
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_modified_column();
 
-CREATE TRIGGER update_text_responses_modtime
-BEFORE UPDATE ON text_responses
-FOR EACH ROW
-EXECUTE PROCEDURE update_modified_column(); 
+CREATE TRIGGER update_question_answers_modtime
+    BEFORE UPDATE ON question_answers
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_modified_column(); 

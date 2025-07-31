@@ -4,7 +4,7 @@ import { useLanguage } from '../../contexts/LanguageContext.tsx';
 import LanguageSelector from '../../components/LanguageSelector/LanguageSelector.tsx';
 import './PersonalityTest.css';
 import { scrollToNextQuestion, scrollToFirstQuestionOfNextPage } from './ScrollUtils.ts';
-import questionnaireApi, { prepareQuestionResponses, QuestionResponse } from '../../api/questionnaire.ts';
+import questionnaireApi from '../../api/questionnaire.ts';
 import { Question, QuestionSection, QuestionnaireType, questionsMenu, QuestionMenu, questions } from './questionnaires.ts';
 import IdentitySelection, { IdentityType } from './IdentitySelection.tsx';
 import QuestionsSection from './QuestionsSection.tsx';
@@ -228,7 +228,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       
       const data = await response.json();
       
-      // 只有在用户已经做出选择时，才更新UI显示
+      // Update UI with the stats
       setIntroStats({
         yesCount: data.yes_count,
         noCount: data.no_count,
@@ -269,10 +269,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   const handleOptionClick = (choice: string) => {
     setUserChoice(choice);
     
-    // 实时保存intro choice到后端
-    questionnaireApi.saveIntroChoice(choice);
-    // 设置loading状态，等待数据更新
-    setIntroStats(prev => ({...prev, loading: true}));
+    // Save intro choice with user ID
+    questionnaireApi.saveIntroChoice(choice)
+      .then(() => {
+        // Set loading state while waiting for data update
+        setIntroStats(prev => ({...prev, loading: true}));
+      })
+      .catch(error => {
+        console.error('Error saving intro choice:', error);
+      });
   };
   
   const handleBeginTest = () => {
@@ -388,28 +393,19 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     // 计算结果并保存
     calculateTagResults();
     
-    // 准备提交到后端的回答数据
-    let allResponses: QuestionResponse[] = [];
-    
     if (selectedIdentity) {
-      // 使用uniqueIdMapping（如果存在）
-      allResponses = prepareQuestionResponses(
-        selectedIdentity, 
-        answers,
-      );
+      // Save all responses at once with the new format
+      questionnaireApi.saveAllQuestionResponses(answers, selectedIdentity)
+        .then(() => {
+          // 保存成功后跳转到结果页面
+          navigate('/results');
+        })
+        .catch((error) => {
+          console.error('Error during questionnaire completion:', error);
+          // 即使保存失败，仍然跳转到结果页面
+          navigate('/results');
+        });
     }
-    
-    // 一次性保存所有回答
-    questionnaireApi.saveAllQuestionResponses(allResponses)
-      .then(() => {
-        // 保存成功后跳转到结果页面
-        navigate('/results');
-      })
-      .catch((error) => {
-        console.error('Error during questionnaire completion:', error);
-        // 即使保存失败，仍然跳转到结果页面
-        navigate('/results');
-      });
   };
 
   // Exit button that appears only on questionnaire and privacy screens
