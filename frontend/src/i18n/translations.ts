@@ -35,6 +35,9 @@ interface Translation {
     disagree: string;
     progressDescription: string;
     beginTest: string;
+    continueTest: string;
+    viewResult: string;
+    restartTest: string;
   };
   personalityTest: {
     title: string;
@@ -123,6 +126,9 @@ const translations: TranslationsType = {
       disagree: 'Disagree',
       progressDescription: 'This represents the percentage of people who agree versus disagree with this statement.',
       beginTest: 'BEGIN MY CHON PERSONALITY TEST →',
+      continueTest: 'CONTINUE MY CHON PERSONALITY TEST →',
+      viewResult: 'VIEW MY RESULT →',
+      restartTest: 'RE-START MY PERSONALITY TEST →'
     },
     personalityTest: {
       title: 'Personality Test',
@@ -207,6 +213,9 @@ const translations: TranslationsType = {
       disagree: '不同意',
       progressDescription: '这表示同意与不同意该说法的人群比例。',
       beginTest: '开始我的CHON性格测试 →',
+      continueTest: '继续我的CHON性格测试 →',
+      viewResult: '查看我的结果 →',
+      restartTest: '重新开始性格测试 →'
     },
     personalityTest: {
       title: '性格测试',

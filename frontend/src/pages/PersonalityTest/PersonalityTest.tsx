@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext.tsx';
 import LanguageSelector from '../../components/LanguageSelector/LanguageSelector.tsx';
 import './PersonalityTest.css';
@@ -8,11 +8,12 @@ import questionnaireApi from '../../api/questionnaire.ts';
 import { Question, QuestionSection, QuestionnaireType, questionsMenu, QuestionMenu, questions } from './questionnaires.ts';
 import IdentitySelection, { IdentityType } from './IdentitySelection.tsx';
 import QuestionsSection from './QuestionsSection.tsx';
+import Results from '../Results/Results.tsx';
 
 // API Configuration
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
-type TestStep = 'intro' | 'identity' | 'privacy' | 'questionnaire';
+type TestStep = 'intro' | 'identity' | 'privacy' | 'questionnaire' | 'results';
 
 interface PersonalityTestProps {
   onWhiteThemeChange?: (isWhite: boolean) => void;
@@ -41,8 +42,8 @@ const MetaTags = () => {
 
 const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTestProps) => {
   const { t, language } = useLanguage();
-  const navigate = useNavigate(); // 添加导航钩子
   const location = useLocation();
+  // Always start at intro
   const [step, setStep] = useState<TestStep>('intro');
   const [userChoice, setUserChoice] = useState<string | null>(null);
   const [selectedIdentity, setSelectedIdentity] = useState<QuestionnaireType | null>(null);
@@ -148,8 +149,11 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       setAnswers(JSON.parse(savedAnswers));
     }
     
-    if (savedStep && isValidStep(savedStep)) {
+    // Only set non-intro steps from storage
+    if (savedStep && savedStep !== 'intro' && isValidStep(savedStep)) {
       setStep(savedStep as TestStep);
+    } else {
+      setStep('intro'); // Explicitly set to intro if no valid saved step
     }
     
     if (savedIdentity) {
@@ -159,12 +163,11 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     if (savedUserChoice) {
       setUserChoice(savedUserChoice);
     }
-
   }, []);
   
   // 验证步骤值是否有效
   const isValidStep = (step: string): boolean => {
-    return ['intro', 'identity', 'privacy', 'questionnaire'].includes(step);
+    return ['intro', 'identity', 'privacy', 'questionnaire', 'results'].includes(step);
   };
   
   // 保存答案到本地存储
@@ -179,10 +182,34 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     }
   }, [answers]);
   
-  // 保存当前步骤到本地存储
+  // Save step to localStorage, but never save 'intro'
   useEffect(() => {
-    localStorage.setItem('chon_personality_step', step);
+    if (step !== 'intro') {
+      localStorage.setItem('chon_personality_step', step);
+    }
   }, [step]);
+  
+  // Load saved answers and other data, but don't change step
+  useEffect(() => {
+    const savedAnswers = localStorage.getItem('chon_personality_answers');
+    const savedIdentity = localStorage.getItem('chon_personality_identity');
+    const savedUserChoice = localStorage.getItem('chon_personality_user_choice');
+    
+    if (savedAnswers) {
+      setAnswers(JSON.parse(savedAnswers));
+    }
+    
+    // Always start at intro
+    setStep('intro');
+    
+    if (savedIdentity) {
+      setSelectedIdentity(JSON.parse(savedIdentity) as QuestionnaireType);
+    }
+    
+    if (savedUserChoice) {
+      setUserChoice(savedUserChoice);
+    }
+  }, []);
   
   // 保存身份选择到本地存储
   useEffect(() => {
@@ -306,7 +333,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     }
   };
 
-  const handleContinue = () => {
+  const handleIdentityContinue = () => {
     if (!selectedIdentity) {
       return;
     }
@@ -398,12 +425,12 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       questionnaireApi.saveAllQuestionResponses(answers, selectedIdentity)
         .then(() => {
           // 保存成功后跳转到结果页面
-          navigate('/results');
+          setStep('results');
         })
         .catch((error) => {
           console.error('Error during questionnaire completion:', error);
           // 即使保存失败，仍然跳转到结果页面
-          navigate('/results');
+          setStep('results');
         });
     }
   };
@@ -437,7 +464,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   );
 
   // Only white theme steps should have no-header class
-  const containerClass = step === 'privacy' || step === 'questionnaire' 
+  const containerClass = step === 'privacy' || step === 'questionnaire'
     ? 'personality-test-container no-header' 
     : 'personality-test-container';
 
@@ -453,8 +480,48 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     return total > 0 ? (answeredCount / total) * 100 : 0;
   };
 
-  // 在intro页面确保显示问题和选项
+  // Add check for in-progress questionnaire
+  const hasInProgressQuestionnaire = (): boolean => {
+    const savedStep = localStorage.getItem('chon_personality_step');
+    return savedStep !== null && savedStep !== 'intro' && isValidStep(savedStep as TestStep);
+  };
+
+  // Add check for completed questionnaire
+  const hasCompletedQuestionnaire = (): boolean => {
+    const savedStep = localStorage.getItem('chon_personality_step');
+    return savedStep === 'results';
+  };
+
+  // Add function to clear all test data
+  const clearTestData = () => {
+    localStorage.removeItem('chon_personality_answers');
+    localStorage.removeItem('chon_personality_step');
+    localStorage.removeItem('chon_personality_identity');
+    localStorage.removeItem('chon_personality_user_choice');
+    localStorage.removeItem('tagScores');
+    localStorage.removeItem('tagStats');
+    
+    // Reset all state and go directly to identity
+    setAnswers({});
+    setSelectedIdentity(null);
+    setUserChoice(null);
+    setCurrentSection(0);
+    setStep('identity');
+  };
+
+  // Continue test from saved progress
+  const continueTest = () => {
+    const savedStep = localStorage.getItem('chon_personality_step');
+    if (savedStep && savedStep !== 'intro' && isValidStep(savedStep)) {
+      setStep(savedStep as TestStep);
+    } else {
+      setStep('identity');
+    }
+  };
+
+  // Modify renderIntroContent to add debug logging
   const renderIntroContent = () => {
+    
     const wrappedQuestion = `<span lang="${language}">${language === 'en' ? t.intro.question : '母亲是天生的领导者。'}</span>`;
     
     return (
@@ -505,13 +572,51 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
               )}
             </div>
             
-            <button 
-              className="begin-test-button" 
-              onClick={handleBeginTest}
-              lang={language}
-            >
-              {t.intro.beginTest}
-            </button>
+            <div className="test-buttons">
+              {hasCompletedQuestionnaire() ? (
+                <>
+                  <button 
+                    className="begin-test-button" 
+                    onClick={() => setStep('results')}
+                    lang={language}
+                  >
+                    {t.intro.viewResult}
+                  </button>
+                  <button 
+                    className="restart-test-button" 
+                    onClick={clearTestData}
+                    lang={language}
+                  >
+                    {t.intro.restartTest}
+                  </button>
+                </>
+              ) : hasInProgressQuestionnaire() ? (
+                <>
+                  <button 
+                    className="begin-test-button" 
+                    onClick={continueTest}
+                    lang={language}
+                  >
+                    {t.intro.continueTest}
+                  </button>
+                  <button 
+                    className="restart-test-button" 
+                    onClick={clearTestData}
+                    lang={language}
+                  >
+                    {t.intro.restartTest}
+                  </button>
+                </>
+              ) : (
+                <button 
+                  className="begin-test-button" 
+                  onClick={handleBeginTest}
+                  lang={language}
+                >
+                  {t.intro.beginTest}
+                </button>
+              )}
+            </div>
           </>
         )}
       </div>
@@ -524,7 +629,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       <IdentitySelection
         selectedIdentity={selectedIdentity}
         onIdentitySelect={handleIdentitySelect}
-        onContinue={handleContinue}
+        onContinue={handleIdentityContinue}
       />
     );
   };
@@ -769,6 +874,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
 
   // Render content based on step
   const renderContent = () => {
+    console.log('Current step:', step);
     switch (step) {
       case 'intro':
         return renderIntroContent();
@@ -781,37 +887,46 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           return renderQuestionsSection(selectedIdentity, currentSection);
         }
         return null;
+      case 'results':
+        return <Results />;
       default:
+        console.log('Invalid step:', step);
         return null;
     }
   };
 
   return (
-    <main className={containerClass} lang={language}>
-      <MetaTags />
-      
-      {showSaveIndicator && (
-        <div className="save-indicator">
-          {language === 'en' ? 'Progress saved' : '进度已保存'}
-        </div>
+    <>
+      {step === 'results' ? (
+        <Results />
+      ) : (
+        <main className={containerClass} lang={language}>
+          <MetaTags />
+          
+          {showSaveIndicator && (
+            <div className="save-indicator">
+              {language === 'en' ? 'Progress saved' : '进度已保存'}
+            </div>
+          )}
+          
+          {/* 只为非母亲问卷页面显示背景 */}
+          {step !== 'privacy' && step !== 'questionnaire' && (
+            <>
+              <div className="molecule-background"></div>
+              <div className="hexagon-pattern"></div>
+            </>
+          )}
+          
+          {/* Show exit button at the top left corner for questionnaire and privacy screens */}
+          {(step === 'privacy' || step === 'questionnaire') && exitButton}
+          
+          {renderContent()}
+          
+          {/* Only show LanguageSelector when not in questionnaire or privacy screens */}
+          {step !== 'privacy' && step !== 'questionnaire' && <LanguageSelector />}
+        </main>
       )}
-      
-      {/* 只为非母亲问卷页面显示背景 */}
-      {step !== 'privacy' && step !== 'questionnaire' && (
-        <>
-          <div className="molecule-background"></div>
-          <div className="hexagon-pattern"></div>
-        </>
-      )}
-      
-      {/* Show exit button at the top left corner for questionnaire and privacy screens */}
-      {(step === 'privacy' || step === 'questionnaire') && exitButton}
-      
-      {renderContent()}
-      
-      {/* Only show LanguageSelector when not in questionnaire or privacy screens */}
-      {step !== 'privacy' && step !== 'questionnaire' && <LanguageSelector />}
-    </main>
+    </>
   );
 };
 

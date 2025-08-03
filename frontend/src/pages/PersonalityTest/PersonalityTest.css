@@ -845,3 +845,29 @@
   50% { opacity: 1; }
   100% { opacity: 0.6; }
 }
+
+.test-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 400px;
+}
+
+.restart-test-button {
+  background: transparent;
+  border: 2px solid #F0BDC0;
+  color: #F0BDC0;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  width: 100%;
+}
+
+.restart-test-button:hover {
+  background: rgba(240, 189, 192, 0.1);
+}
