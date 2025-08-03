@@ -795,30 +795,45 @@ const Results: React.FC = () => {
 
   // Modify findBestMatch function
   const findBestMatch = (userScores: Record<string, number>) => {
-    let bestMatchIndex = 0;
-    let highestMatchScore = -1;
-
-    cardsData.forEach((card, index) => {
+    // Calculate match scores for all characters
+    const charactersWithScores = cardsData.map((card, index) => {
       let matchScore = 0;
       
       Object.entries(card.tagRanges).forEach(([tag, range]) => {
         const userScore = userScores[tag];
         if (userScore !== undefined) {
+          // Calculate how close the score is to the range
           if (userScore >= range[0] && userScore <= range[1]) {
-            matchScore++;
+            matchScore += 1;
+          } else {
+            // Add partial score based on how close it is to the range
+            const distanceToRange = Math.min(
+              Math.abs(userScore - range[0]),
+              Math.abs(userScore - range[1])
+            );
+            matchScore += Math.max(0, 1 - (distanceToRange / 100));
           }
         }
       });
 
-      if (matchScore > highestMatchScore) {
-        highestMatchScore = matchScore;
-        bestMatchIndex = index;
-      }
+      return {
+        card,
+        index,
+        matchScore
+      };
     });
 
-    setActiveCardIndex(bestMatchIndex);
-    setMatchedCard(cardsData[bestMatchIndex]);
-    setBestMatchCard(cardsData[bestMatchIndex]); // Store best match
+    // Sort characters by match score in descending order
+    const sortedCharacters = charactersWithScores.sort((a, b) => b.matchScore - a.matchScore);
+
+    // Update state with sorted cards
+    const sortedCards = sortedCharacters.map(item => item.card);
+    setCards(sortedCards);
+    
+    // Set the best match (first card in sorted array)
+    setActiveCardIndex(0);
+    setMatchedCard(sortedCards[0]);
+    setBestMatchCard(sortedCards[0]);
   };
 
   // Modify handleCardClick to only trigger hexagon animation
