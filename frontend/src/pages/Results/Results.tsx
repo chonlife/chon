@@ -2,14 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
 import './Results.css';
 
-interface TagScore {
-  userScore: number;
-  totalPossibleScore: number;
-  scorePercentage: number;
-  averageScore: number;
-  answeredQuestions: number;
-}
-
 interface CardData {
   id: string;
   name: {
@@ -221,21 +213,6 @@ const HexagonChart: React.FC<{
 
   // 添加刻度值 - 调整位置以匹配新的角度
   const scaleValues = ["0", "25", "50", "75", "100"];
-  
-  // 根据屏幕尺寸调整分数气泡和标签的大小
-  const getBubbleSize = () => {
-    if (windowWidth <= 380) return 16;
-    if (windowWidth <= 480) return 17;
-    if (windowWidth <= 768) return 18;
-    return 18;
-  };
-  
-  const getScoreFontSize = () => {
-    if (windowWidth <= 380) return 10;
-    if (windowWidth <= 480) return 11;
-    if (windowWidth <= 768) return 11;
-    return 12;
-  };
   
   const getLabelWidth = () => {
     if (windowWidth <= 380) return 100;
@@ -482,12 +459,30 @@ const FancyLoader: React.FC = () => {
   );
 };
 
+// Create a memoized wrapper for HexagonChart
+const MemoizedHexagonChart = React.memo(({ scores, labels, language, animationKey, selectedCharacter }: {
+  scores: Record<string, number>,
+  labels: Record<string, TagTranslations>,
+  language: string,
+  animationKey: number,
+  selectedCharacter: CardData | null
+}) => (
+  <HexagonChart 
+    scores={scores} 
+    labels={labels} 
+    language={language} 
+    animationKey={animationKey} 
+    selectedCharacter={selectedCharacter}
+  />
+));
+
 const Results: React.FC = () => {
   const { language } = useLanguage();
   const [tagScores, setTagScores] = useState<Record<string, number>>({});
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [cards, setCards] = useState<CardData[]>([]);
   const [matchedCard, setMatchedCard] = useState<CardData | null>(null);
+  const [bestMatchCard, setBestMatchCard] = useState<CardData | null>(null); // Add new state
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [animationKey, setAnimationKey] = useState(0);
   const [isCardSwitching, setIsCardSwitching] = useState(false);
@@ -798,7 +793,7 @@ const Results: React.FC = () => {
     }
   }, []);
 
-  // 寻找最佳匹配的卡片
+  // Modify findBestMatch function
   const findBestMatch = (userScores: Record<string, number>) => {
     let bestMatchIndex = 0;
     let highestMatchScore = -1;
@@ -806,11 +801,9 @@ const Results: React.FC = () => {
     cardsData.forEach((card, index) => {
       let matchScore = 0;
       
-      // 计算每个标签的匹配分数
       Object.entries(card.tagRanges).forEach(([tag, range]) => {
         const userScore = userScores[tag];
         if (userScore !== undefined) {
-          // 如果用户分数在范围内，增加匹配分数
           if (userScore >= range[0] && userScore <= range[1]) {
             matchScore++;
           }
@@ -825,26 +818,15 @@ const Results: React.FC = () => {
 
     setActiveCardIndex(bestMatchIndex);
     setMatchedCard(cardsData[bestMatchIndex]);
+    setBestMatchCard(cardsData[bestMatchIndex]); // Store best match
   };
 
+  // Modify handleCardClick to only trigger hexagon animation
   const handleCardClick = (index: number) => {
     if (index !== activeCardIndex) {
-      // 设置切换状态
-      setIsCardSwitching(true);
-      
-      // 先将所有元素设为不可见状态
-      setAnimationKey(prevKey => prevKey + 1);
-      
-      // 短暂延迟后更新卡片，给动画重置留出时间
-      setTimeout(() => {
-        setActiveCardIndex(index);
-        setMatchedCard(cards[index]);
-        
-        // 通过延迟取消加载状态，确保新内容加载后动画能正确播放
-        setTimeout(() => {
-          setIsCardSwitching(false);
-        }, 200);
-      }, 100);
+      setAnimationKey(prevKey => prevKey + 1); // Only affects hexagon now
+      setActiveCardIndex(index);
+      setMatchedCard(cards[index]); // Only update matchedCard for hexagon ranges
     }
   };
 
@@ -859,49 +841,88 @@ const Results: React.FC = () => {
     target.style.backgroundColor = '#333';
   }, []);
 
-  if (!matchedCard || !imagesLoaded || isCardSwitching) {
+  // Remove isCardSwitching state since we don't need it anymore
+  if (!bestMatchCard || !imagesLoaded) {
     return <FancyLoader />;
   }
 
   return (
     <div className="results-container" lang={language}>
-      <div className="results-layout" key={`content-${animationKey}`}>
+      <div className="results-layout">
         <div className="results-left">
           <div className="character-portrait">
             <img 
-              src={matchedCard.image} 
-              alt={language === 'en' ? matchedCard.name.en : matchedCard.name.zh}
+              src={bestMatchCard.image}
+              alt={language === 'en' ? bestMatchCard.name.en : bestMatchCard.name.zh}
               onError={(e) => handleImageError(e, '350x350')}
             />
           </div>
           
           <div className="hexagon-chart">
-            <HexagonChart 
+            <MemoizedHexagonChart 
               scores={tagScores} 
               labels={tagLabels} 
               language={language} 
               animationKey={animationKey} 
               selectedCharacter={matchedCard}
             />
+            
+            {/* Character comparison section */}
+            <div className="character-comparison">
+              <div className="comparison-title">
+                {language === 'en' ? 'Compare with other archetypes' : '与其他原型比较'}
+              </div>
+              <div className="character-grid">
+                {cards.map((card, index) => {
+                  const isBestMatch = card.id === bestMatchCard.id;
+                  const isActive = index === activeCardIndex;
+                  
+                  return (
+                    <div 
+                      key={card.id}
+                      onClick={() => handleCardClick(index)}
+                      className={`dock-card ${isActive ? 'active' : ''} ${isBestMatch ? 'best-match' : ''}`}
+                    >
+                      {isBestMatch && (
+                        <div className="best-match-badge">
+                          {language === 'en' ? 'Best Match' : '最佳匹配'}
+                        </div>
+                      )}
+                      <img 
+                        src={card.image} 
+                        alt={language === 'en' ? card.name.en : card.name.zh}
+                        className="character-image"
+                        onError={(e) => handleImageError(e, '50x50')}
+                        loading="eager"
+                        decoding="async"
+                      />
+                      <span className="dock-card-name">
+                        {language === 'en' ? card.name.en : card.name.zh}
+                      </span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
         
         <div className="results-right">
           <div className="character-info">
             <h1 className="character-name">
-              {language === 'en' ? matchedCard.name.en : matchedCard.name.zh}
+              {language === 'en' ? bestMatchCard?.name.en : bestMatchCard?.name.zh}
             </h1>
             <h2 className="character-title">
-              {language === 'en' ? matchedCard.title.en : matchedCard.title.zh}
+              {language === 'en' ? bestMatchCard?.title.en : bestMatchCard?.title.zh}
             </h2>
             
             <div className="mythology-description">
-              <p>{language === 'en' ? matchedCard.mythology.en : matchedCard.mythology.zh}</p>
+              <p>{language === 'en' ? bestMatchCard?.mythology.en : bestMatchCard?.mythology.zh}</p>
             </div>
           </div>
           
           <div className="workplace-description">
-            <p>{language === 'en' ? matchedCard.description.en : matchedCard.description.zh}</p>
+            <p>{language === 'en' ? bestMatchCard?.description.en : bestMatchCard?.description.zh}</p>
           </div>
           
           <div className="user-results">
@@ -926,31 +947,6 @@ const Results: React.FC = () => {
               ))}
             </div>
           </div>
-        </div>
-      </div>
-      
-      {/* 将角色卡片Dock作为独立元素，不嵌套在其他容器中 */}
-      <div id="character-dock-container" style={{ position: 'fixed', bottom: 0, left: 0, width: '100%', zIndex: 1000, pointerEvents: 'none' }}>
-        <div className="character-cards-dock" style={{ pointerEvents: 'auto' }}>
-          {cards.map((card, index) => (
-            <div 
-              key={card.id}
-              className={`dock-card ${index === activeCardIndex ? 'active' : ''}`}
-              onClick={() => handleCardClick(index)}
-            >
-              <img 
-                src={card.image} 
-                alt={language === 'en' ? card.name.en : card.name.zh}
-                className="dock-card-image"
-                onError={(e) => handleImageError(e, '50x50')}
-                loading="eager"
-                decoding="async"
-              />
-              <span className="dock-card-name">
-                {language === 'en' ? card.name.en : card.name.zh}
-              </span>
-            </div>
-          ))}
         </div>
       </div>
     </div>

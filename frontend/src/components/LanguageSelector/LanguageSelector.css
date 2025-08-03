@@ -1,101 +1,57 @@
 .language-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
   position: fixed;
   bottom: 20px;
   left: 20px;
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.6);
-  display: flex;
-  align-items: center;
-  gap: 0.3rem;
-  z-index: 100;
-  pointer-events: auto;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 5px 10px;
-  border-radius: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  font-family: 'Kaisei Decol', 'Alike Angular', serif;
+  z-index: 1000;
 }
 
-/* White theme styles for language selector */
-.white-theme .language-selector {
-  background: white;
-  border: 1px solid #ddd;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-  padding: 6px 12px;
+.language-selector:hover {
+  background-color: rgba(0, 0, 0, 0.8);
 }
 
-.white-theme .lang-button {
-  color: rgba(0, 0, 0, 0.6);
-  position: relative;
-  padding: 2px 5px;
-  transition: all 0.2s ease;
-  border-radius: 4px;
-}
-
-.white-theme .lang-separator {
-  color: rgba(0, 0, 0, 0.3);
-  margin: 0 3px;
-}
-
-.white-theme .lang-button.active {
-  color: #F0BDC0;
-  font-weight: 700;
-  text-decoration: underline;
-  transform: scale(1.15);
-  text-shadow: 0 0 1px rgba(240, 189, 192, 0.5);
-  background-color: rgba(240, 189, 192, 0.1);
-  position: relative;
-}
-
-.white-theme .lang-button.active::before {
-  content: '';
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  background-color: #F0BDC0;
-  border-radius: 50%;
-  bottom: -3px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.white-theme .lang-button:hover {
-  color: #F0BDC0;
-  background-color: rgba(240, 189, 192, 0.05);
-}
-
-/* 语言切换器中文文本的特定样式 */
-.language-selector:lang(zh),
-.language-selector *:lang(zh),
-.lang-button:lang(zh) {
-  font-family: 'Alike Angular', serif !important;
-}
-
-/* 专门为中文按钮设置字体 */
-.lang-button[lang="zh"] {
-  font-family: 'Alike Angular', serif !important;
-}
-
-.lang-button {
-  color: rgba(255, 255, 255, 0.6);
-  text-decoration: none;
-  transition: color 0.3s ease;
-  background: transparent;
+.language-button {
+  background: none;
   border: none;
-  font-size: 0.8rem;
-  padding: 0;
+  color: white;
   cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  opacity: 0.7;
 }
 
-.lang-separator {
-  color: rgba(255, 255, 255, 0.6);
+.language-button.active {
+  opacity: 1;
+  background-color: rgba(240, 189, 192, 0.2);
 }
 
-.lang-button.active {
-  color: #F0BDC0;
-  font-weight: 500;
+.language-button:hover {
+  opacity: 1;
+  background-color: rgba(240, 189, 192, 0.1);
 }
 
-.lang-button:hover {
-  color: #F0BDC0;
+.language-divider {
+  color: rgba(255, 255, 255, 0.3);
+  user-select: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .language-selector {
+    padding: 6px 10px;
+  }
+  
+  .language-button {
+    padding: 3px 6px;
+    font-size: 14px;
+  }
 } 

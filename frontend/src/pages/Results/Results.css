@@ -56,10 +56,10 @@
   display: block;
 }
 
-/* 六边形图表 */
+/* Hexagon chart container */
 .hexagon-chart {
   width: 100%;
-  max-width: 400px;
+  max-width: 380px;
   aspect-ratio: 1 / 1;
   margin: 3rem auto;
   position: relative;
@@ -68,6 +68,19 @@
   border-radius: 8px;
   animation: fadeInUp 0.8s ease-out 0.3s forwards;
   opacity: 0;
+}
+
+/* SVG hexagon chart */
+.svg-hexagon-chart {
+  width: 100%;
+  max-width: 380px;
+  margin: 0 auto;
+  background-color: rgba(15, 15, 15, 0.8);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+  position: relative;
+  z-index: 1;
 }
 
 .hexagon-grid {
@@ -236,10 +249,11 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  text-align: left;
 }
 
-.character-name {
-  font-size: 2.8rem;
+.results-right .character-info .character-name {
+  font-size: 2.8rem !important;
   margin: 0 0 0.2rem 0;
   color: #F0BDC0;
   animation: fadeInUp 0.8s ease-out 0.6s forwards;
@@ -251,6 +265,7 @@
   width: 100%;
   position: relative;
   padding-bottom: 0.3rem;
+  text-align: left;
 }
 
 .character-name::after {
@@ -279,6 +294,7 @@
   border-top: 1px solid rgba(240, 189, 192, 0.2);
   padding-top: 0.5rem;
   position: relative;
+  text-align: left;
 }
 
 .character-title::before {
@@ -440,8 +456,9 @@
   transform-style: preserve-3d;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  animation: scaleIn 0.5s ease-out forwards;
   opacity: 0;
+  width: 90px; /* Add fixed width */
+  min-width: 90px; /* Ensure minimum width */
 }
 
 .dock-card::after {
@@ -512,7 +529,7 @@
   }
   
   .svg-hexagon-chart {
-    max-width: 450px;
+    max-width: 500px;
   }
 }
 
@@ -580,7 +597,7 @@
   }
   
   .svg-hexagon-chart {
-    max-width: 380px;
+    max-width: 420px;
     margin: 0 auto;
   }
 }
@@ -865,18 +882,6 @@
   transform: rotate(-300deg) translateY(-10px);
 }
 
-.svg-hexagon-chart {
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-  background-color: rgba(15, 15, 15, 0.8);
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
-  position: relative;
-  z-index: 1;
-}
-
 .svg-hexagon-chart svg {
   width: 100%;
   height: auto;
@@ -1061,7 +1066,8 @@
 /* 媒体查询以确保在小屏幕上也能看到完整的标签 */
 @media (max-width: 768px) {
   .svg-hexagon-chart {
-    padding: 1rem;
+    max-width: 400px;
+    padding: 1.2rem;
     margin-top: 1rem;
     margin-bottom: 2rem;
   }
@@ -1069,6 +1075,7 @@
 
 @media (max-width: 480px) {
   .svg-hexagon-chart {
+    max-width: 350px;
     padding: 0.5rem;
     margin-top: 2rem;
     margin-bottom: 2rem;
@@ -1466,4 +1473,162 @@
     transform: scale(1.05);
     box-shadow: 0 0 8px rgba(240, 189, 192, 0.7);
   }
+}
+
+/* Character comparison section */
+.character-comparison {
+  width: 100%;
+  margin: 20px auto 0;
+  padding: 15px;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 12px;
+  max-width: 520px;
+}
+
+.comparison-title {
+  color: #fff;
+  font-size: 12px;
+  margin-bottom: 12px;
+  opacity: 0.7;
+  text-align: center;
+}
+
+.character-grid {
+  display: flex;
+  justify-content: center;
+  gap: 3px;
+  flex-wrap: nowrap;
+  margin: 0 auto;
+}
+
+.character-card {
+  position: relative;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 70px;
+  transition: all 0.3s ease;
+  flex: 0 0 auto;
+}
+
+.character-card.active {
+  background-color: rgba(240,189,192,0.2);
+}
+
+.character-card.best-match {
+  border: 2px solid #F0BDC0;
+}
+
+.best-match-badge {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #F0BDC0;
+  color: #000;
+  font-size: 9px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+.character-image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  transition: border-color 0.3s ease;
+}
+
+.character-card.best-match .character-image {
+  border: 2px solid #F0BDC0;
+}
+
+.character-name {
+  font-size: 11px;
+  color: #fff;
+  text-align: center;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  padding: 0 2px;
+}
+
+.character-card.active .character-name {
+  opacity: 1;
+}
+
+/* Language switcher positioning */
+.language-switcher {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+}
+
+/* Responsive adjustments */
+@media (min-width: 768px) {
+  .character-comparison {
+    max-width: 540px;
+  }
+  
+  .character-card {
+    width: 75px;
+  }
+  
+  .character-image {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .character-comparison {
+    max-width: 560px;
+  }
+  
+  .character-card {
+    width: 80px;
+  }
+  
+  .character-image {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .character-comparison {
+    max-width: 500px;
+  }
+  
+  .character-card {
+    width: 65px;
+  }
+  
+  .character-image {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* Add margin at the bottom to accommodate the language switcher */
+.results-container {
+  margin-bottom: 80px;
+}
+
+/* Hover effects */
+.character-card:hover {
+  transform: translateY(-2px);
+}
+
+.character-card.active:hover {
+  transform: translateY(-2px) scale(1.02);
 }
