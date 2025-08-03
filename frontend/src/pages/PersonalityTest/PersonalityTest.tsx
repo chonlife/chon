@@ -9,6 +9,8 @@ import { Question, QuestionSection, QuestionnaireType, questionsMenu, QuestionMe
 import IdentitySelection, { IdentityType } from './IdentitySelection.tsx';
 import QuestionsSection from './QuestionsSection.tsx';
 import Results from '../Results/Results.tsx';
+import IntroSection from './IntroSection.tsx';
+import PrivacyStatement from './PrivacyStatement.tsx';
 
 // API Configuration
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
@@ -51,7 +53,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   const location = useLocation();
   // Always start at intro
   const [step, setStep] = useState<TestStep>('intro');
-  const [userChoice, setUserChoice] = useState<string | null>(null);
+  const [userIntroChoice, setUserIntroChoice] = useState<string | null>(null);
   const [selectedIdentity, setSelectedIdentity] = useState<QuestionnaireType | null>(null);
   const [gender, setGender] = useState<string | null>(null);
   const [workedInCoporate, setWorkedInCoporate] = useState<boolean>(false);
@@ -128,7 +130,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     const savedAnswers = localStorage.getItem('chon_personality_answers');
     const savedStep = localStorage.getItem('chon_personality_step');
     const savedIdentity = localStorage.getItem('chon_personality_identity');
-    const savedUserChoice = localStorage.getItem('chon_personality_user_choice');
+    const savedUserIntroChoice = localStorage.getItem('chon_personality_user_intro_choice');
     
     if (savedAnswers) {
       setAnswers(JSON.parse(savedAnswers));
@@ -145,8 +147,8 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       setSelectedIdentity(JSON.parse(savedIdentity) as QuestionnaireType);
     }
     
-    if (savedUserChoice) {
-      setUserChoice(savedUserChoice);
+    if (savedUserIntroChoice) {
+      setUserIntroChoice(savedUserIntroChoice);
     }
   }, []);
   
@@ -178,7 +180,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   useEffect(() => {
     const savedAnswers = localStorage.getItem('chon_personality_answers');
     const savedIdentity = localStorage.getItem('chon_personality_identity');
-    const savedUserChoice = localStorage.getItem('chon_personality_user_choice');
+    const savedUserIntroChoice = localStorage.getItem('chon_personality_user_intro_choice');
     
     if (savedAnswers) {
       setAnswers(JSON.parse(savedAnswers));
@@ -191,8 +193,8 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       setSelectedIdentity(JSON.parse(savedIdentity) as QuestionnaireType);
     }
     
-    if (savedUserChoice) {
-      setUserChoice(savedUserChoice);
+    if (savedUserIntroChoice) {
+      setUserIntroChoice(savedUserIntroChoice);
     }
   }, []);
   
@@ -205,10 +207,10 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   
   // 保存用户选择到本地存储
   useEffect(() => {
-    if (userChoice) {
-      localStorage.setItem('chon_personality_user_choice', userChoice);
+    if (userIntroChoice) {
+      localStorage.setItem('chon_personality_user_intro_choice', userIntroChoice);
     }
-  }, [userChoice]);
+  }, [userIntroChoice]);
 
   // Update white theme state when step changes
   useEffect(() => {
@@ -254,7 +256,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
 
   // 在用户选择yes/no后获取最新统计数据
   useEffect(() => {
-    if (userChoice) {
+    if (userIntroChoice) {
       // 稍微延迟，让后端有时间更新数据
       const timer = setTimeout(() => {
         fetchIntroStats();
@@ -262,13 +264,13 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       
       return () => clearTimeout(timer);
     }
-  }, [userChoice]);
+  }, [userIntroChoice]);
 
   // 在组件挂载或step变为'intro'时进行初始化
   useEffect(() => {
     if (step === 'intro') {
-      // 重置userChoice，确保用户每次回到intro页面时都会看到选项
-      setUserChoice(null);
+      // 重置userIntroChoice，确保用户每次回到intro页面时都会看到选项
+      setUserIntroChoice(null);
       
       // 同时预加载统计数据，但不会影响UI显示
       fetchIntroStats();
@@ -276,7 +278,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   }, [step]);
 
   const handleOptionClick = (choice: string) => {
-    setUserChoice(choice);
+    setUserIntroChoice(choice);
     
     // Save intro choice with user ID
     questionnaireApi.saveIntroChoice(choice)
@@ -481,7 +483,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     // Reset all state and go directly to identity
     setAnswers({});
     setSelectedIdentity(null);
-    setUserChoice(null);
+    setUserIntroChoice(null);
     setCurrentSection(0);
     setStep('identity');
   };
@@ -494,126 +496,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     } else {
       setStep('identity');
     }
-  };
-
-  // Modify renderIntroContent to add debug logging
-  const renderIntroContent = () => {
-    
-    const wrappedQuestion = `<span lang="${language}">${language === 'en' ? t.intro.question : '母亲是天生的领导者。'}</span>`;
-    
-    return (
-      <div className="intro-content" lang={language}>
-        <h1 className="intro-question" 
-            dangerouslySetInnerHTML={{ __html: wrappedQuestion }}
-            lang={language}>
-        </h1>
-        
-        {!userChoice ? (
-          <div className="test-options" lang={language}>
-            <button 
-              className="test-option-button"
-              onClick={() => handleOptionClick('yes')}
-              lang={language}
-            >
-              {t.intro.yes}
-            </button>
-            <button 
-              className="test-option-button"
-              onClick={() => handleOptionClick('no')}
-              lang={language}
-            >
-              {t.intro.no}
-            </button>
-          </div>
-        ) : (
-          <>
-            <div className="progress-container" lang={language}>
-              <div className="percentage-labels" lang={language}>
-                <span className="agree-label" lang={language}>
-                  {t.intro.agree} ({introStats.yesPercentage}%)
-                </span>
-                <span className="disagree-label" lang={language}>
-                  {t.intro.disagree} ({100 - introStats.yesPercentage}%)
-                </span>
-              </div>
-              <div className="progress-bar">
-                <div 
-                  className="progress-fill" 
-                  style={{ width: `${introStats.yesPercentage}%` }}
-                ></div>
-              </div>
-            </div>
-            
-            <div className="test-buttons">
-              {hasCompletedQuestionnaire() ? (
-                <>
-                  <button 
-                    className="begin-test-button" 
-                    onClick={() => setStep('results')}
-                    lang={language}
-                  >
-                    {t.intro.viewResult}
-                  </button>
-                  <button 
-                    className="restart-test-button" 
-                    onClick={clearTestData}
-                    lang={language}
-                  >
-                    {t.intro.restartTest}
-                  </button>
-                </>
-              ) : hasInProgressQuestionnaire() ? (
-                <>
-                  <button 
-                    className="begin-test-button" 
-                    onClick={continueTest}
-                    lang={language}
-                  >
-                    {t.intro.continueTest}
-                  </button>
-                  <button 
-                    className="restart-test-button" 
-                    onClick={clearTestData}
-                    lang={language}
-                  >
-                    {t.intro.restartTest}
-                  </button>
-                </>
-              ) : (
-                <button 
-                  className="begin-test-button" 
-                  onClick={handleBeginTest}
-                  lang={language}
-                >
-                  {t.intro.beginTest}
-                </button>
-              )}
-            </div>
-          </>
-        )}
-      </div>
-    );
-  };
-
-  // Render the identity selection UI
-  const renderIdentitySelection = () => {
-    return (
-      <IdentitySelection
-        selectedIdentity={selectedIdentity}
-        onIdentitySelect={handleIdentitySelect}
-        onContinue={handleIdentityContinue}
-      />
-    );
-  };
-
-  // 在多个地方复用的问题文本渲染函数
-  const renderQuestionText = (question: Question) => {
-    return (
-      <h2 className="question-text">
-        {language === 'en' ? question.textEn : question.textZh}
-        {/* 标签不再前端显示，但数据仍保留在question对象中用于后续分析 */}
-      </h2>
-    );
   };
 
   // Calculate final statistics for each tag
@@ -712,50 +594,38 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     URL.revokeObjectURL(url);
   };
 
-  const renderPrivacyStatement = () => {
-    
-    // 添加换行的隐私文本 - 英文版本
-    const privacyTextEn = "Your information will only be used for verification purposes and to formulate your CHON personality test.\n\n" +
-      "It will not be shared, disclosed, or used for any other purpose.\n\n" +
-      "We are committed to protecting your privacy and ensuring the security of your data.";
-    
-    // 中文版本的隐私文本 - 优化中文段落结构
-    const privacyTextZh = "您的信息将仅用于验证目的和制定您的 CHON 性格测试。\n\n" +
-      "您的信息不会被共享、披露或用于任何其他目的。\n\n" +
-      "我们重视您的隐私，并承诺保护您的数据安全。";
-    
-    // Add class based on selectedIdentity
-    const privacyClass = selectedIdentity === 'mother' ? 'mother-privacy' : 'other-privacy';
-    
-    return (
-      <div className={`privacy-statement ${privacyClass}`} lang={language} style={{ overflowX: 'hidden', maxWidth: '100%' }}>
-        <p className="privacy-text" lang={language} style={{ whiteSpace: 'pre-line' }}>
-          {language === 'en' 
-            ? privacyTextEn
-            : privacyTextZh
-          }
-        </p>
-        <button 
-          className="privacy-continue"
-          onClick={handlePrivacyContinue}
-          lang={language}
-        >
-          <span>{language === 'en' ? 'CONTINUE' : '继续'}</span>
-          <span className="continue-arrow">→</span>
-        </button>
-      </div>
-    );
-  };
-
   // Render content based on step
   const renderContent = () => {
     switch (step) {
       case 'intro':
-        return renderIntroContent();
+        return (
+          <IntroSection 
+            userIntroChoice={userIntroChoice}
+            introStats={introStats}
+            hasCompletedQuestionnaire={hasCompletedQuestionnaire}
+            hasInProgressQuestionnaire={hasInProgressQuestionnaire}
+            onOptionClick={handleOptionClick}
+            onBeginTest={handleBeginTest}
+            onContinueTest={continueTest}
+            onClearTestData={clearTestData}
+            onSetResultsStep={() => setStep('results')}
+          />
+        );
       case 'identity':
-        return renderIdentitySelection();
+        return (
+          <IdentitySelection
+            selectedIdentity={selectedIdentity}
+            onIdentitySelect={handleIdentitySelect}
+            onContinue={handleIdentityContinue}
+          />
+        );
       case 'privacy':
-        return renderPrivacyStatement();
+        return (
+          <PrivacyStatement
+            selectedIdentity={selectedIdentity}
+            onContinue={handlePrivacyContinue}
+          />
+        );
       case 'questionnaire':
         if (selectedIdentity) {
           return renderQuestionsSection(selectedIdentity, currentSection);
