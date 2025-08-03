@@ -40,6 +40,12 @@ const MetaTags = () => {
   return null;
 };
 
+// Add interface for stored answer
+export interface StoredAnswer {
+  value: string;
+  tags?: string[];
+}
+
 const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTestProps) => {
   const { t, language } = useLanguage();
   const location = useLocation();
@@ -50,18 +56,16 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   const [gender, setGender] = useState<string | null>(null);
   const [workedInCoporate, setWorkedInCoporate] = useState<boolean>(false);
   const [currentSection, setCurrentSection] = useState<number>(0);
-  const [answers, setAnswers] = useState<Record<number, string>>({});
+  // Update answers type to store more information
+  const [answers, setAnswers] = useState<Record<number, StoredAnswer>>({});
   const [showSaveIndicator, setShowSaveIndicator] = useState(false);
-  // 替换静态百分比为动态状态
+  // Remove loading from state
   const [introStats, setIntroStats] = useState({
     yesCount: 0,
     noCount: 0,
-    yesPercentage: 65, // 默认值，将被API数据替换
-    loading: true
+    yesPercentage: 65
   });
-  // 添加标签得分计算相关的状态
-  const [tagScores, setTagScores] = useState<Record<string, Record<number, number>>>();
-  
+
   // Add new state for branch tracking after the existing state declarations
   const [branchingPath, setBranchingPath] = useState<'default' | 'yes-path' | 'no-path'>('default');
   const [hasBranchingQuestion, setHasBranchingQuestion] = useState(false);
@@ -73,23 +77,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     scorePercentage: number;
     averageScore: number;
     answeredQuestions: number;
-  }
-
-  const getCurrentQuestions = (identity: QuestionnaireType) => {
-    const menu = questionsMenu.find(menu => menu.identity === identity) || null;
-    if (!menu) {
-      return [];
-    }
-    const allQuestions: Question[] = [];
-    for (const section of menu.sections) {
-      for (const questionId of section.questions) {
-        const question = questions.find(q => q.id === questionId);
-        if (question) {
-          allQuestions.push(question);
-        }
-      }
-    }
-    return allQuestions;
   }
 
   const renderQuestionsSection = (identity: QuestionnaireType, currentSection: number) => {
@@ -118,8 +105,8 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           onMultipleChoice={handleMultipleChoiceAnswer}
           onTextInput={handleTextAnswer}
           onScale={handleScaleAnswer}
-          onNext={handleNextSection}
-          onBack={handleBackSection}
+          onNext={handleNextQuestionSection}
+          onBack={handleBackQuestionSection}
           onFinish={finishQuestionnaire}
           scrollToFirstQuestionOfNextPage={scrollToFirstQuestionOfNextPage}
         />
@@ -128,15 +115,13 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     return null;
   }
 
-  const handleNextSection = () => {
+  const handleNextQuestionSection = () => {
     setCurrentSection(currentSection + 1);
   }
 
-  const handleBackSection = () => {
+  const handleBackQuestionSection = () => {
     setCurrentSection(currentSection - 1);
   }
-
-
   
   // 从本地存储加载答案数据
   useEffect(() => {
@@ -189,7 +174,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     }
   }, [step]);
   
-  // Load saved answers and other data, but don't change step
+  // Load saved answers and other data
   useEffect(() => {
     const savedAnswers = localStorage.getItem('chon_personality_answers');
     const savedIdentity = localStorage.getItem('chon_personality_identity');
@@ -259,14 +244,11 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       setIntroStats({
         yesCount: data.yes_count,
         noCount: data.no_count,
-        yesPercentage: data.yes_percentage,
-        loading: false
+        yesPercentage: data.yes_percentage
       });
       
-      console.log("Fetched intro stats:", data);
     } catch (error) {
-      console.error("Error fetching intro stats:", error);
-      setIntroStats(prev => ({...prev, loading: false}));
+      // Keep current stats on error
     }
   };
 
@@ -298,10 +280,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     
     // Save intro choice with user ID
     questionnaireApi.saveIntroChoice(choice)
-      .then(() => {
-        // Set loading state while waiting for data update
-        setIntroStats(prev => ({...prev, loading: true}));
-      })
       .catch(error => {
         console.error('Error saving intro choice:', error);
       });
@@ -359,7 +337,9 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     const currentAnswers = answers;
     setAnswers({
       ...currentAnswers,
-      [question.id]: optionId
+      [question.id]: {
+        value: optionId
+      }
     });
     
     // Add branching logic for specific question (e.g., question 6)
@@ -385,7 +365,9 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     if (text.trim()) {
       setAnswers({
         ...currentAnswers,
-        [question.id]: text
+        [question.id]: {
+          value: text
+        }
       });
     } else {
       // Remove the answer if text is empty to accurately track progress
@@ -397,17 +379,17 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
 
   // Handle scale question answer
   const handleScaleAnswer = (question: Question, value: string, identity: QuestionnaireType | null) => {
-    if (!identity) {
+    if (!identity || question.type !== 'scale-question') {
       return;
     }
     const currentAnswers = answers;
     setAnswers({
       ...currentAnswers,
-      [question.id]: value
+      [question.id]: {
+        value,
+        tags: question.tags
+      }
     });
-    
-    // Update tag scores
-    updateTagScores(question, value, identity);
     
     // Auto-scroll to next question
     setTimeout(() => {
@@ -417,19 +399,16 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
 
   // 完成问卷并跳转到结果页面的函数
   const finishQuestionnaire = () => {
-    // 计算结果并保存
+    // Calculate final results
     calculateTagResults();
     
     if (selectedIdentity) {
       // Save all responses at once with the new format
       questionnaireApi.saveAllQuestionResponses(answers, selectedIdentity)
         .then(() => {
-          // 保存成功后跳转到结果页面
           setStep('results');
         })
         .catch((error) => {
-          console.error('Error during questionnaire completion:', error);
-          // 即使保存失败，仍然跳转到结果页面
           setStep('results');
         });
     }
@@ -452,7 +431,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     // 清空所有localStorage数据
     localStorage.clear();
     
-    console.log('已清空所有测试数据');
   };
 
   const exitButton = (
@@ -498,7 +476,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     localStorage.removeItem('chon_personality_step');
     localStorage.removeItem('chon_personality_identity');
     localStorage.removeItem('chon_personality_user_choice');
-    localStorage.removeItem('tagScores');
     localStorage.removeItem('tagStats');
     
     // Reset all state and go directly to identity
@@ -565,11 +542,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
                   style={{ width: `${introStats.yesPercentage}%` }}
                 ></div>
               </div>
-              {introStats.loading && (
-                <div className="loading-indicator">
-                  {language === 'en' ? 'Loading stats...' : '加载统计数据...'}
-                </div>
-              )}
             </div>
             
             <div className="test-buttons">
@@ -644,84 +616,58 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     );
   };
 
-  // When user answers a question, update tag scores
-  const updateTagScores = (question: Question, value: string, identity: QuestionnaireType) => {
-    if (!question || question.type !== 'scale-question' || !question.tags || question.tags.length === 0) return;
-    
-    console.log(`处理问题 ${question.id} 的回答，值: ${value}, 类型: ${question.type}, tags: ${question.tags}`);
-    
-    // Calculate score for this question
-    let score: number;
-    if (['A', 'B', 'C', 'D', 'E'].includes(value)) {
-      const scoreMap: Record<string, number> = {'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5};
-      score = scoreMap[value] || 0;
-    } else {
-      score = parseInt(value, 10) || 0;
-    }
-
-    // Update score for each tag this question belongs to
-    const newTagScores = {...tagScores};
-    question.tags.forEach((tag: string) => {
-      if (!newTagScores[tag]) {
-        newTagScores[tag] = {};
-      }
-      // Store score by question ID to avoid counting multiple times
-      newTagScores[tag][question.id] = score;
-    });
-    
-    setTagScores(newTagScores);
-    localStorage.setItem('tagScores', JSON.stringify(newTagScores));
-    calculateAndSaveTagStats(newTagScores, identity);
-  };
-
   // Calculate final statistics for each tag
-  const calculateAndSaveTagStats = (currentTagScores: Record<string, Record<number, number>>, identity: QuestionnaireType) => {
+  const calculateTagResults = () => {
     const tagStats: Record<string, TagStats> = {};
     const allTags = ['自我意识', '奉献精神', '社交情商', '情绪调节', '客观能力', '核心耐力'];
     
-    // Count questions per tag
-    const tagQuestionCounts: Record<string, number> = {};
-    const questions = getCurrentQuestions(identity);
-    
-    questions.forEach(question => {
-      if (question.type === 'scale-question' && question.tags) {
-        question.tags.forEach(tag => {
-          if (!tagQuestionCounts[tag]) {
-            tagQuestionCounts[tag] = 0;
-          }
-          tagQuestionCounts[tag] += 1;
-        });
-      }
-    });
-    
-    // Calculate stats for each tag
+    // Initialize stats for each tag
     allTags.forEach(tag => {
-      const questionScores = currentTagScores[tag] || {};
-      const scores = Object.values(questionScores).filter(score => score > 0);
-      const userScore = scores.reduce((sum, score) => sum + score, 0);
-      const answeredQuestions = scores.length;
-      const totalPossibleScore = tagQuestionCounts[tag] * 5; // Each question max score is 5
-      
-      const scorePercentage = totalPossibleScore > 0 
-        ? Math.min(100, Number(((userScore / totalPossibleScore) * 100).toFixed(2))) 
-        : 0;
-      const averageScore = answeredQuestions > 0 
-        ? Number((userScore / answeredQuestions).toFixed(2)) 
-        : 0;
-      
       tagStats[tag] = {
-        userScore,
-        totalPossibleScore,
-        scorePercentage,
-        averageScore,
-        answeredQuestions
+        userScore: 0,
+        totalPossibleScore: 0,
+        scorePercentage: 0,
+        averageScore: 0,
+        answeredQuestions: 0
       };
     });
-    
+
+    // Calculate stats using stored answers
+    Object.entries(answers).forEach(([questionId, answer]) => {
+      if (answer.tags) {
+        let score: number;
+        if (['A', 'B', 'C', 'D', 'E'].includes(answer.value)) {
+          const scoreMap: Record<string, number> = {'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5};
+          score = scoreMap[answer.value] || 0;
+        } else {
+          score = parseInt(answer.value, 10) || 0;
+        }
+
+        if (score > 0) {
+          answer.tags.forEach(tag => {
+            if (tagStats[tag]) {
+              tagStats[tag].userScore += score;
+              tagStats[tag].totalPossibleScore += 5; // Max score is 5
+              tagStats[tag].answeredQuestions += 1;
+            }
+          });
+        }
+      }
+    });
+
+    // Calculate percentages and averages
+    allTags.forEach(tag => {
+      const stats = tagStats[tag];
+      stats.scorePercentage = stats.totalPossibleScore > 0 
+        ? Math.min(100, Number(((stats.userScore / stats.totalPossibleScore) * 100).toFixed(2))) 
+        : 0;
+      stats.averageScore = stats.answeredQuestions > 0 
+        ? Number((stats.userScore / stats.answeredQuestions).toFixed(2)) 
+        : 0;
+    });
+
+    // Save the final stats
     localStorage.setItem('tagStats', JSON.stringify(tagStats));
-    console.log('==== 标签得分统计 ====');
-    console.table(tagStats);
-    
     return tagStats;
   };
 
@@ -739,78 +685,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     return {};
   };
 
-  // 在useEffect中添加从localStorage读取标签得分和统计数据的代码
-  useEffect(() => {
-    // 定义所有标签
-    const allTags = ['自我意识', '奉献精神', '社交情商', '情绪调节', '客观能力', '核心耐力'];
-    const loadedTagScores: Record<string, Record<number, number>> = {};
-    
-    // 从问题分数映射中加载标签分数
-    allTags.forEach(tag => {
-      const savedMap = localStorage.getItem(`questionScores_${tag}`);
-      if (savedMap) {
-        try {
-          const questionScoreMap = JSON.parse(savedMap);
-          // 将问题分数映射的值填入数组
-          loadedTagScores[tag] = questionScoreMap;
-          console.log(`成功加载标签 ${tag} 的问题分数映射:`, questionScoreMap);
-        } catch (e) {
-          console.error(`解析标签 ${tag} 的问题分数映射出错:`, e);
-          loadedTagScores[tag] = {};
-        }
-      } else {
-        // 尝试从旧格式加载
-        const savedTagScores = localStorage.getItem('tagScores');
-        if (savedTagScores) {
-          try {
-            const parsedScores = JSON.parse(savedTagScores);
-            if (parsedScores[tag]) {
-              loadedTagScores[tag] = parsedScores[tag];
-            } else {
-              loadedTagScores[tag] = {};
-            }
-          } catch (e) {
-            console.error('解析旧格式标签分数出错:', e);
-            loadedTagScores[tag] = {};
-          }
-        }
-      }
-    });
-    
-    // 设置加载的标签分数
-    if (Object.keys(loadedTagScores).length > 0) {
-      setTagScores(loadedTagScores);
-      console.log('成功加载所有标签分数:', loadedTagScores);
-      
-      // 如果有标签分数但没有统计数据，重新计算一次
-      if (!localStorage.getItem('tagStats') && selectedIdentity) {
-        calculateAndSaveTagStats(loadedTagScores, selectedIdentity);
-      }
-    }
-  }, []);
 
-  // 计算每个标签的总分和平均分
-  const calculateTagResults = () => {
-    const results: Record<string, {total: number, average: number, count: number}> = {};
-    
-    if (tagScores) {
-      Object.entries(tagScores).forEach(([tag, scores]) => {
-        // 过滤掉0分(未计分的多选题)
-        const validScores = Object.values(scores).filter(score => score > 0);
-        const total = validScores.reduce((sum, score) => sum + score, 0);
-        const count = validScores.length;
-        const average = count > 0 ? total / count : 0;
-        
-        results[tag] = {
-          total,
-          average,
-          count
-        };
-      });
-    }
-    
-    return results;
-  };
 
   // 导出结果的函数，可以在需要导出用户结果时调用
   const exportResults = () => {
@@ -874,7 +749,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
 
   // Render content based on step
   const renderContent = () => {
-    console.log('Current step:', step);
     switch (step) {
       case 'intro':
         return renderIntroContent();
@@ -890,7 +764,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       case 'results':
         return <Results />;
       default:
-        console.log('Invalid step:', step);
         return null;
     }
   };

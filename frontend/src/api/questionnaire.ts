@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { questions } from '../pages/PersonalityTest/questionnaires';
 import { getUserId } from '../utils/userIdentification';
+import { StoredAnswer } from '../pages/PersonalityTest/PersonalityTest';
 
 // API Configuration
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
@@ -54,7 +55,7 @@ export const saveIntroChoice = async (choice: string): Promise<boolean> => {
  * @returns Promise，表示保存操作的结果
  */
 export const saveAllQuestionResponses = async (
-  answers: Record<number, string>,
+  answers: Record<number, StoredAnswer>,
   questionnaireType: QuestionnaireType
 ): Promise<boolean> => {
   if (!answers || Object.keys(answers).length === 0) {
@@ -67,9 +68,9 @@ export const saveAllQuestionResponses = async (
     const submission: QuestionnaireSubmission = {
       user_id: userId,
       type: questionnaireType,
-      answers: Object.entries(answers).map(([questionId, value]) => ({
+      answers: Object.entries(answers).map(([questionId, answer]) => ({
         question_id: parseInt(questionId),
-        response_value: value
+        response_value: answer.value
       }))
     };
 

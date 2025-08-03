@@ -1,5 +1,6 @@
 import React from 'react';
 import { Question, QuestionnaireType, questions, QuestionSection } from './questionnaires';
+import { StoredAnswer } from './PersonalityTest';
 import QuestionBlock from './QuestionBlock';
 import ProgressBar from './ProgressBar';
 import './PersonalityTest.css';
@@ -13,7 +14,7 @@ interface QuestionsSectionProps {
   showFinish: boolean;
   language: string;
   identity: QuestionnaireType | null;
-  currentAnswers: Record<number, string>;
+  currentAnswers: Record<number, StoredAnswer>;
   onMultipleChoice: (question: Question, optionId: string) => void;
   onTextInput: (question: Question, text: string) => void;
   onScale: (question: Question, value: string, identity: QuestionnaireType | null) => void;

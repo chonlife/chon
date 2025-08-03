@@ -1,9 +1,10 @@
 import React from 'react';
 import { Question, QuestionnaireType } from './questionnaires';
+import { StoredAnswer } from './PersonalityTest';
 
 interface QuestionBlockProps {
   question: Question;
-  currentAnswer: string | undefined;
+  currentAnswer: StoredAnswer | undefined;
   language: string;
   identity: QuestionnaireType | null;
   onMultipleChoice: (question: Question, optionId: string) => void;
@@ -30,7 +31,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
           {question.options?.map(option => (
             <div
               key={option.id}
-              className={`answer-option ${currentAnswer === option.id ? 'selected' : ''}`}
+              className={`answer-option ${currentAnswer?.value === option.id ? 'selected' : ''}`}
               onClick={() => onMultipleChoice(question, option.id)}
             >
               <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
@@ -43,7 +44,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
           <input
             type="text"
             className="text-answer-input"
-            value={currentAnswer || ''}
+            value={currentAnswer?.value || ''}
             onChange={e => onTextInput(question, e.target.value)}
             placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
           />
@@ -56,7 +57,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
               {['1', '2', '3', '4', '5'].map(value => (
                 <div
                   key={value}
-                  className={`scale-option ${currentAnswer === value ? 'selected' : ''}`}
+                  className={`scale-option ${currentAnswer?.value === value ? 'selected' : ''}`}
                   onClick={() => onScale(question, value, identity)}
                 >
                   <div className="scale-circle"></div>
