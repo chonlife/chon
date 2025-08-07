@@ -32,7 +32,7 @@
   align-items: center;
   margin-bottom: 0.6rem;
   cursor: pointer;
-  padding-left: 35px; /* Space for checkbox */
+  padding-left: 0; /* Remove outside padding */
 }
 
 .identity-option {
@@ -49,6 +49,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-left: 3rem; /* Add space for checkbox inside */
 }
 
 .identity-option.selected {
@@ -111,7 +112,7 @@
 .identity-checkbox {
   width: 22px;
   height: 22px;
-  border: 2px solid white;
+  border: 2px solid #ccc;
   border-radius: 4px;
   transition: all 0.3s ease;
   flex-shrink: 0;
@@ -119,7 +120,7 @@
   align-items: center;
   justify-content: center;
   position: absolute;
-  left: 0;
+  left: 1rem; /* Position inside the option */
   top: 50%;
   transform: translateY(-50%);
   z-index: 2;
@@ -128,19 +129,18 @@
 }
 
 .option-container:hover .identity-checkbox {
-  border-color: white;
-  background-color: rgba(255, 255, 255, 0.1);
+  border-color: #F0BDC0;
 }
 
 .option-container.selected .identity-checkbox {
-  background-color: transparent;
+  background-color: #F0BDC0;
   border-color: #F0BDC0;
 }
 
 .option-container.selected .identity-checkbox::after {
   content: "✓";
   font-size: 16px;
-  color: #F0BDC0;
+  color: white;
   position: absolute;
   display: flex;
   align-items: center;
@@ -183,6 +183,149 @@
   background-color: #ccc;
 }
 
+/* Role selection styles */
+.role-selection {
+  width: 80%;
+  background-color: transparent;
+  animation: fadeIn 0.4s ease forwards;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center children horizontally */
+}
+
+.role-selection-title {
+  font-size: 1.4rem;
+  color: white;
+  margin-bottom: 1rem;
+  font-weight: normal;
+  letter-spacing: 0.1em;
+  font-family: 'Kaisei Decol', serif;
+  text-align: center; /* Center the title text */
+}
+
+.role-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+  margin-bottom: 2rem;
+  width: 100%; /* Ensure full width of parent */
+}
+
+.role-option {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  background-color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  justify-content: center;
+}
+
+.role-option:hover {
+  background-color: #F0BDC0;
+  box-shadow: 0 4px 15px rgba(240, 189, 192, 0.3);
+  transform: translateY(-2px);
+}
+
+.role-option.selected {
+  background-color: #F0BDC0;
+  box-shadow: 0 4px 15px rgba(240, 189, 192, 0.3);
+  transform: translateY(-2px);
+}
+
+.role-option span {
+  font-size: 1.1rem;
+  color: black;
+  transition: all 0.3s ease;
+  line-height: 1.3;
+  text-align: center;
+}
+
+.role-option:hover span,
+.role-option.selected span {
+  color: white;
+}
+
+/* Other option specific styles */
+.option-container:last-child {
+  margin-top: 2rem; /* Add space above the "other" option */
+  margin-bottom: 1rem; /* Add space below for better balance */
+}
+
+.option-container:last-child .identity-option {
+  background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent to differentiate */
+}
+
+.option-container:last-child .identity-option:hover,
+.option-container:last-child .identity-option.selected {
+  background-color: #F0BDC0;
+}
+
+/* Language-specific adjustments */
+[lang="zh"] .role-selection-title {
+  font-family: 'Alike Angular', serif;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .role-selection {
+    width: 90%; /* Slightly wider on smaller screens */
+  }
+
+  .role-selection-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .role-options {
+    margin-bottom: 1.5rem; /* Slightly reduced space on mobile */
+  }
+
+  .option-container:last-child {
+    margin-top: 1.5rem; /* Slightly reduced space on mobile */
+  }
+
+  .role-option {
+    padding: 0.9rem;
+  }
+
+  .role-option span {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .role-selection {
+    width: 95%; /* Even wider on mobile */
+  }
+
+  .role-selection-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .role-options {
+    margin-bottom: 1.2rem; /* Further reduced space on smaller screens */
+  }
+
+  .option-container:last-child {
+    margin-top: 1.2rem; /* Further reduced space on smaller screens */
+  }
+
+  .role-option {
+    padding: 0.8rem;
+  }
+
+  .role-option span {
+    font-size: 0.95rem;
+  }
+}
+
 /* Media queries for smaller screens */
 @media (max-width: 768px) {
   .identity-selection {
@@ -214,5 +357,38 @@
   
   .identity-option p {
     font-size: 1rem;
+  }
+} 
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .identity-option {
+    padding-left: 2.5rem;
+  }
+
+  .identity-checkbox {
+    width: 18px;
+    height: 18px;
+    left: 0.8rem;
+  }
+
+  .option-container.selected .identity-checkbox::after {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .identity-option {
+    padding-left: 2.2rem;
+  }
+
+  .identity-checkbox {
+    width: 16px;
+    height: 16px;
+    left: 0.7rem;
+  }
+
+  .option-container.selected .identity-checkbox::after {
+    font-size: 11px;
   }
 } 

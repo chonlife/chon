@@ -2,6 +2,7 @@ import axios from 'axios';
 import { questions } from '../pages/PersonalityTest/questionnaires';
 import { getUserId } from '../utils/userIdentification';
 import { StoredAnswer } from '../pages/PersonalityTest/PersonalityTest';
+import { CorporateRole } from '../pages/PersonalityTest/IdentitySelection';
 
 // API Configuration
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
@@ -19,6 +20,7 @@ export interface QuestionResponse {
 export interface QuestionnaireSubmission {
   user_id: string;
   type: QuestionnaireType;
+  corporate_role?: CorporateRole;  // Optional field for corporate role
   answers: QuestionResponse[];
 }
 
@@ -52,11 +54,13 @@ export const saveIntroChoice = async (choice: string): Promise<boolean> => {
  * 批量保存所有问卷回答到后端
  * @param answers 用户的回答记录
  * @param questionnaireType 问卷类型
+ * @param corporateRole 企业管理人员的职位（可选）
  * @returns Promise，表示保存操作的结果
  */
 export const saveAllQuestionResponses = async (
   answers: Record<number, StoredAnswer>,
-  questionnaireType: QuestionnaireType
+  questionnaireType: QuestionnaireType,
+  corporateRole?: CorporateRole | null
 ): Promise<boolean> => {
   if (!answers || Object.keys(answers).length === 0) {
     console.warn('No responses to save');
@@ -73,6 +77,11 @@ export const saveAllQuestionResponses = async (
         response_value: answer.value
       }))
     };
+
+    // Add corporate role to submission if provided and relevant
+    if (corporateRole && (questionnaireType === 'corporate' || questionnaireType === 'both')) {
+      submission.corporate_role = corporateRole;
+    }
 
     console.log(`Saving responses for user ${userId} to the backend...`);
     

@@ -6,7 +6,7 @@ import './PersonalityTest.css';
 import { scrollToNextQuestion, scrollToFirstQuestionOfNextPage } from './ScrollUtils.ts';
 import questionnaireApi from '../../api/questionnaire.ts';
 import { Question, QuestionSection, QuestionnaireType, questionsMenu, QuestionMenu, questions } from './questionnaires.ts';
-import IdentitySelection, { IdentityType } from './IdentitySelection.tsx';
+import IdentitySelection, { IdentityType, CorporateRole } from './IdentitySelection.tsx';
 import QuestionsSection from './QuestionsSection.tsx';
 import Results from '../Results/Results.tsx';
 import IntroSection from './IntroSection.tsx';
@@ -71,6 +71,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   // Add new state for branch tracking after the existing state declarations
   const [branchingPath, setBranchingPath] = useState<'default' | 'yes-path' | 'no-path'>('default');
   const [hasBranchingQuestion, setHasBranchingQuestion] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<CorporateRole | null>(null);
 
   // Add interface definition
   interface TagStats {
@@ -212,6 +213,23 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     }
   }, [userIntroChoice]);
 
+  // Load saved role from localStorage
+  useEffect(() => {
+    const savedRole = localStorage.getItem('chon_personality_role');
+    if (savedRole) {
+      setSelectedRole(JSON.parse(savedRole) as CorporateRole);
+    }
+  }, []);
+
+  // Save role to localStorage
+  useEffect(() => {
+    if (selectedRole) {
+      localStorage.setItem('chon_personality_role', JSON.stringify(selectedRole));
+    } else {
+      localStorage.removeItem('chon_personality_role');
+    }
+  }, [selectedRole]);
+
   // Update white theme state when step changes
   useEffect(() => {
     if (onWhiteThemeChange) {
@@ -293,28 +311,40 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
 
   const handleIdentitySelect = (identity: IdentityType) => {
     if (identity === 'other') {
-      // If other is selected, clear any previous selection
       setSelectedIdentity(selectedIdentity === 'other' ? null : 'other');
+      setSelectedRole(null); // Clear role when selecting 'other'
     } else if (identity === 'mother' || identity === 'corporate') {
       if (selectedIdentity === 'both') {
-        // If both is selected, clicking one should keep the other selected
         setSelectedIdentity(identity === 'mother' ? 'corporate' : 'mother');
+        // Keep role if switching to corporate, clear if switching to mother
+        if (identity === 'mother') {
+          setSelectedRole(null);
+        }
       } else if (selectedIdentity === identity) {
-        // Unselect if clicking the same option
         setSelectedIdentity(null);
+        if (identity === 'corporate') {
+          setSelectedRole(null); // Clear role when unselecting corporate
+        }
       } else if ((selectedIdentity === 'mother' && identity === 'corporate') || 
                  (selectedIdentity === 'corporate' && identity === 'mother')) {
-        // If selecting the other option when one is already selected, set to both
         setSelectedIdentity('both');
       } else {
-        // Select the new option
         setSelectedIdentity(identity);
+        if (identity !== 'corporate') {
+          setSelectedRole(null); // Clear role when not selecting corporate
+        }
       }
     }
   };
 
+  const handleRoleSelect = (role: CorporateRole | null) => {
+    setSelectedRole(role);
+  };
+
   const handleIdentityContinue = () => {
-    if (!selectedIdentity) {
+    // Only allow continue if a role is selected when corporate is selected
+    const isCorporate = selectedIdentity === 'corporate' || selectedIdentity === 'both';
+    if (!selectedIdentity || (isCorporate && !selectedRole)) {
       return;
     }
     setStep('privacy');
@@ -406,7 +436,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     
     if (selectedIdentity) {
       // Save all responses at once with the new format
-      questionnaireApi.saveAllQuestionResponses(answers, selectedIdentity)
+      questionnaireApi.saveAllQuestionResponses(answers, selectedIdentity, selectedRole)
         .then(() => {
           setStep('results');
         })
@@ -478,11 +508,13 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     localStorage.removeItem('chon_personality_step');
     localStorage.removeItem('chon_personality_identity');
     localStorage.removeItem('chon_personality_user_choice');
+    localStorage.removeItem('chon_personality_role');
     localStorage.removeItem('tagStats');
     
     // Reset all state and go directly to identity
     setAnswers({});
     setSelectedIdentity(null);
+    setSelectedRole(null);
     setUserIntroChoice(null);
     setCurrentSection(0);
     setStep('identity');
@@ -615,7 +647,9 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         return (
           <IdentitySelection
             selectedIdentity={selectedIdentity}
+            selectedRole={selectedRole}
             onIdentitySelect={handleIdentitySelect}
+            onRoleSelect={handleRoleSelect}
             onContinue={handleIdentityContinue}
           />
         );

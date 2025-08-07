@@ -116,6 +116,7 @@ def batch_save_question_responses():
     Expects JSON: {
         "user_id": "chon_timestamp_random",
         "type": "mother/corporate/other/both",
+        "corporate_role": "founder/board_member/etc" (optional),
         "answers": [
             {
                 "question_id": 1,
@@ -134,11 +135,20 @@ def batch_save_question_responses():
         return jsonify({'error': f"Missing required fields: {', '.join(missing_fields)}"}), 400
     
     try:
-        # Create the questionnaire submission
-        submission_response = supabase.table('questionnaire_submissions').insert({
+        # Create submission data with optional corporate_role
+        submission_data = {
             'user_id': data['user_id'],
             'questionnaire_type': data['type']
-        }).execute()
+        }
+        
+        # Add corporate_role if provided and type is corporate or both
+        if 'corporate_role' in data and data['type'] in ['corporate', 'both']:
+            submission_data['corporate_role'] = data['corporate_role']
+        
+        # Create the questionnaire submission
+        submission_response = supabase.table('questionnaire_submissions').insert(
+            submission_data
+        ).execute()
         
         submission_id = submission_response.data[0]['id']
         
