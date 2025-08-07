@@ -8,7 +8,7 @@
   flex-direction: column;
   color: white;
   font-family: 'Kaisei Decol', serif;
-  background-color: #0A0A0A;
+  background-color: black;
   position: relative;
 }
 
@@ -970,7 +970,7 @@
 
 /* 信息卡片样式 - 减少动画强度 */
 .info-card {
-  background-color: rgba(0, 0, 0, 0.85);
+  background-color: rgba(0, 0, 0, 0);
   border-radius: 10px;
   padding: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
@@ -1480,7 +1480,7 @@
   width: 100%;
   margin: 20px auto 0;
   padding: 15px;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0);
   border-radius: 12px;
   max-width: 520px;
 }
