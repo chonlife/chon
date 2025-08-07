@@ -92,90 +92,98 @@
 
 /* Privacy statement styles */
 .privacy-statement {
-  max-width: 800px;
-  margin: 4rem auto;
-  padding: 2rem;
-  text-align: center;
-  color: white;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 4rem 3rem 3rem;
+  text-align: left;
+  color: black;
   animation: fadeIn 0.6s ease forwards;
-  overflow-x: hidden; /* 防止水平滚动条 */
+  overflow-x: hidden;
   box-sizing: border-box;
   width: 100%;
-  position: relative; /* 确保定位正确 */
+  position: relative;
+  background-color: white;
+  min-height: 100vh;
 }
 
-/* Mother privacy statement specific styles */
-.privacy-statement.mother-privacy,
-.privacy-statement.other-privacy {
-  background-color: transparent;
-  color: black;
-  min-height: calc(100vh - 20px);
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding: 3rem 2rem 5rem 2rem; /* 减少左右padding */
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden; /* 防止所有方向的滚动 */
-  position: relative; /* 改为relative以防止布局问题 */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 10;
-  box-sizing: border-box; /* 确保padding不会导致宽度计算问题 */
-}
-
-.mother-privacy .privacy-text,
-.other-privacy .privacy-text {
-  color: black;
-  text-align: left;
-  overflow: auto;
-  max-height: 70vh;
-  font-size: 1.4rem;
-  line-height: 1.8;
-  max-width: 100%;
-  width: 100%;
+/* Privacy title styles */
+.privacy-title {
+  font-size: 2.4rem;
+  font-weight: 500;
   margin-bottom: 2rem;
-  background-color: transparent;
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: none;
-  box-sizing: border-box;
-  word-wrap: break-word;
-  white-space: pre-line; /* 确保换行符生效 */
+  color: #333;
+  position: relative;
+  padding-bottom: 1rem;
+  font-family: 'Kaisei Decol', serif;
 }
 
-.privacy-text {
-  font-size: 2rem;
+.privacy-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(to right, #F0BDC0, rgba(240, 189, 192, 0.2));
+}
+
+.privacy-intro {
+  font-size: 1.2rem;
   line-height: 1.7;
   margin-bottom: 3rem;
-  font-family: 'Kaisei Decol', serif;
-  font-weight: 300;
-  letter-spacing: 0.02em;
-  width: 100%;
-  max-width: 100%;
-  overflow-wrap: break-word;
-  box-sizing: border-box;
-  white-space: pre-line; /* 确保换行符生效 */
+  color: #444;
+  max-width: 850px;
 }
 
-/* 添加段落间距样式 */
-.privacy-text p {
+.privacy-section {
+  margin-bottom: 3rem;
+  max-width: 850px;
+}
+
+.privacy-section h2 {
+  font-size: 1.8rem;
+  font-weight: 500;
   margin-bottom: 1.5rem;
+  color: #333;
+  font-family: 'Kaisei Decol', serif;
 }
 
-/* 重新设计privacy continue按钮 */
+.privacy-section p {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+  color: #444;
+}
+
+.privacy-section ul {
+  list-style-type: disc;
+  margin: 1.5rem 0 2rem 1.5rem;
+  padding-left: 0;
+}
+
+.privacy-section li {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  color: #444;
+  padding-left: 0.5rem;
+}
+
+.privacy-section strong {
+  font-weight: 600;
+  color: #333;
+}
+
+/* Continue button styles */
 .privacy-continue {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background-color: #F0BDC0;
   color: black;
-  padding: 1.2rem 3rem;
-  font-size: 1.2rem;
-  letter-spacing: 0.2em;
+  padding: 0.8rem 2.5rem;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   border: none;
   cursor: pointer;
@@ -184,6 +192,121 @@
   text-decoration: none;
   position: relative;
   text-align: center;
+  border-radius: 4px;
+  margin-top: 2rem;
+}
+
+.privacy-continue:hover {
+  background-color: #e3a6a9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(240, 189, 192, 0.3);
+}
+
+.continue-arrow {
+  margin-left: 0.8rem;
+  font-size: 1.1rem;
+  transition: transform 0.3s ease;
+}
+
+.privacy-continue:hover .continue-arrow {
+  transform: translateX(4px);
+}
+
+/* Language-specific adjustments */
+[lang="zh"] .privacy-title,
+[lang="zh"] .privacy-section h2 {
+  font-family: 'Alike Angular', serif;
+}
+
+[lang="zh"] .privacy-title {
+  font-size: 2.2rem;
+}
+
+[lang="zh"] .privacy-section h2 {
+  font-size: 1.7rem;
+}
+
+[lang="zh"] .privacy-intro,
+[lang="zh"] .privacy-section p,
+[lang="zh"] .privacy-section li {
+  line-height: 1.8;
+  letter-spacing: 0.02em;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .privacy-statement {
+    padding: 4rem 2rem 2rem;
+  }
+
+  .privacy-title {
+    font-size: 2rem;
+  }
+
+  .privacy-intro {
+    font-size: 1.1rem;
+  }
+
+  .privacy-section h2 {
+    font-size: 1.5rem;
+  }
+
+  .privacy-section p,
+  .privacy-section li {
+    font-size: 1.1rem;
+  }
+
+  [lang="zh"] .privacy-title {
+    font-size: 1.8rem;
+  }
+
+  [lang="zh"] .privacy-section h2 {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .privacy-statement {
+    padding: 4rem 1.5rem 1.5rem;
+  }
+
+  .privacy-title {
+    font-size: 1.7rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .privacy-intro {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .privacy-section {
+    margin-bottom: 2rem;
+  }
+
+  .privacy-section h2 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+  }
+
+  .privacy-section p,
+  .privacy-section li {
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+  }
+
+  [lang="zh"] .privacy-title {
+    font-size: 1.5rem;
+  }
+
+  [lang="zh"] .privacy-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .privacy-continue {
+    padding: 0.7rem 2rem;
+    font-size: 0.9rem;
+  }
 }
 
 /* 重写母亲隐私页面的Continue按钮样式 */
