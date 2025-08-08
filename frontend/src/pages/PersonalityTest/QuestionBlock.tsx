@@ -30,9 +30,19 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
   return (
     <div id={`question-${question.id}`} className="question-container">
       <h2 className="question-text">
-        {language === 'en'
-          ? (!workedInCorporate && (question as any).textLifeEn ? (question as any).textLifeEn : question.textEn)
-          : (!workedInCorporate && (question as any).textLifeZh ? (question as any).textLifeZh : question.textZh)}
+        {(() => {
+          const qAny: any = question as any;
+          // For corporate-only identity, prefer corporate-specific copy when present
+          if (identity === 'corporate') {
+            return language === 'en'
+              ? (qAny.textCorporateEn || question.textEn)
+              : (qAny.textCorporateZh || question.textZh);
+          }
+          // For non-corporate flows, show life variant when not worked in corporate and life copy exists
+          return language === 'en'
+            ? (!workedInCorporate && qAny.textLifeEn ? qAny.textLifeEn : question.textEn)
+            : (!workedInCorporate && qAny.textLifeZh ? qAny.textLifeZh : question.textZh);
+        })()}
       </h2>
       {question.type === 'multiple-choice' && (
         <div className="answer-options">
