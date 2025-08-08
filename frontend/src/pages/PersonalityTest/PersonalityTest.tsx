@@ -55,7 +55,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   const [step, setStep] = useState<TestStep>('intro');
   const [userIntroChoice, setUserIntroChoice] = useState<string | null>(null);
   const [selectedIdentity, setSelectedIdentity] = useState<QuestionnaireType | null>(null);
-  const [gender, setGender] = useState<string | null>(null);
+  const [gender, setGender] = useState<string>('Female');
   const [workedInCoporate, setWorkedInCoporate] = useState<boolean>(true);
   const [currentSection, setCurrentSection] = useState<number>(0);
   // Update answers type to store more information
@@ -68,9 +68,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     yesPercentage: 65
   });
 
-  // Add new state for branch tracking after the existing state declarations
-  const [branchingPath, setBranchingPath] = useState<'default' | 'yes-path' | 'no-path'>('default');
-  const [hasBranchingQuestion, setHasBranchingQuestion] = useState(false);
   const [selectedRole, setSelectedRole] = useState<CorporateRole | null>(null);
 
   // Add interface definition
@@ -351,6 +348,70 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     setStep('privacy');
   };
 
+  // Helpers for handling multiple choice answers
+  const getOptionById = (question: Question, optionId: string) => {
+    const qAny: any = question as any;
+    return qAny.options?.find((o: any) => o.id === optionId);
+  };
+
+  const updateGenderIfApplicable = (question: Question, optionId: string) => {
+    if (question.id !== 1) return;
+    const opt: any = getOptionById(question, optionId);
+    const en = (opt?.textEn || '').toLowerCase();
+    const zh = opt?.textZh || '';
+    const isFemale = en.includes('female') || zh.includes('女');
+    const isMale = en.includes('male') || zh.includes('男');
+    if (isFemale) setGender('Female');
+    if (isMale) setGender('Male');
+  };
+
+  const updateCorporateIfApplicable = (question: Question, optionId: string) => {
+    if (![2, 4].includes(question.id)) return;
+    const opt: any = getOptionById(question, optionId);
+    const en = (opt?.textEn || '').toLowerCase();
+    const zh = opt?.textZh || '';
+    const isYes = en.includes('yes') || zh.includes('是');
+    const isNo = en.includes('no') || zh.includes('否');
+    if (isYes) setWorkedInCoporate(true);
+    if (isNo) setWorkedInCoporate(false);
+  };
+
+  const computeNextAnswersForMultipleChoice = (
+    question: Question,
+    optionId: string,
+    currentAnswers: Record<number, StoredAnswer>
+  ): { updatedAnswers: Record<number, StoredAnswer>; isMultiSelect: boolean } => {
+    const isMulti = question.type === 'multiple-choice' && (question as any).multiSelect;
+    if (isMulti) {
+      const prev = currentAnswers[question.id]?.value;
+      const prevArray: string[] = Array.isArray(prev) ? prev : [];
+      const nextArray = prevArray.includes(optionId)
+        ? prevArray.filter(v => v !== optionId)
+        : [...prevArray, optionId];
+
+      if (nextArray.length === 0) {
+        const newAnswers = { ...currentAnswers };
+        delete newAnswers[question.id];
+        return { updatedAnswers: newAnswers, isMultiSelect: true };
+      }
+      return {
+        updatedAnswers: {
+          ...currentAnswers,
+          [question.id]: { value: nextArray }
+        },
+        isMultiSelect: true
+      };
+    }
+    // Single select default
+    return {
+      updatedAnswers: {
+        ...currentAnswers,
+        [question.id]: { value: optionId }
+      },
+      isMultiSelect: false
+    };
+  };
+
   const handlePrivacyContinue = () => {
     // 设置为问卷步骤
     setStep('questionnaire');
@@ -368,60 +429,18 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   // Handle answer selection for multiple choice questions
   const handleMultipleChoiceAnswer = (question: Question, optionId: string) => {
     const currentAnswers = answers;
-    // If corporate experience question (per request: id=2; also handle legacy id=4)
-    if ([2, 4].includes(question.id)) {
-      const opt: any = (question as any).options?.find((o: any) => o.id === optionId);
-      const en = (opt?.textEn || '').toLowerCase();
-      const zh = opt?.textZh || '';
-      const isYes = en.includes('yes') || zh.includes('是');
-      const isNo = en.includes('no') || zh.includes('否');
-      if (isYes) setWorkedInCoporate(true);
-      if (isNo) setWorkedInCoporate(false);
-    }
-    // Multi-select support when question.multiSelect is true
-    if (question.type === 'multiple-choice' && (question as any).multiSelect) {
-      const prev = currentAnswers[question.id]?.value;
-      const prevArray: string[] = Array.isArray(prev) ? prev : [];
-      let nextArray: string[];
-      if (prevArray.includes(optionId)) {
-        nextArray = prevArray.filter(v => v !== optionId);
-      } else {
-        nextArray = [...prevArray, optionId];
-      }
+    updateGenderIfApplicable(question, optionId);
+    updateCorporateIfApplicable(question, optionId);
 
-      if (nextArray.length === 0) {
-        const newAnswers = { ...currentAnswers };
-        delete newAnswers[question.id];
-        setAnswers(newAnswers);
-      } else {
-        setAnswers({
-          ...currentAnswers,
-          [question.id]: { value: nextArray }
-        });
-      }
-    } else {
-      // Single-select default behavior
-      setAnswers({
-        ...currentAnswers,
-        [question.id]: {
-          value: optionId
-        }
-      });
-    }
-    
-    // Add branching logic for specific question (e.g., question 6)
-    if (question.id === 6) {
-      setHasBranchingQuestion(true);
-      if (optionId === 'A') { // Yes
-        setBranchingPath('yes-path');
-      } else if (optionId === 'B') { // No
-        setBranchingPath('no-path');
-      }
-    }
-    
-    // Add new feature: auto-scroll to next question
-    // For multi-select, do not auto-scroll to next question to allow multiple picks
-    if (!(question.type === 'multiple-choice' && (question as any).multiSelect)) {
+    const { updatedAnswers, isMultiSelect } = computeNextAnswersForMultipleChoice(
+      question,
+      optionId,
+      currentAnswers
+    );
+    setAnswers(updatedAnswers);
+
+    // Auto-scroll only for single-select
+    if (!isMultiSelect) {
       setTimeout(() => {
         scrollToNextQuestion(question.id);
       }, 100);
@@ -453,11 +472,17 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       return;
     }
     const currentAnswers = answers;
+    // Choose gender-specific tags if available
+    const qAny: any = question as any;
+    const effectiveTags: string[] | undefined =
+      gender === 'Male' && Array.isArray(qAny.tagsMale) ? qAny.tagsMale
+      : gender === 'Female' && Array.isArray(qAny.tagsFemale) ? qAny.tagsFemale
+      : qAny.tags;
     setAnswers({
       ...currentAnswers,
       [question.id]: {
         value,
-        tags: question.tags
+        tags: effectiveTags
       }
     });
     
@@ -586,6 +611,11 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
 
     // Calculate stats using stored answers
     Object.entries(answers).forEach(([questionId, answer]) => {
+      // Resolve tags considering gender-specific fields if available
+      const qid = Number(questionId);
+      // We don't have direct access to question meta here; tags are saved on answer for scale questions only.
+      // Extend: if answer.tags exists, optionally override with gender-specific tags stored in a hidden convention
+      // For current code path, inject gender-specific tags at save time in handleScaleAnswer below.
       if (answer.tags) {
         let score: number;
         const valueStr = Array.isArray(answer.value) ? '' : (answer.value as string);
