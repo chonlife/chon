@@ -1,0 +1,123 @@
+.account-signup-container {
+  max-width: 560px;
+  margin: 0 auto;
+  color: #fff;
+}
+
+.signup-title {
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.account-signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 28px; /* larger vertical gaps between fields */
+  background: rgba(255,255,255,0.04);
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(10px);
+}
+
+/* Modern floating-label fields */
+.field {
+  position: relative;
+}
+
+.field input {
+  width: 100%;
+  padding: 18px 14px 16px 14px; /* larger tap target */
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(12,12,12,0.6);
+  color: #fff;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.field input::placeholder { color: transparent; }
+
+.field label {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  padding: 0 6px;
+  background: transparent;
+  color: rgba(255,255,255,0.7);
+  pointer-events: none;
+  transform-origin: left top;
+  transition: transform .15s ease, color .2s ease, background .2s ease;
+}
+
+.field input:focus {
+  border-color: rgba(240,189,192,0.7);
+  box-shadow: 0 0 0 4px rgba(240,189,192,0.15);
+  background: rgba(12,12,12,0.75);
+}
+
+.field input:focus + label,
+.field input:not(:placeholder-shown) + label {
+  transform: translateY(-22px) scale(0.86); /* raise label to sit on top border */
+  background: #0a0a0a;
+  color: #F0BDC0;
+  line-height: 1; /* tighter for precise alignment */
+}
+
+/* Password toggle */
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: rgba(255,255,255,0.8);
+  cursor: pointer;
+  font-size: 16px;
+}
+
+/* Split phone input */
+.field--split label {
+  position: static; /* separate label row */
+  display: block;
+  margin-bottom: 6px;
+  color: rgba(255,255,255,0.8);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 10px;
+}
+
+.split select,
+.split input {
+  width: 100%;
+  padding: 16px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(12,12,12,0.6);
+  color: #fff;
+}
+
+.form-error {
+  color: #ff7a7a;
+  background: rgba(255, 55, 55, 0.08);
+  border: 1px solid rgba(255, 55, 55, 0.25);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+@media (max-width: 576px) {
+  .account-signup-container { max-width: 100%; padding: 0 12px; }
+  .split { grid-template-columns: 1fr 1.6fr; }
+}
+

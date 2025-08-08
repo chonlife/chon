@@ -414,6 +414,25 @@
   font-weight: bold;
 }
 
+/* Simple primary/secondary buttons for signup CTA */
+.primary-button {
+  background: #F0BDC0;
+  color: #000;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.secondary-button {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
 /* 底部的dock样式 */
 .character-cards-dock {
   position: fixed !important;
@@ -1631,4 +1650,50 @@
 
 .character-card.active:hover {
   transform: translateY(-2px) scale(1.02);
+}
+
+/* Sticky CTA */
+.sticky-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 68px; /* sit above the character dock */
+  z-index: 1100;
+  display: flex;
+  justify-content: center;
+  pointer-events: none; /* container ignores click */
+}
+
+.sticky-cta__content {
+  pointer-events: all; /* content captures click */
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(20,20,20,0.9);
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+  padding: 10px 14px;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+}
+
+.sticky-cta__text {
+  color: #fff;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.sticky-cta__button {
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+@media (max-width: 576px) {
+  .sticky-cta {
+    bottom: 82px; /* allow extra breathing room on small screens */
+  }
+  .sticky-cta__content {
+    width: calc(100% - 24px);
+    justify-content: space-between;
+  }
 }

@@ -3,6 +3,9 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 from dotenv import load_dotenv
 from supabase import create_client
+import hashlib
+import os
+import binascii
 
 # Load environment variables
 load_dotenv()
@@ -109,6 +112,15 @@ def get_intro_stats():
             'error': str(e)
         }), 500
 
+def _hash_password(password: str, salt: str | None = None):
+    """Return (hash_hex, salt_hex) using PBKDF2-HMAC-SHA256."""
+    if salt is None:
+        salt_bytes = os.urandom(16)
+    else:
+        salt_bytes = binascii.unhexlify(salt)
+    hash_bytes = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt_bytes, 100_000)
+    return binascii.hexlify(hash_bytes).decode('utf-8'), binascii.hexlify(salt_bytes).decode('utf-8')
+
 @app.route('/api/batch-question-responses', methods=['POST'])
 def batch_save_question_responses():
     """
@@ -172,6 +184,66 @@ def batch_save_question_responses():
     
     except Exception as e:
         print(f"Error saving batch responses: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/signup', methods=['POST'])
+def signup():
+    """
+    Create a user account linked with questionnaire user_id.
+    Expects JSON:
+    {
+      "user_id": "chon_...",            -- required (to link questionnaire)
+      "username": "...",                 -- required
+      "password": "...",                 -- required (will be hashed)
+      "email": "...",                    -- optional
+      "phone_number": "+1 5551234567"    -- optional
+    }
+    At least one of email or phone_number must be present.
+    """
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'Invalid JSON'}), 400
+
+        user_id = data.get('user_id')
+        username = data.get('username')
+        password = data.get('password')
+        email = data.get('email')
+        phone = data.get('phone_number')
+
+        if not user_id or not username or not password:
+            return jsonify({'error': 'Missing required fields: user_id, username, password'}), 400
+        if not email and not phone:
+            return jsonify({'error': 'Provide at least one of email or phone_number'}), 400
+
+        # Hash password
+        pwd_hash, salt = _hash_password(password)
+
+        # Upsert-like behavior: ensure unique by user_id
+        # Try update first
+        existing = supabase.table('users').select('id').eq('user_id', user_id).execute()
+        if existing.data:
+            # Update existing record
+            supabase.table('users').update({
+                'email': email,
+                'phone_number': phone,
+                'username': username,
+                'password_hash': pwd_hash,
+                'password_salt': salt,
+            }).eq('user_id', user_id).execute()
+        else:
+            supabase.table('users').insert({
+                'user_id': user_id,
+                'email': email,
+                'phone_number': phone,
+                'username': username,
+                'password_hash': pwd_hash,
+                'password_salt': salt,
+            }).execute()
+
+        return jsonify({'success': True})
+    except Exception as e:
+        print(f"Error in signup: {e}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/user-responses/<user_id>', methods=['GET'])

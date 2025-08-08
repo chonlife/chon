@@ -24,6 +24,14 @@ export interface QuestionnaireSubmission {
   answers: QuestionResponse[];
 }
 
+export interface SignupPayload {
+  user_id: string;
+  email?: string | null;
+  phone_number?: string | null;
+  password: string;
+  username: string;
+}
+
 /**
  * Save user's intro choice to backend
  * @param choice user's choice, yes or no
@@ -95,7 +103,26 @@ export const saveAllQuestionResponses = async (
   }
 };
 
+export const createAccount = async (payload: Omit<SignupPayload, 'user_id'> & { user_id?: string }): Promise<boolean> => {
+  try {
+    const userId = payload.user_id || getUserId();
+    const body: SignupPayload = {
+      user_id: userId,
+      email: payload.email ?? null,
+      phone_number: payload.phone_number ?? null,
+      password: payload.password,
+      username: payload.username,
+    };
+    await axios.post(`${API_URL}/api/signup`, body);
+    return true;
+  } catch (error) {
+    console.error('Error creating account:', error);
+    return false;
+  }
+};
+
 export default {
   saveIntroChoice,
-  saveAllQuestionResponses
+  saveAllQuestionResponses,
+  createAccount
 }; 

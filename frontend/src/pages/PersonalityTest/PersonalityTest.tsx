@@ -9,13 +9,14 @@ import { Question, QuestionSection, QuestionnaireType, questionsMenu, QuestionMe
 import IdentitySelection, { IdentityType, CorporateRole } from './IdentitySelection.tsx';
 import QuestionsSection from './QuestionsSection.tsx';
 import Results from '../Results/Results.tsx';
+import AccountSignup from '../Signup/AccountSignup.tsx';
 import IntroSection from './IntroSection.tsx';
 import PrivacyStatement from './PrivacyStatement.tsx';
 
 // API Configuration
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
-type TestStep = 'intro' | 'identity' | 'privacy' | 'questionnaire' | 'results';
+type TestStep = 'intro' | 'identity' | 'privacy' | 'questionnaire' | 'results' | 'account';
 
 interface PersonalityTestProps {
   onWhiteThemeChange?: (isWhite: boolean) => void;
@@ -153,7 +154,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   
   // 验证步骤值是否有效
   const isValidStep = (step: string): boolean => {
-    return ['intro', 'identity', 'privacy', 'questionnaire', 'results'].includes(step);
+    return ['intro', 'identity', 'privacy', 'questionnaire', 'results', 'account'].includes(step);
   };
   
   // 保存答案到本地存储
@@ -735,7 +736,19 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         }
         return null;
       case 'results':
-        return <Results />;
+        return <Results onCreateAccount={() => setStep('account')} />;
+      case 'account':
+        return (
+          <AccountSignup
+            language={language}
+            answers={answers}
+            onCancel={() => setStep('results')}
+            onSuccess={() => {
+              // After successful signup, keep them on results or home
+              setStep('results');
+            }}
+          />
+        );
       default:
         return null;
     }
@@ -744,7 +757,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   return (
     <>
       {step === 'results' ? (
-        <Results />
+        <Results onCreateAccount={() => setStep('account')} />
       ) : (
         <main className={containerClass} lang={language}>
           <MetaTags />
