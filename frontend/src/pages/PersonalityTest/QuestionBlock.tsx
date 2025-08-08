@@ -35,7 +35,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
           {question.options?.map(option => (
             <div
               key={option.id}
-              className={`answer-option ${currentAnswer?.value === option.id ? 'selected' : ''}`}
+              className={`answer-option ${Array.isArray(currentAnswer?.value) ? (currentAnswer?.value as string[]).includes(option.id) ? 'selected' : '' : currentAnswer?.value === option.id ? 'selected' : ''}`}
               onClick={() => onMultipleChoice(question, option.id)}
             >
               <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
@@ -56,7 +56,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
       )}
       {isCountryQuestion && (
         <CountryAutocomplete
-          value={currentAnswer?.value || ''}
+          value={typeof currentAnswer?.value === 'string' ? currentAnswer.value : ''}
           onChange={(val) => onTextInput(question, val)}
           language={language}
           placeholder={language === 'en' ? 'Start typing a country name...' : '输入国家/地区名称...'}

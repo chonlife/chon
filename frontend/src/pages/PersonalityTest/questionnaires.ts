@@ -23,6 +23,7 @@ interface BaseQuestion {
 export interface MultipleChoiceQuestion extends BaseQuestion {
   type: 'multiple-choice';
   options: Option[];
+  multiSelect?: boolean;
 }
 
 export interface ScaleQuestion extends BaseQuestion {
@@ -740,9 +741,20 @@ export const questions: Question[] = [
   
   {
     id: 53,
-    type: 'text-input',
-    textEn: 'During which weeks of your pregnancy did you experience noticeable morning sickness?',
-    textZh: '在怀孕的哪些周数期间，您经历了明显的妊娠反应？'
+    type: 'multiple-choice',
+    multiSelect: true,
+    textEn: 'During which weeks of your pregnancy did you experience noticeable morning sickness? (Select all that apply)',
+    textZh: '在怀孕的哪些周数期间，您经历了明显的妊娠反应？（可多选）',
+    options: [
+      { id: 'A', textEn: 'I did not experience noticeable morning sickness', textZh: '我没有经历明显的妊娠反应' },
+      { id: 'B', textEn: 'Weeks 4–8', textZh: '第4至第8周' },
+      { id: 'C', textEn: 'Weeks 9-12', textZh: '第9至第12周' },
+      { id: 'D', textEn: 'Weeks 13-20', textZh: '第13至第20周' },
+      { id: 'E', textEn: 'Weeks 21-28', textZh: '第21至第28周' },
+      { id: 'F', textEn: 'Weeks 29-36', textZh: '第29至第36周' },
+      { id: 'G', textEn: 'Weeks 37-40', textZh: '第37至第40周' },
+      { id: 'H', textEn: 'I can\'t remember', textZh: '我记不清了' }
+    ]
   },
   
   {

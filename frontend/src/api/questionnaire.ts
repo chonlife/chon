@@ -74,7 +74,7 @@ export const saveAllQuestionResponses = async (
       type: questionnaireType,
       answers: Object.entries(answers).map(([questionId, answer]) => ({
         question_id: parseInt(questionId),
-        response_value: answer.value
+        response_value: Array.isArray(answer.value) ? JSON.stringify(answer.value) : (answer.value as string)
       }))
     };
 

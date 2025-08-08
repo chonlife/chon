@@ -44,7 +44,7 @@ const MetaTags = () => {
 
 // Add interface for stored answer
 export interface StoredAnswer {
-  value: string;
+  value: string | string[];
   tags?: string[];
 }
 
@@ -367,12 +367,36 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   // Handle answer selection for multiple choice questions
   const handleMultipleChoiceAnswer = (question: Question, optionId: string) => {
     const currentAnswers = answers;
-    setAnswers({
-      ...currentAnswers,
-      [question.id]: {
-        value: optionId
+    // Multi-select support when question.multiSelect is true
+    if (question.type === 'multiple-choice' && (question as any).multiSelect) {
+      const prev = currentAnswers[question.id]?.value;
+      const prevArray: string[] = Array.isArray(prev) ? prev : [];
+      let nextArray: string[];
+      if (prevArray.includes(optionId)) {
+        nextArray = prevArray.filter(v => v !== optionId);
+      } else {
+        nextArray = [...prevArray, optionId];
       }
-    });
+
+      if (nextArray.length === 0) {
+        const newAnswers = { ...currentAnswers };
+        delete newAnswers[question.id];
+        setAnswers(newAnswers);
+      } else {
+        setAnswers({
+          ...currentAnswers,
+          [question.id]: { value: nextArray }
+        });
+      }
+    } else {
+      // Single-select default behavior
+      setAnswers({
+        ...currentAnswers,
+        [question.id]: {
+          value: optionId
+        }
+      });
+    }
     
     // Add branching logic for specific question (e.g., question 6)
     if (question.id === 6) {
@@ -385,9 +409,12 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     }
     
     // Add new feature: auto-scroll to next question
-    setTimeout(() => {
-      scrollToNextQuestion(question.id);
-    }, 100);
+    // For multi-select, do not auto-scroll to next question to allow multiple picks
+    if (!(question.type === 'multiple-choice' && (question as any).multiSelect)) {
+      setTimeout(() => {
+        scrollToNextQuestion(question.id);
+      }, 100);
+    }
   };
 
   // Handle text input for free text questions
@@ -550,11 +577,12 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     Object.entries(answers).forEach(([questionId, answer]) => {
       if (answer.tags) {
         let score: number;
-        if (['A', 'B', 'C', 'D', 'E'].includes(answer.value)) {
+        const valueStr = Array.isArray(answer.value) ? '' : (answer.value as string);
+        if (['A', 'B', 'C', 'D', 'E'].includes(valueStr)) {
           const scoreMap: Record<string, number> = {'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5};
-          score = scoreMap[answer.value] || 0;
+          score = scoreMap[valueStr] || 0;
         } else {
-          score = parseInt(answer.value, 10) || 0;
+          score = parseInt(valueStr, 10) || 0;
         }
 
         if (score > 0) {
