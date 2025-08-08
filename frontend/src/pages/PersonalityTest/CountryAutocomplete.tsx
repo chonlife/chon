@@ -43,7 +43,7 @@ const CountryAutocomplete: React.FC<CountryAutocompleteProps> = ({
 
   const filteredCountries = useMemo(() => {
     const query = inputValue.trim();
-    if (!query) return allCountries.slice(0, 10);
+    if (!query) return allCountries;
     if (language === 'en') {
       const lower = query.toLowerCase();
       return allCountries.filter(c => (c.country_name_en || '').toLowerCase().includes(lower)).slice(0, 10);

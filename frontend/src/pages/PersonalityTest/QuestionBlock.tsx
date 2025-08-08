@@ -59,7 +59,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
           value={currentAnswer?.value || ''}
           onChange={(val) => onTextInput(question, val)}
           language={language}
-          placeholder={language === 'en' ? 'Start typing a country...' : '开始输入国家名称...'}
+          placeholder={language === 'en' ? 'Start typing a country name...' : '输入国家/地区名称...'}
         />
       )}
       {question.type === 'scale-question' && (
