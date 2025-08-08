@@ -127,9 +127,22 @@ export const questions: Question[] = [
   
   {
     id: 8,
-    type: 'text-input',
+    type: 'multiple-choice',
     textEn: 'Which industry or business sector does your company operate in?',
-    textZh: '贵公司属于哪个行业或业务领域？'
+    textZh: '贵公司属于哪个行业或业务领域？',
+    options: [
+      { id: 'A', textEn: 'Consumer Goods & Retail', textZh: '消费品和零售' },
+      { id: 'B', textEn: 'Education & Business Professional Services', textZh: '教育和商业专业服务' },
+      { id: 'C', textEn: 'Energy & Utilities', textZh: '能源和公用事业' },
+      { id: 'D', textEn: 'Entertainment & Media', textZh: '娱乐和媒体' },
+      { id: 'E', textEn: 'Financial Services', textZh: '金融服务' },
+      { id: 'F', textEn: 'Government, Nonprofits & Public Services', textZh: '政府、非营利和公共服务' },
+      { id: 'G', textEn: 'Healthcare & Pharmaceuticals', textZh: '医疗保健和制药' },
+      { id: 'H', textEn: 'Industrial Production & Manufacturing', textZh: '工业生产和制造' },
+      { id: 'I', textEn: 'Real Estate & Construction', textZh: '房地产和建筑' },
+      { id: 'J', textEn: 'Technology & Telecommunications', textZh: '技术和电信' },
+      { id: 'K', textEn: 'Transportation & Logistics', textZh: '运输和物流' }
+    ]
   },
   
   {
@@ -152,12 +165,12 @@ export const questions: Question[] = [
     textEn: 'What is the approximate annual revenue of your company?',
     textZh: '贵公司的年营业收入大约是多少？',
     options: [
-      { id: 'A', textEn: 'Less than $1 million', textZh: '少于100万' },
-      { id: 'B', textEn: '$1–10 million', textZh: '100–1,000万' },
-      { id: 'C', textEn: '$10–50 million', textZh: '1,000–5,000万' },
-      { id: 'D', textEn: '$50–500 million', textZh: '5,000万–5亿' },
-      { id: 'E', textEn: '$500 million–$5 billion', textZh: '5亿–50亿' },
-      { id: 'F', textEn: 'Over $10 billion', textZh: '超过100亿' }
+      { id: 'A', textEn: 'Less than $1 million', textZh: '少于500万' },
+      { id: 'B', textEn: '$1–10 million', textZh: '500–5,000万' },
+      { id: 'C', textEn: '$10–50 million', textZh: '5,000–5亿' },
+      { id: 'D', textEn: '$50–500 million', textZh: '5亿–50亿' },
+      { id: 'E', textEn: '$500 million–$5 billion', textZh: '50亿–500亿' },
+      { id: 'F', textEn: 'Over $10 billion', textZh: '超过500亿' }
     ]
   },
   
@@ -290,6 +303,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'Does your company value “soft skills” of responsibility, empathy, and communication?',
     textZh: '贵司认可软实力（例如责任心、同理心、沟通能力）吗？',
+    textLifeEn: 'Does your team value “soft skills” of responsibility, empathy, and communication?',
+    textLifeZh: '您所在的团队是否认可责任心、同理心、沟通能力等软实力？',
     tags: ['奉献精神'],
     scaleLabels: {
       minEn: 'Not recognized at all',
@@ -340,7 +355,7 @@ export const questions: Question[] = [
       minEn: 'Not supportive at all',
       minZh: '完全不支持',
       maxEn: 'Highly supportive with clear policies and resources, please specify',
-      maxZh: '高度支持，有明确的政策和资源，请阐述'
+      maxZh: '高度支持'
     }
   },
   
@@ -403,8 +418,8 @@ export const questions: Question[] = [
   {
     id: 28,
     type: 'scale-question',
-    textEn: 'How valuable are working mothers staying updated with the professional field?',
-    textZh: '职场母亲了解行业领域信息有多大价值？',
+    textEn: 'How valuable are you staying updated with the professional field?',
+    textZh: '了解行业领域信息对您来说有多大价值？',
     tags: ['奉献精神'],
     scaleLabels: {
       minEn: 'Not valuable',
@@ -417,8 +432,8 @@ export const questions: Question[] = [
   {
     id: 29,
     type: 'scale-question',
-    textEn: 'How valuable are working mothers posting and accessing new business deals?',
-    textZh: '职场母亲发布和获取商业合作有多大价值？',
+    textEn: 'How valuable are you posting and accessing new business deals?',
+    textZh: '发布和获取商业合作对您来说有多大价值？',
     tags: ['奉献精神'],
     scaleLabels: {
       minEn: 'Not valuable',
@@ -431,8 +446,8 @@ export const questions: Question[] = [
   {
     id: 30,
     type: 'scale-question',
-    textEn: 'How valuable are working mothers sharing maternal experiences and emotional support?',
-    textZh: '职场母亲分享育儿经验、提供情感支持有多大价值？',
+    textEn: 'How valuable are you sharing maternal experiences and emotional support?',
+    textZh: '分享育儿经验、提供情感支持对您来说有多大价值？',
     tags: ['奉献精神'],
     scaleLabels: {
       minEn: 'Not valuable',
@@ -445,7 +460,7 @@ export const questions: Question[] = [
   {
     id: 31,
     type: 'scale-question',
-    textEn: 'How valuable are healthcare professionals’ medical advice for working mothers?',
+    textEn: 'How valuable are healthcare professionals’ medical advice for you?',
     textZh: '外部医疗专业人士提供医学建议有多大价值？',
     tags: ['奉献精神'],
     scaleLabels: {
@@ -1128,6 +1143,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'Does your company foster professional growth and well-being?',
     textZh: '贵司是否同时重视职业发展和身心健康？',
+    textLifeEn: 'Does your team support both professional growth and overall well-being?',
+    textLifeZh: '您的团队是否支持职业发展和身心健康？',
     tags: ['自我意识'],
     scaleLabels: {
       minEn: 'Very supportive',
@@ -1142,6 +1159,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'Do you build meaningful relationships through work?',
     textZh: '您在工作中是否有建立有意义的关系的机会？',
+    textLifeEn: 'Do you build meaningful relationships through teamwork?',
+    textLifeZh: '您在团队工作中是否有建立有意义的关系的机会？',
     tags: ['社交情商'],
     scaleLabels: {
       minEn: 'A lot – strong connections',
@@ -1170,6 +1189,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'Do you support or care for colleagues?',
     textZh: '您是否会给予同事支持或关心？',
+    textLifeEn: 'Do you support or care for teammates?',
+    textLifeZh: '您是否会给予团队成员支持或关心？',
     tags: ['奉献精神'],
     scaleLabels: {
       minEn: 'Frequently offer support',
@@ -1198,6 +1219,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'Does your company promote collaboration based on trust and respect?',
     textZh: '贵司是否鼓励基于信任与相互尊重的合作？',
+    textLifeEn: 'Does your team promote collaboration based on trust and respect?',
+    textLifeZh: '您的团队是否鼓励基于信任与相互尊重的合作？',
     tags: ['客观能力', '奉献精神'],
     scaleLabels: {
       minEn: 'Strongly across all levels',
@@ -1212,6 +1235,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'Could you reach out to colleagues or managers when facing challenges?',
     textZh: '面对困难或需要帮助时，您能否与同事或上级沟通？',
+    textLifeEn: 'Could you reach out to teammates when facing challenges?',
+    textLifeZh: '面对困难或需要帮助时，您能否与团队成员沟通？',
     tags: ['社交情商', '情绪调节'],
     scaleLabels: {
       minEn: 'Very comfortable',
@@ -1226,6 +1251,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'Is a people-centered work culture important?',
     textZh: '以人为本的企业文化是否重要？',
+    textLifeEn: 'Is a people-centered team culture important?',
+    textLifeZh: '以人为本的工作团队文化是否重要？',
     tags: ['社交情商'],
     scaleLabels: {
       minEn: 'Extremely important',
@@ -1240,6 +1267,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'Do you feel motivated by a sense of belonging or team care?',
     textZh: '您是否因团队归属感或同事关怀提升工作积极性？',
+    textLifeEn: 'Do you feel motivated by a sense of belonging or team care?',
+    textLifeZh: '您是否因团队归属感或团队成员关怀提升工作积极性？',
     tags: ['情绪调节'],
     scaleLabels: {
       minEn: 'Very often',
@@ -1272,13 +1301,13 @@ export const questionsMenu: QuestionMenu[] = [
         sectionId: 2,
         sectionTitleEn: "II. About Us, CHON",
         sectionTitleZh: "II. 关于我们，CHON",
-        questions: [26, 27, 71, 29, 28, 31, 30, 32, 72, 33, 35, 38, 39, 40, 41, 42, 43, 44]
+        questions: [26, 27, 71, 29, 28, 31, 30, 32, 72, 33, 35, 38, 39, 40]
       },
       {
         sectionId: 3,
         sectionTitleEn: "III. About Motherhood",
         sectionTitleZh: "III. 关于母亲",
-        questions: [73, 74, 75, 76, 77, 78, 79, 80, 51]
+        questions: [ 41, 42, 43, 44, 73, 74, 75, 76, 77, 78, 79, 80, 51]
       }
     ],
 
@@ -1290,7 +1319,7 @@ export const questionsMenu: QuestionMenu[] = [
         sectionId: 0,
         sectionTitleEn: "",
         sectionTitleZh: "",
-        questions: [6, 1, 2, 3, 5, 7, 8, 9, 10, 11]
+        questions: [6, 1, 2, 3, 7, 8, 9, 10, 11]
       },
       {
         sectionId: 1,
@@ -1319,7 +1348,7 @@ export const questionsMenu: QuestionMenu[] = [
         sectionId: 0,
         sectionTitleEn: "",
         sectionTitleZh: "",
-        questions: [6, 2, 3, 52, 53, 54, 55, 56, 57, 58, 5, 7, 8, 9, 10, 11]
+        questions: [6, 2, 3, 52, 53, 54, 55, 56, 57, 58, 7, 8, 9, 10, 11]
       },
       {
         sectionId: 1,
@@ -1360,6 +1389,8 @@ export const questionsMenu: QuestionMenu[] = [
         sectionId: 1,
         sectionTitleEn: "I. About Professional Work",
         sectionTitleZh: "I. 关于职业工作",
+        sectionLifeTitleEn: "I. About Teamwork",
+        sectionLifeTitleZh: "I. 关于团队工作",
         questions: [81, 82, 20, 83, 84, 85, 86, 87, 88, 89, 24]
       },
       {
