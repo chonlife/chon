@@ -78,8 +78,8 @@ export const saveAllQuestionResponses = async (
       }))
     };
 
-    // Add corporate role to submission if provided and relevant
-    if (corporateRole && (questionnaireType === 'corporate' || questionnaireType === 'both')) {
+    // Add corporate role to submission if provided (backend will accept when present)
+    if (corporateRole) {
       submission.corporate_role = corporateRole;
     }
 
