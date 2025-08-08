@@ -1,6 +1,7 @@
 import React from 'react';
 import { Question, QuestionnaireType } from './questionnaires';
 import { StoredAnswer } from './PersonalityTest';
+import CountryAutocomplete from './CountryAutocomplete';
 
 interface QuestionBlockProps {
   question: Question;
@@ -21,6 +22,9 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
   onTextInput,
   onScale,
 }) => {
+  // Special handling for country autocomplete on question id 3
+  const isCountryQuestion = question.id === 3 && question.type === 'text-input';
+
   return (
     <div id={`question-${question.id}`} className="question-container">
       <h2 className="question-text">
@@ -39,7 +43,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
           ))}
         </div>
       )}
-      {question.type === 'text-input' && (
+      {question.type === 'text-input' && !isCountryQuestion && (
         <div className="text-input-container">
           <input
             type="text"
@@ -49,6 +53,14 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
             placeholder={language === 'en' ? 'Enter your answer here' : '在此输入您的答案'}
           />
         </div>
+      )}
+      {isCountryQuestion && (
+        <CountryAutocomplete
+          value={currentAnswer?.value || ''}
+          onChange={(val) => onTextInput(question, val)}
+          language={language}
+          placeholder={language === 'en' ? 'Start typing a country...' : '开始输入国家名称...'}
+        />
       )}
       {question.type === 'scale-question' && (
         <div className="scale-question-container">
