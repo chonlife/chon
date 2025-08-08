@@ -28,20 +28,39 @@ const AccountSignup: React.FC<AccountSignupProps> = ({ language, answers, onCanc
   const [showPassword, setShowPassword] = useState(false);
   const [showError, setShowError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [effectiveAnswers, setEffectiveAnswers] = useState<Record<number, StoredAnswer>>({});
 
   const allCountries = countries as CountryItem[];
 
-  // Prefill email from question 6 if answered
+  // Resolve answers: prefer prop; fallback to localStorage
   useEffect(() => {
-    const q6 = answers[6]?.value;
-    if (typeof q6 === 'string' && q6.includes('@')) {
-      setEmail(q6);
+    const hasPropAnswers = answers && Object.keys(answers).length > 0;
+    if (hasPropAnswers) {
+      setEffectiveAnswers(answers);
+      return;
+    }
+    try {
+      const saved = localStorage.getItem('chon_personality_answers');
+      if (saved) {
+        const parsed = JSON.parse(saved) as Record<number, StoredAnswer>;
+        setEffectiveAnswers(parsed || {});
+      }
+    } catch (_) {
+      setEffectiveAnswers({});
     }
   }, [answers]);
 
-  // Prefill country code from question 3 (country), default to US if not found
+  // Prefill email from question id 6 if answered
   useEffect(() => {
-    const q3 = answers[3]?.value;
+    const q6 = effectiveAnswers[6]?.value;
+    if (typeof q6 === 'string' && q6.includes('@')) {
+      setEmail(q6);
+    }
+  }, [effectiveAnswers]);
+
+  // Prefill country code from question id 3 (country), default to US if not found
+  useEffect(() => {
+    const q3 = effectiveAnswers[3]?.value;
     if (typeof q3 === 'string' && q3.trim().length > 0) {
       const lower = q3.toLowerCase();
       const found = allCountries.find(c => (c.country_name_en || '').toLowerCase() === lower || (c.country_name_cn || '') === q3);
@@ -52,12 +71,13 @@ const AccountSignup: React.FC<AccountSignupProps> = ({ language, answers, onCanc
     }
     // Default
     setPhoneCode('+1');
-  }, [answers, allCountries]);
+  }, [effectiveAnswers, allCountries]);
 
   const codeOptions = useMemo(() => {
     return allCountries
       .filter(c => c.country_code)
       .map(c => ({
+        id: `${c.ab || c.country_name_en}-${c.country_code}`,
         value: `+${c.country_code}`,
         label: language === 'en' ? `${c.country_name_en} (+${c.country_code})` : `${c.country_name_cn} (+${c.country_code})`
       }));
@@ -78,8 +98,19 @@ const AccountSignup: React.FC<AccountSignupProps> = ({ language, answers, onCanc
     if (username.trim().length < 2) {
       return language === 'en' ? 'Username must be at least 2 characters.' : '用户名至少2个字符。';
     }
-    if (password.length < 6) {
-      return language === 'en' ? 'Password must be at least 6 characters.' : '密码至少6个字符。';
+    // Password rules: min 10 chars, must include letters and numbers
+    const minLen = 10;
+    const hasLetter = /[A-Za-z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    if (password.length < minLen) {
+      return language === 'en'
+        ? `Password must be at least ${minLen} characters.`
+        : `密码至少${minLen}个字符。`;
+    }
+    if (!(hasLetter && hasNumber)) {
+      return language === 'en'
+        ? 'Password must include both letters and numbers.'
+        : '密码需包含字母和数字。';
     }
     return null;
   };
@@ -118,7 +149,7 @@ const AccountSignup: React.FC<AccountSignupProps> = ({ language, answers, onCanc
 
   return (
     <div className="account-signup-container" lang={language}>
-      <h1 className="signup-title">{language === 'en' ? 'Create Your Account' : '创建您的账户'}</h1>
+      <h1 className="signup-title">{language === 'en' ? 'Save Results & Create Your Account' : '保存结果并创建您的账户'}</h1>
       <form className="account-signup-form" onSubmit={handleSubmit}>
         {/* Username */}
         <div className="field">
@@ -175,7 +206,7 @@ const AccountSignup: React.FC<AccountSignupProps> = ({ language, answers, onCanc
           <div className="split">
             <select value={phoneCode} onChange={(e) => setPhoneCode(e.target.value)}>
               {codeOptions.map(opt => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                <option key={opt.id} value={opt.value}>{opt.label}</option>
               ))}
             </select>
             <input
@@ -199,7 +230,7 @@ const AccountSignup: React.FC<AccountSignupProps> = ({ language, answers, onCanc
             {language === 'en' ? 'Back' : '返回'}
           </button>
           <button type="submit" className="primary-button" disabled={submitting}>
-            {submitting ? (language === 'en' ? 'Creating...' : '创建中...') : (language === 'en' ? 'Create Account' : '创建账户')}
+            {submitting ? (language === 'en' ? 'Creating...' : '创建中...') : (language === 'en' ? 'Save & Create Account' : '保存并创建账户')}
           </button>
         </div>
       </form>
