@@ -14,6 +14,7 @@ interface QuestionsSectionProps {
   showFinish: boolean;
   language: string;
   identity: QuestionnaireType | null;
+  workedInCorporate: boolean;
   currentAnswers: Record<number, StoredAnswer>;
   onMultipleChoice: (question: Question, optionId: string) => void;
   onTextInput: (question: Question, text: string) => void;
@@ -32,6 +33,7 @@ const QuestionsSection: React.FC<QuestionsSectionProps> = ({
   showFinish,
   language,
   identity,
+  workedInCorporate,
   currentAnswers,
   onMultipleChoice,
   onTextInput,
@@ -72,7 +74,9 @@ const QuestionsSection: React.FC<QuestionsSectionProps> = ({
         {/* Render section title if it exists */}
         {(section.sectionTitleEn || section.sectionTitleZh) && (
             <h1 className="section-title">
-            {language === 'en' ? section.sectionTitleEn : section.sectionTitleZh}
+            {language === 'en'
+              ? (!workedInCorporate && section.sectionLifeTitleEn ? section.sectionLifeTitleEn : section.sectionTitleEn)
+              : (!workedInCorporate && section.sectionLifeTitleZh ? section.sectionLifeTitleZh : section.sectionTitleZh)}
             </h1>
         )}
         {sectionQuestions.map((question) => (
@@ -82,6 +86,7 @@ const QuestionsSection: React.FC<QuestionsSectionProps> = ({
             currentAnswer={currentAnswers[question.id]}
             language={language}
             identity={identity}
+            workedInCorporate={workedInCorporate}
             onMultipleChoice={onMultipleChoice}
             onTextInput={onTextInput}
             onScale={onScale}

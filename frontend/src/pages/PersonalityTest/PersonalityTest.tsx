@@ -5,7 +5,7 @@ import LanguageSelector from '../../components/LanguageSelector/LanguageSelector
 import './PersonalityTest.css';
 import { scrollToNextQuestion, scrollToFirstQuestionOfNextPage } from './ScrollUtils.ts';
 import questionnaireApi from '../../api/questionnaire.ts';
-import { Question, QuestionSection, QuestionnaireType, questionsMenu, QuestionMenu, questions } from './questionnaires.ts';
+import { Question, QuestionSection, QuestionnaireType, questionsMenu, QuestionMenu } from './questionnaires.ts';
 import IdentitySelection, { IdentityType, CorporateRole } from './IdentitySelection.tsx';
 import QuestionsSection from './QuestionsSection.tsx';
 import Results from '../Results/Results.tsx';
@@ -56,7 +56,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   const [userIntroChoice, setUserIntroChoice] = useState<string | null>(null);
   const [selectedIdentity, setSelectedIdentity] = useState<QuestionnaireType | null>(null);
   const [gender, setGender] = useState<string | null>(null);
-  const [workedInCoporate, setWorkedInCoporate] = useState<boolean>(false);
+  const [workedInCoporate, setWorkedInCoporate] = useState<boolean>(true);
   const [currentSection, setCurrentSection] = useState<number>(0);
   // Update answers type to store more information
   const [answers, setAnswers] = useState<Record<number, StoredAnswer>>({});
@@ -105,6 +105,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
           showNext={showNext}
           showFinish={showFinish}
           currentAnswers={answers}
+          workedInCorporate={workedInCoporate}
           onMultipleChoice={handleMultipleChoiceAnswer}
           onTextInput={handleTextAnswer}
           onScale={handleScaleAnswer}
@@ -367,6 +368,16 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   // Handle answer selection for multiple choice questions
   const handleMultipleChoiceAnswer = (question: Question, optionId: string) => {
     const currentAnswers = answers;
+    // If corporate experience question (per request: id=2; also handle legacy id=4)
+    if ([2, 4].includes(question.id)) {
+      const opt: any = (question as any).options?.find((o: any) => o.id === optionId);
+      const en = (opt?.textEn || '').toLowerCase();
+      const zh = opt?.textZh || '';
+      const isYes = en.includes('yes') || zh.includes('是');
+      const isNo = en.includes('no') || zh.includes('否');
+      if (isYes) setWorkedInCoporate(true);
+      if (isNo) setWorkedInCoporate(false);
+    }
     // Multi-select support when question.multiSelect is true
     if (question.type === 'multiple-choice' && (question as any).multiSelect) {
       const prev = currentAnswers[question.id]?.value;

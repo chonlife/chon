@@ -8,6 +8,7 @@ interface QuestionBlockProps {
   currentAnswer: StoredAnswer | undefined;
   language: string;
   identity: QuestionnaireType | null;
+  workedInCorporate: boolean;
   onMultipleChoice: (question: Question, optionId: string) => void;
   onTextInput: (question: Question, value: string) => void;
   onScale: (question: Question, value: string, identity: QuestionnaireType | null) => void;
@@ -18,6 +19,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
   currentAnswer,
   language,
   identity,
+  workedInCorporate,
   onMultipleChoice,
   onTextInput,
   onScale,
@@ -28,7 +30,9 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
   return (
     <div id={`question-${question.id}`} className="question-container">
       <h2 className="question-text">
-        {language === 'en' ? question.textEn : question.textZh}
+        {language === 'en'
+          ? (!workedInCorporate && (question as any).textLifeEn ? (question as any).textLifeEn : question.textEn)
+          : (!workedInCorporate && (question as any).textLifeZh ? (question as any).textLifeZh : question.textZh)}
       </h2>
       {question.type === 'multiple-choice' && (
         <div className="answer-options">

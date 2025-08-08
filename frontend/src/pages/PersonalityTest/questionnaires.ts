@@ -18,6 +18,8 @@ interface BaseQuestion {
   id: number;
   textEn: string;
   textZh: string;
+  textLifeEn?: string;
+  textLifeZh?: string;
 }
 
 export interface MultipleChoiceQuestion extends BaseQuestion {
@@ -49,6 +51,8 @@ export interface QuestionSection {
   sectionId: number;
   sectionTitleEn: string;
   sectionTitleZh: string;
+  sectionLifeTitleEn?: string;
+  sectionLifeTitleZh?: string;
   questions: number[];
 }
 
@@ -808,6 +812,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'How involved are you with your previous social life from work?',
     textZh: '自己与以往工作的社交联系程度如何？',
+    textLifeEn: 'How involved are you with your previous social life?',
+    textLifeZh: '自己与以往的社交联系程度如何？',
     tags: ['社交情商'],
     scaleLabels: {
       minEn: 'Not involved at all',
@@ -822,6 +828,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'How well does your work arrangement support your needs?',
     textZh: '您的工作安排对您有多大支持作用？',
+    textLifeEn: 'How well does your life arrangement support your needs?',
+    textLifeZh: '您的生活安排对您有多大支持作用？',
     scaleLabels: {
       minEn: 'Not supportive at all',
       minZh: '完全不支持',
@@ -835,6 +843,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'How connected are you to your professional identity?',
     textZh: '您对自己的职业身份感有多强？',
+    textLifeEn: 'How connected are you to your personal identity?',
+    textLifeZh: '您对自己的个人身份感有多强？',
     tags: ['自我意识'],
     scaleLabels: {
       minEn: 'Not connected – motherhood is full priority',
@@ -849,6 +859,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'How has motherhood impacted your career progression?',
     textZh: '母亲身份对您的职业发展或晋升机会有何影响？',
+    textLifeEn: 'How has motherhood impacted your personal development?',
+    textLifeZh: '成为母亲对您个人发展有何影响？',
     scaleLabels: {
       minEn: 'Very negative – significantly hindered',
       minZh: '非常负面 – 明显阻碍',
@@ -862,6 +874,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'How is your work-life balance supported by your company?',
     textZh: '您的工作与生活平衡如何被贵司支持？',
+    textLifeEn: 'How is your life balance supported by your community?',
+    textLifeZh: '您的生活平衡如何被社区支持？',
     tags: ['自我意识'],
     scaleLabels: {
       minEn: 'Not capable of being supported',
@@ -1250,6 +1264,8 @@ export const questionsMenu: QuestionMenu[] = [
         sectionId: 1,
         sectionTitleEn: "I. About Work-Life Balance",
         sectionTitleZh: "I. 关于工作与生活的平衡",
+        sectionLifeTitleEn: "I. About Life Balance",
+        sectionLifeTitleZh: "I. 关于生活平衡",
         questions: [59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 25]
       },
       {
