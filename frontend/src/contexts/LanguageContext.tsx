@@ -33,12 +33,10 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
   const setLanguage = (lang: 'en' | 'zh') => {
     setLanguageState(lang);
     localStorage.setItem('language', lang);
-    console.log('Language set to:', lang);
   };
   
   useEffect(() => {
     localStorage.setItem('language', 'en');
-    console.log('Current language:', language);
   }, []);
 
   return (

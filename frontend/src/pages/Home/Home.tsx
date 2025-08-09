@@ -12,15 +12,6 @@ const Home = () => {
     return <span dangerouslySetInnerHTML={{ __html: wrappedHtml }} />;
   };
 
-  const debugLanguage = () => {
-    console.log('Current language in Home:', language);
-    console.log('Current translations in Home:', t);
-  };
-
-  React.useEffect(() => {
-    debugLanguage();
-  }, [language, t]);
-
   const handleCtaClick = () => {
     navigate('/personality-test');
   };

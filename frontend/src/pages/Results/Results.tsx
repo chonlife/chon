@@ -45,7 +45,6 @@ const HexagonChart: React.FC<{
   animationKey?: number,
   selectedCharacter: CardData | null // Add selected character prop
 }> = ({ scores, labels, language, animationKey, selectedCharacter }) => {
-  console.log('scores', scores);
   // 六边形的6个顶点 - 调整起始角度为30度，使顶点而非边在正上方
   const getHexagonPoints = (center: [number, number], size: number) => {
     const points = [];
@@ -79,7 +78,6 @@ const HexagonChart: React.FC<{
     for (let i = 0; i < 6; i++) {
       const tag = tagKeys[i];
       const score = scores[tag] || 0;
-      console.log('score', score);
       const scaledSize = (size * score) / 100;
       // 从30度开始，每隔60度一个顶点
       const angle = (Math.PI / 6) + (Math.PI / 3 * i);
@@ -706,7 +704,6 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount }) => {
     // 从localStorage获取用户测试结果或使用模拟数据
     const getTagStats = () => {
       const savedStats = localStorage.getItem('tagStats');
-      console.log('savedStats', savedStats);
       if (savedStats) {
         try {
           return JSON.parse(savedStats);

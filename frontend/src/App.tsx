@@ -21,7 +21,6 @@ function App() {
   // 当语言变化时，更新HTML根元素的lang属性
   useEffect(() => {
     document.documentElement.lang = language;
-    console.log('Document language set to:', language);
   }, [language]);
 
   // 监听路由变化，当不在personality-test页面时重置为黑色主题

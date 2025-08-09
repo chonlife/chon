@@ -6,7 +6,6 @@ const LanguageSelector = () => {
   const { language, setLanguage } = useLanguage();
 
   const toggleLanguage = (lang: 'en' | 'zh') => {
-    console.log('Language selected:', lang);
     setLanguage(lang);
   };
 

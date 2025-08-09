@@ -109,7 +109,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     storedAnswers: Record<number, StoredAnswer>
   ): number => {
     const menu = getMenuByIdentity(identity);
-    console.log("menu", menu);
     if (!menu) return 0;
     for (let i = 0; i < menu.sections.length; i += 1) {
       const sec = menu.sections[i];
