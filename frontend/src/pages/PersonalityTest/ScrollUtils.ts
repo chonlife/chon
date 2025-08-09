@@ -74,3 +74,15 @@ export const scrollToFirstQuestionOfNextPage = (): void => {
     }
   }, 500); // 500ms延迟，确保页面已切换
 }; 
+
+/**
+ * 滚动到指定问题元素
+ * @param questionId 目标问题的ID
+ */
+export const scrollToQuestion = (questionId: number): void => {
+  // 使用小延迟确保DOM渲染完成
+  setTimeout(() => {
+    const el = document.getElementById(`question-${questionId}`);
+    el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 50);
+};

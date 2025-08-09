@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext.tsx';
 import LanguageSelector from '../../components/LanguageSelector/LanguageSelector.tsx';
 import './PersonalityTest.css';
-import { scrollToNextQuestion, scrollToFirstQuestionOfNextPage } from './ScrollUtils.ts';
+import { scrollToNextQuestion, scrollToFirstQuestionOfNextPage, scrollToQuestion } from './ScrollUtils.ts';
 import questionnaireApi from '../../api/questionnaire.ts';
 import { Question, QuestionSection, QuestionnaireType, questionsMenu, QuestionMenu } from './questionnaires.ts';
 import IdentitySelection, { IdentityType, CorporateRole } from './IdentitySelection.tsx';
@@ -70,6 +70,9 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   });
 
   const [selectedRole, setSelectedRole] = useState<CorporateRole | null>(null);
+  const initializedSectionRef = useRef<boolean>(false);
+  const hasMountedAnswersRef = useRef<boolean>(false);
+  const hasMountedSectionRef = useRef<boolean>(false);
 
   // Add interface definition
   interface TagStats {
@@ -79,6 +82,51 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     averageScore: number;
     answeredQuestions: number;
   }
+
+  // Helpers: sections and progress
+  const getMenuByIdentity = (identity: QuestionnaireType): QuestionMenu | null => {
+    return questionsMenu.find(m => m.identity === identity) || null;
+  };
+
+  const getSectionByIndex = (
+    identity: QuestionnaireType,
+    index: number
+  ): QuestionSection | null => {
+    const menu = getMenuByIdentity(identity);
+    if (!menu) return null;
+    return menu.sections[index] ?? null;
+  };
+
+  const isQuestionAnswered = (
+    questionId: number,
+    storedAnswers: Record<number, StoredAnswer>
+  ): boolean => {
+    return storedAnswers[questionId] !== undefined;
+  };
+
+  const findFirstIncompleteSection = (
+    identity: QuestionnaireType,
+    storedAnswers: Record<number, StoredAnswer>
+  ): number => {
+    const menu = getMenuByIdentity(identity);
+    console.log("menu", menu);
+    if (!menu) return 0;
+    for (let i = 0; i < menu.sections.length; i += 1) {
+      const sec = menu.sections[i];
+      const allAnswered = sec.questions.every(qid => isQuestionAnswered(qid, storedAnswers));
+      if (!allAnswered) return i;
+    }
+    // If everything answered, point to last section
+    return Math.max(0, menu.sections.length - 1);
+  };
+
+  const findFirstUnansweredQuestionInSection = (
+    section: QuestionSection,
+    storedAnswers: Record<number, StoredAnswer>
+  ): number | null => {
+    const target = section.questions.find(qid => !isQuestionAnswered(qid, storedAnswers));
+    return target ?? null;
+  };
 
   const renderQuestionsSection = (identity: QuestionnaireType, currentSection: number) => {
     const menu = questionsMenu.find(menu => menu.identity === identity) || null;
@@ -125,30 +173,44 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     setCurrentSection(currentSection - 1);
   }
   
-  // 从本地存储加载答案数据
+  // 从本地存储加载初始数据（合并初始化）
   useEffect(() => {
     const savedAnswers = localStorage.getItem('chon_personality_answers');
     const savedStep = localStorage.getItem('chon_personality_step');
     const savedIdentity = localStorage.getItem('chon_personality_identity');
     const savedUserIntroChoice = localStorage.getItem('chon_personality_user_intro_choice');
-    
+    const savedSection = localStorage.getItem('chon_personality_section');
+
     if (savedAnswers) {
-      setAnswers(JSON.parse(savedAnswers));
+      try {
+        const parsed = JSON.parse(savedAnswers);
+        setAnswers(parsed);
+      } catch {}
     }
-    
-    // Only set non-intro steps from storage
+
+    if (savedIdentity) {
+      try {
+        setSelectedIdentity(JSON.parse(savedIdentity) as QuestionnaireType);
+      } catch {}
+    }
+
+    if (savedUserIntroChoice) {
+      setUserIntroChoice(savedUserIntroChoice);
+    }
+
+    // 恢复 section 索引（若无则保持 0，稍后根据答案计算）
+    if (savedSection) {
+      const parsedSection = parseInt(savedSection, 10);
+      if (!Number.isNaN(parsedSection)) {
+        setCurrentSection(parsedSection);
+      }
+    }
+
+    // 仅在存在有效的保存步骤时恢复，否则保持在 intro
     if (savedStep && savedStep !== 'intro' && isValidStep(savedStep)) {
       setStep(savedStep as TestStep);
     } else {
-      setStep('intro'); // Explicitly set to intro if no valid saved step
-    }
-    
-    if (savedIdentity) {
-      setSelectedIdentity(JSON.parse(savedIdentity) as QuestionnaireType);
-    }
-    
-    if (savedUserIntroChoice) {
-      setUserIntroChoice(savedUserIntroChoice);
+      setStep('intro');
     }
   }, []);
   
@@ -157,8 +219,12 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     return ['intro', 'identity', 'privacy', 'questionnaire', 'results', 'account'].includes(step);
   };
   
-  // 保存答案到本地存储
+  // 保存答案到本地存储（跳过首次挂载，避免覆盖已保存数据）
   useEffect(() => {
+    if (!hasMountedAnswersRef.current) {
+      hasMountedAnswersRef.current = true;
+      return;
+    }
     localStorage.setItem('chon_personality_answers', JSON.stringify(answers));
     if (Object.keys(answers).length > 0) {
       setShowSaveIndicator(true);
@@ -176,27 +242,56 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     }
   }, [step]);
   
-  // Load saved answers and other data
+  // 持久化当前 section 索引（跳过首次挂载，避免覆盖已保存数据）
   useEffect(() => {
-    const savedAnswers = localStorage.getItem('chon_personality_answers');
-    const savedIdentity = localStorage.getItem('chon_personality_identity');
-    const savedUserIntroChoice = localStorage.getItem('chon_personality_user_intro_choice');
-    
-    if (savedAnswers) {
-      setAnswers(JSON.parse(savedAnswers));
+    if (!hasMountedSectionRef.current) {
+      hasMountedSectionRef.current = true;
+      return;
     }
-    
-    // Always start at intro
-    setStep('intro');
-    
-    if (savedIdentity) {
-      setSelectedIdentity(JSON.parse(savedIdentity) as QuestionnaireType);
+    localStorage.setItem('chon_personality_section', String(currentSection));
+  }, [currentSection]);
+
+  // 从答案派生性别与是否在企业工作（用于文案与标签）
+  useEffect(() => {
+    const sexAnswer = answers[1]?.value;
+    if (typeof sexAnswer === 'string') {
+      if (sexAnswer === 'A') setGender('Female');
+      if (sexAnswer === 'B') setGender('Male');
     }
-    
-    if (savedUserIntroChoice) {
-      setUserIntroChoice(savedUserIntroChoice);
+
+    const corpAnswer = answers[4]?.value; // Q4: Yes/No => A/B
+    if (typeof corpAnswer === 'string') {
+      if (corpAnswer === 'A') setWorkedInCoporate(true);
+      if (corpAnswer === 'B') setWorkedInCoporate(false);
     }
-  }, []);
+  }, [answers]);
+
+  // 进入问卷或切换分区时，滚动到第一个未完成题目（不在回答变更时触发）
+  useEffect(() => {
+    if (step !== 'questionnaire' || !selectedIdentity) return;
+    if (!initializedSectionRef.current) {
+      const savedSectionStr = localStorage.getItem('chon_personality_section');
+      if (!savedSectionStr) {
+        const firstIncomplete = findFirstIncompleteSection(selectedIdentity, answers);
+        setCurrentSection(firstIncomplete);
+      } else {
+        const parsed = parseInt(savedSectionStr, 10);
+        if (!Number.isNaN(parsed)) {
+          setCurrentSection(parsed);
+        }
+      }
+      initializedSectionRef.current = true;
+    }
+
+    // 滚动定位（基于最新的 currentSection 与 answers）
+    const section = getSectionByIndex(selectedIdentity, currentSection);
+    const targetQ = section ? findFirstUnansweredQuestionInSection(section, answers) : null;
+    if (targetQ != null) {
+      scrollToQuestion(targetQ);
+    } else if (section && section.questions.length > 0) {
+      scrollToQuestion(section.questions[0]);
+    }
+  }, [step, selectedIdentity, currentSection]);
   
   // 保存身份选择到本地存储
   useEffect(() => {
@@ -571,8 +666,9 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     localStorage.removeItem('chon_personality_answers');
     localStorage.removeItem('chon_personality_step');
     localStorage.removeItem('chon_personality_identity');
-    localStorage.removeItem('chon_personality_user_choice');
+    localStorage.removeItem('chon_personality_user_intro_choice');
     localStorage.removeItem('chon_personality_role');
+    localStorage.removeItem('chon_personality_section');
     localStorage.removeItem('tagStats');
     
     // Reset all state and go directly to identity
@@ -588,7 +684,19 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   const continueTest = () => {
     const savedStep = localStorage.getItem('chon_personality_step');
     if (savedStep && savedStep !== 'intro' && isValidStep(savedStep)) {
-      setStep(savedStep as TestStep);
+      const nextStep = savedStep as TestStep;
+      setStep(nextStep);
+      if (nextStep === 'questionnaire') {
+        // 恢复或计算 section（滚动逻辑由 effect 处理）
+        const savedSectionStr = localStorage.getItem('chon_personality_section');
+        const savedSection = savedSectionStr ? parseInt(savedSectionStr, 10) : NaN;
+        if (!Number.isNaN(savedSection)) {
+          setCurrentSection(savedSection);
+        } else if (selectedIdentity) {
+          const firstIncomplete = findFirstIncompleteSection(selectedIdentity, answers);
+          setCurrentSection(firstIncomplete);
+        }
+      }
     } else {
       setStep('identity');
     }
