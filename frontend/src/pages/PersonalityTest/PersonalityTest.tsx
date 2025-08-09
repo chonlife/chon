@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext.tsx';
 import LanguageSelector from '../../components/LanguageSelector/LanguageSelector.tsx';
 import './PersonalityTest.css';
@@ -52,6 +52,7 @@ export interface StoredAnswer {
 const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTestProps) => {
   const { t, language } = useLanguage();
   const location = useLocation();
+  const navigate = useNavigate();
   // Always start at intro
   const [step, setStep] = useState<TestStep>('intro');
   const [userIntroChoice, setUserIntroChoice] = useState<string | null>(null);
@@ -604,30 +605,53 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     }
   };
 
-  // Exit button that appears only on questionnaire and privacy screens
-  const handleExit = (e: React.MouseEvent) => {
-    // 添加确认对话框
-    const confirmExit = window.confirm(
-      language === 'en' 
-        ? 'Are you sure you want to exit? All progress will be lost.'
-        : '确定要退出吗？所有进度将会丢失。'
+  // Restart button (replaces Exit) on questionnaire/privacy screens
+  const handleRestart = (e?: React.MouseEvent) => {
+    const confirmRestart = window.confirm(
+      language === 'en'
+        ? 'Restart the test? All progress will be cleared.'
+        : '重新开始测试？所有进度将被清除。'
     );
-    
-    if (!confirmExit) {
-      e.preventDefault(); // 阻止导航
+    if (!confirmRestart) {
+      e?.preventDefault();
       return;
     }
-    
-    // 清空所有localStorage数据
-    localStorage.clear();
-    
+    clearTestData();
   };
 
-  const exitButton = (
+  // Save & Exit button on questionnaire screens only
+  const handleSaveAndExit = () => {
+    try {
+      // Ensure latest values are saved
+      localStorage.setItem('chon_personality_step', 'questionnaire');
+      localStorage.setItem('chon_personality_answers', JSON.stringify(answers));
+      if (selectedIdentity) {
+        localStorage.setItem('chon_personality_identity', JSON.stringify(selectedIdentity));
+      }
+      if (selectedRole) {
+        localStorage.setItem('chon_personality_role', JSON.stringify(selectedRole));
+      }
+      localStorage.setItem('chon_personality_section', String(currentSection));
+    } catch (e) {
+      // swallow
+    }
+    navigate('/');
+  };
+
+  const topActions = (
     <div className="exit-actions">
-      <Link to="/" className="exit-button" lang={language} onClick={handleExit}>
-        {language === 'en' ? '← Exit' : '← 退出'}
-      </Link>
+      {/* Restart button (was Exit) */}
+      <button type="button" className="exit-button restart-button" lang={language} onClick={handleRestart}>
+        <img src={new URL('./Restart.svg', import.meta.url).toString()} alt="Restart" style={{ width: 18, height: 18, marginRight: 6 }} />
+        {language === 'en' ? 'Restart' : '重新开始'}
+      </button>
+      {/* Save & Exit only on questionnaire pages */}
+      {step === 'questionnaire' && (
+        <button type="button" className="exit-button save-exit-button" lang={language} onClick={handleSaveAndExit}>
+          <img src={new URL('./Save.svg', import.meta.url).toString()} alt="Save & Exit" style={{ width: 18, height: 18, marginRight: 6 }} />
+          {language === 'en' ? 'Save & Exit' : '保存并退出'}
+        </button>
+      )}
     </div>
   );
 
@@ -843,7 +867,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         }
         return null;
       case 'results':
-        return <Results onCreateAccount={() => setStep('account')} />;
+        return <Results onCreateAccount={() => setStep('account')} onRestart={() => handleRestart()} />;
       case 'account':
         return (
           <AccountSignup
@@ -864,7 +888,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   return (
     <>
       {step === 'results' ? (
-        <Results onCreateAccount={() => setStep('account')} />
+        <Results onCreateAccount={() => setStep('account')} onRestart={() => handleRestart()} />
       ) : (
         <main className={containerClass} lang={language}>
           <MetaTags />
@@ -883,8 +907,8 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
             </>
           )}
           
-          {/* Show exit button at the top left corner for questionnaire and privacy screens */}
-          {(step === 'privacy' || step === 'questionnaire') && exitButton}
+      {/* Show top actions (Restart; Save & Exit on questionnaire) */}
+      {(step === 'privacy' || step === 'questionnaire') && topActions}
           
           {renderContent()}
           

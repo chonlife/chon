@@ -476,9 +476,10 @@ const MemoizedHexagonChart = React.memo(({ scores, labels, language, animationKe
 
 interface ResultsProps {
   onCreateAccount?: () => void;
+  onRestart?: () => void;
 }
 
-const Results: React.FC<ResultsProps> = ({ onCreateAccount }) => {
+const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
   const { language } = useLanguage();
   const [tagScores, setTagScores] = useState<Record<string, number>>({});
   const [activeCardIndex, setActiveCardIndex] = useState(0);
@@ -976,6 +977,12 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount }) => {
             onClick={() => onCreateAccount && onCreateAccount()}
           >
             {language === 'en' ? 'Save my results' : '保存我的结果'}
+          </button>
+          <button
+            className="secondary-button sticky-cta__button"
+            onClick={() => onRestart && onRestart()}
+          >
+            {language === 'en' ? 'Restart' : '重新开始'}
           </button>
         </div>
       </div>
