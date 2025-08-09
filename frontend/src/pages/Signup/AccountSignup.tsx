@@ -102,15 +102,10 @@ const AccountSignup: React.FC<AccountSignupProps> = ({ language, answers, onCanc
     const minLen = 10;
     const hasLetter = /[A-Za-z]/.test(password);
     const hasNumber = /\d/.test(password);
-    if (password.length < minLen) {
+    if (password.length < minLen || !hasLetter || !hasNumber) {
       return language === 'en'
-        ? `Password must be at least ${minLen} characters.`
-        : `密码至少${minLen}个字符。`;
-    }
-    if (!(hasLetter && hasNumber)) {
-      return language === 'en'
-        ? 'Password must include both letters and numbers.'
-        : '密码需包含字母和数字。';
+        ? `Password must be at least ${minLen} characters and include both letters and numbers.`
+        : `密码至少${minLen}个字符，且需包含字母和数字。`;
     }
     return null;
   };
@@ -183,7 +178,10 @@ const AccountSignup: React.FC<AccountSignupProps> = ({ language, answers, onCanc
             onClick={() => setShowPassword(s => !s)}
             aria-label={language === 'en' ? (showPassword ? 'Hide password' : 'Show password') : (showPassword ? '隐藏密码' : '显示密码')}
           >
-            {showPassword ? '🙈' : '👁️'}
+            {showPassword ? 
+                <img src={new URL('../../icons/preview-open.svg', import.meta.url).toString()} alt="Preview Open" style={{ width: 18, height: 18, marginRight: 6 }} /> 
+                : 
+                <img src={new URL('../../icons/preview-close.svg', import.meta.url).toString()} alt="Preview Close" style={{ width: 18, height: 18, marginRight: 6 }} />}
           </button>
         </div>
 

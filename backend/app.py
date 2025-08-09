@@ -24,6 +24,18 @@ supabase = create_client(supabase_url, supabase_key)
 def index():
     return jsonify({"message": "CHON Personality Test API"})
 
+# Ensure CORS headers exist on every response and make preflight expectations explicit
+@app.after_request
+def apply_cors_headers(response):
+    origin = request.headers.get('Origin')
+    # Echo back the request origin when present; otherwise allow all
+    response.headers['Access-Control-Allow-Origin'] = origin or '*'
+    response.headers['Vary'] = 'Origin'
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS, PUT, PATCH, DELETE'
+    return response
+
 @app.route('/api/intro-choice', methods=['POST'])
 def update_intro_choice():
     """
@@ -186,7 +198,7 @@ def batch_save_question_responses():
         print(f"Error saving batch responses: {e}")
         return jsonify({'error': str(e)}), 500
 
-@app.route('/api/signup', methods=['POST'])
+@app.route('/api/signup', methods=['POST', 'OPTIONS'])
 def signup():
     """
     Create a user account linked with questionnaire user_id.
@@ -200,6 +212,10 @@ def signup():
     }
     At least one of email or phone_number must be present.
     """
+    # Handle CORS preflight explicitly to avoid 4xx/5xx from interfering
+    if request.method == 'OPTIONS':
+        return ('', 204)
+
     try:
         data = request.get_json()
         if not data:
