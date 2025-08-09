@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext.tsx';
 import LanguageSelector from '../../components/LanguageSelector/LanguageSelector.tsx';
 import './PersonalityTest.css';
-import { scrollToNextQuestion, scrollToFirstQuestionOfNextPage, scrollToQuestion } from './ScrollUtils.ts';
+import { scrollToNextQuestion, scrollToFirstQuestionOfNextPage, scrollToQuestion, scrollToPageTop } from './ScrollUtils.ts';
 import questionnaireApi from '../../api/questionnaire.ts';
 import { Question, QuestionSection, QuestionnaireType, questionsMenu, QuestionMenu } from './questionnaires.ts';
 import IdentitySelection, { IdentityType, CorporateRole } from './IdentitySelection.tsx';
@@ -441,6 +441,8 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     if (!selectedIdentity || (isCorporate && !selectedRole)) {
       return;
     }
+    // Ensure privacy page starts at top
+    scrollToPageTop();
     setStep('privacy');
   };
 

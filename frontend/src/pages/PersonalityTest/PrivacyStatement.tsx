@@ -12,6 +12,10 @@ const PrivacyStatement: React.FC<PrivacyStatementProps> = ({
   onContinue
 }) => {
   const { language } = useLanguage();
+  React.useEffect(() => {
+    // Scroll to top when mounting Privacy page
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, []);
 
   // English version with rich text formatting
   const privacyTextEn = (
@@ -70,7 +74,7 @@ const PrivacyStatement: React.FC<PrivacyStatementProps> = ({
         onClick={onContinue}
         lang={language}
       >
-        <span>{language === 'en' ? 'CONTINUE' : '继续'}</span>
+        <span>{language === 'en' ? 'AGREE & CONTINUE' : '同意并继续'}</span>
         <span className="continue-arrow">→</span>
       </button>
     </div>
