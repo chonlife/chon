@@ -653,6 +653,7 @@
 .text-answer-input::placeholder {
   color: #aaa;
   font-style: italic;
+  font-family: 'Kaisei Decol', serif;
 }
 
 /* Autocomplete styles for country list */

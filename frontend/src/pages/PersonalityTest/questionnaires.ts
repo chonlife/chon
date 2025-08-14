@@ -356,7 +356,7 @@ export const questions: Question[] = [
     scaleLabels: {
       minEn: 'Not supportive at all',
       minZh: '完全不支持',
-      maxEn: 'Highly supportive with clear policies and resources, please specify',
+      maxEn: 'Highly supportive',
       maxZh: '高度支持'
     }
   },
@@ -885,7 +885,7 @@ export const questions: Question[] = [
     textEn: 'How has motherhood impacted your career progression?',
     textZh: '母亲身份对您的职业发展或晋升机会有何影响？',
     textLifeEn: 'How has motherhood impacted your personal development?',
-    textLifeZh: '成为母亲对您个人发展有何影响？',
+    textLifeZh: '母亲身份对您的个人发展有何影响？',
     scaleLabels: {
       minEn: 'Very negative – significantly hindered',
       minZh: '非常负面 – 明显阻碍',
@@ -943,6 +943,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'How motivated do you feel to pursue career growth?',
     textZh: '您职业发展的动力有多强？',
+    textLifeEn: 'How motivated do you feel to pursue personal growth?',
+    textLifeZh: '您个人发展的动力有多强？',
     tags: ['核心耐力'],
     scaleLabels: {
       minEn: 'Not motivated at all',
@@ -957,6 +959,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'How satisfied are you with your work-life balance?',
     textZh: '您对您的工作与生活平衡满意吗？',
+    textLifeEn: 'How satisfied are you with your life balance?',
+    textLifeZh: '您对您的生活平衡满意吗？',
     tags: ['自我意识'],
     scaleLabels: {
       minEn: 'Very dissatisfied',
@@ -971,6 +975,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'Are your needs as a mother taken into account during workplace decisions?',
     textZh: '您作为母亲的需求是否在职场决策中被考虑到？',
+    textLifeEn: 'Are your needs as a mother taken into account during community decisions?',
+    textLifeZh: '您作为母亲的需求是否在社区决策中被考虑到？',
     tags: ['自我意识'],
     scaleLabels: {
       minEn: 'Never – completely overlooked',
@@ -985,6 +991,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'How connected do you feel with other mothers through your work?',
     textZh: '您在工作中与其他母亲的联系如何？',
+    textLifeEn: 'How connected do you feel with other mothers through your life?',
+    textLifeZh: '您在生活与其他母亲的联系如何？',
     tags: ['社交情商'],
     scaleLabels: {
       minEn: 'Very disconnected — no connection',
@@ -999,6 +1007,8 @@ export const questions: Question[] = [
     type: 'scale-question',
     textEn: 'Do you want to connect with other mothers through your profession?',
     textZh: '您是否想在工作中与其他职场母亲建立联系？',
+    textLifeEn: 'Do you want to connect with other mothers through your lifestyle?',
+    textLifeZh: '您是否想在生活与其他母亲建立联系？',
     tags: ['社交情商'],
     scaleLabels: {
       minEn: 'Never',
@@ -1376,13 +1386,13 @@ export const questionsMenu: QuestionMenu[] = [
         sectionId: 3,
         sectionTitleEn: "III. About Us, CHON",
         sectionTitleZh: "III. 关于我们，CHON",
-        questions: [26, 27, 71, 29, 28, 31, 30, 32, 72, 33, 35, 38, 39, 40, 41, 42, 43, 44]
+        questions: [26, 27, 71, 29, 28, 31, 30, 32, 72, 33, 35, 38, 39, 40]
       },
       {
         sectionId: 4,
         sectionTitleEn: "IV. About Motherhood",
         sectionTitleZh: "IV. 关于母亲",
-        questions: [73, 74, 75, 76, 77, 78, 79, 80, 51]
+        questions: [41, 42, 43, 44, 73, 74, 75, 76, 77, 78, 79, 80, 51]
       }
     ]
   },

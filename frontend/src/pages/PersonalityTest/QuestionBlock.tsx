@@ -33,7 +33,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
         {(() => {
           const qAny: any = question as any;
           // For corporate-only identity, prefer corporate-specific copy when present
-          if (identity === 'corporate') {
+          if (identity === 'corporate' || identity === 'other') {
             return language === 'en'
               ? (qAny.textCorporateEn || question.textEn)
               : (qAny.textCorporateZh || question.textZh);
@@ -73,7 +73,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
           value={typeof currentAnswer?.value === 'string' ? currentAnswer.value : ''}
           onChange={(val) => onTextInput(question, val)}
           language={language}
-          placeholder={language === 'en' ? 'Start typing a country name...' : '输入国家/地区名称...'}
+          placeholder={language === 'en' ? 'Start typing a country or region...' : '输入国家/地区名称...'}
         />
       )}
       {question.type === 'scale-question' && (
