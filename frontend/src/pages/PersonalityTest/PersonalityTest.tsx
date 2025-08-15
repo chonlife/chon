@@ -594,16 +594,11 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   const finishQuestionnaire = () => {
     // Calculate final results
     calculateTagResults();
-    
+    setStep('results');
     if (selectedIdentity) {
-      // Save all responses at once with the new format
-      questionnaireApi.saveAllQuestionResponses(answers, selectedIdentity, selectedRole)
-        .then(() => {
-          setStep('results');
-        })
-        .catch((error) => {
-          setStep('results');
-        });
+      questionnaireApi
+        .saveAllQuestionResponses(answers, selectedIdentity, selectedRole)
+        .catch(() => {});
     }
   };
 

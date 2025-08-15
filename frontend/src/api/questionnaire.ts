@@ -59,6 +59,20 @@ export const saveIntroChoice = async (choice: string): Promise<boolean> => {
 };
 
 /**
+ * Check if the user already has any questionnaire submissions saved
+ */
+export const hasSavedSubmission = async (userId: string): Promise<boolean> => {
+  try {
+    const response = await axios.get(`${API_URL}/api/user-responses/${userId}`);
+    const submissions = response?.data?.submissions;
+    return Array.isArray(submissions) && submissions.length > 0;
+  } catch (error) {
+    console.error('Error checking existing submissions:', error);
+    return false;
+  }
+};
+
+/**
  * 批量保存所有问卷回答到后端
  * @param answers 用户的回答记录
  * @param questionnaireType 问卷类型
@@ -123,6 +137,7 @@ export const createAccount = async (payload: Omit<SignupPayload, 'user_id'> & { 
 
 export default {
   saveIntroChoice,
+  hasSavedSubmission,
   saveAllQuestionResponses,
   createAccount
 }; 

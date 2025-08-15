@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import questionnaireApi from '../../api/questionnaire';
+import questionnaireApi, { QuestionnaireType } from '../../api/questionnaire';
 import { StoredAnswer } from '../PersonalityTest/PersonalityTest';
+import { CorporateRole } from '../PersonalityTest/IdentitySelection';
 import countries from '../PersonalityTest/country-list.json';
 import { getUserId } from '../../utils/userIdentification';
 import './AccountSignup.css';
@@ -121,6 +122,49 @@ const AccountSignup: React.FC<AccountSignupProps> = ({ language, answers, onCanc
     setSubmitting(true);
     try {
       const user_id = getUserId();
+
+      // Ensure questionnaire responses are stored before account creation
+      const alreadySaved = await questionnaireApi.hasSavedSubmission(user_id);
+      if (!alreadySaved) {
+        const identityStr = localStorage.getItem('chon_personality_identity');
+        const roleStr = localStorage.getItem('chon_personality_role');
+        const identity: QuestionnaireType | null = identityStr ? JSON.parse(identityStr) as QuestionnaireType : null;
+        const role: CorporateRole | null = roleStr ? JSON.parse(roleStr) as CorporateRole : null;
+
+        if (!identity || !effectiveAnswers || Object.keys(effectiveAnswers).length === 0) {
+          setShowError(
+            language === 'en'
+              ? 'Your questionnaire data is missing. Please finish the test again before creating an account.'
+              : '未找到您的问卷数据。请先完成测试后再创建账户。'
+          );
+          setSubmitting(false);
+          return;
+        }
+
+        const savedOk = await questionnaireApi.saveAllQuestionResponses(effectiveAnswers, identity, role);
+        if (!savedOk) {
+          setShowError(
+            language === 'en'
+              ? 'Failed to save your questionnaire responses. Please try again.'
+              : '保存问卷回答失败，请重试。'
+          );
+          setSubmitting(false);
+          return;
+        }
+
+        // Double-check presence after save
+        const nowSaved = await questionnaireApi.hasSavedSubmission(user_id);
+        if (!nowSaved) {
+          setShowError(
+            language === 'en'
+              ? 'We could not verify your questionnaire save. Please try again.'
+              : '无法验证问卷已保存，请重试。'
+          );
+          setSubmitting(false);
+          return;
+        }
+      }
+
       const ok = await questionnaireApi.createAccount({
         user_id,
         email: email || undefined,
