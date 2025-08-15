@@ -1,6 +1,7 @@
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext.tsx';
+import { useAuth } from '../../contexts/AuthContext.tsx';
 import questionnaireApi from '../../api/questionnaire';
 import './Login.css';
 import '../Signup/AccountSignup.css';
@@ -9,6 +10,13 @@ import countries from '../PersonalityTest/country-list.json';
 const Login = () => {
   const { language } = useLanguage();
   const navigate = useNavigate();
+  const { isAuthenticated, login } = useAuth();
+  // Redirect to profile if already logged in
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/profile', { replace: true });
+    }
+  }, [isAuthenticated, navigate]);
   const [identifier, setIdentifier] = useState(''); // email or local phone input
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -88,9 +96,8 @@ const Login = () => {
 
       const userId = loginResp.user.user_id;
       const username = loginResp.user.username;
-      // Persist logged in user basics
-      localStorage.setItem('chon_user_id', userId);
-      localStorage.setItem('chon_username', username || '');
+      // Persist logged in user basics & notify context
+      login(userId, username || '');
 
       // Fetch user's questionnaire submissions
       const resp = await questionnaireApi.getUserResponses(userId);
@@ -201,6 +208,15 @@ const Login = () => {
           </button>
         </div>
       </form>
+      <div style={{ marginTop: 16, display: 'flex', justifyContent: 'center' }}>
+        <button
+          type="button"
+          className="secondary-button"
+          onClick={() => navigate('/personality-test')}
+        >
+          {language === 'en' ? 'Take personality test and create account' : '去完成测试并创建账户'}
+        </button>
+      </div>
     </div>
   );
 };

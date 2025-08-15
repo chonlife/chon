@@ -6,6 +6,7 @@ interface Translation {
     personalityTest: string;
     contact: string;
     login: string;
+    profile: string;
   };
   home: {
     motherhood: {
@@ -97,6 +98,7 @@ const translations: TranslationsType = {
       personalityTest: 'PERSONALITY TEST',
       contact: 'CONTACT US',
       login: 'LOGIN',
+      profile: 'PROFILE',
     },
     home: {
       motherhood: {
@@ -184,6 +186,7 @@ const translations: TranslationsType = {
       personalityTest: '性格测试',
       contact: '联系我们',
       login: '登录',
+      profile: '个人资料',
     },
     home: {
       motherhood: {

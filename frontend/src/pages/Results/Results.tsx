@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../contexts/LanguageContext';
+import { useAuth } from '../../contexts/AuthContext.tsx';
 import './Results.css';
 
 interface CardData {
@@ -481,6 +482,7 @@ interface ResultsProps {
 
 const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
   const { language } = useLanguage();
+  const { isAuthenticated } = useAuth();
   const [tagScores, setTagScores] = useState<Record<string, number>>({});
   const [activeCardIndex, setActiveCardIndex] = useState(0);
   const [cards, setCards] = useState<CardData[]>([]);
@@ -980,8 +982,9 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
           <button
             className="primary-button sticky-cta__button"
             onClick={() => onCreateAccount && onCreateAccount()}
+            disabled={isAuthenticated}
           >
-            {language === 'en' ? 'Save my results' : '保存我的结果'}
+            {isAuthenticated ? (language === 'en' ? 'Saved' : '已保存') : (language === 'en' ? 'Save my results' : '保存我的结果')}
           </button>
           <button
             className="secondary-button sticky-cta__button"

@@ -5,6 +5,7 @@ import { CorporateRole } from '../PersonalityTest/IdentitySelection';
 import countries from '../PersonalityTest/country-list.json';
 import { getUserId } from '../../utils/userIdentification';
 import './AccountSignup.css';
+import { useAuth } from '../../contexts/AuthContext.tsx';
 
 interface AccountSignupProps {
   language: string;
@@ -30,6 +31,7 @@ const AccountSignup: React.FC<AccountSignupProps> = ({ language, answers, onCanc
   const [showError, setShowError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [effectiveAnswers, setEffectiveAnswers] = useState<Record<number, StoredAnswer>>({});
+  const { login: loginContext } = useAuth();
 
   const allCountries = countries as CountryItem[];
 
@@ -173,6 +175,8 @@ const AccountSignup: React.FC<AccountSignupProps> = ({ language, answers, onCanc
         password
       });
       if (ok) {
+        // Auto login after account creation
+        loginContext(user_id, username);
         onSuccess && onSuccess();
       } else {
         setShowError(language === 'en' ? 'Failed to create account.' : '创建账户失败。');

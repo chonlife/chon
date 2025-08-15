@@ -2,11 +2,13 @@ import { Link, useLocation } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext.tsx';
 import routes from '../../router.ts';
 import './Navigation.css';
+import { useAuth } from '../../contexts/AuthContext.tsx';
 
 const Navigation = () => {
   const location = useLocation();
   const currentPath = location.pathname;
   const { t } = useLanguage();
+  const { isAuthenticated } = useAuth();
 
   const getTranslatedName = (routeName: string) => {
     switch(routeName) {
@@ -18,6 +20,8 @@ const Navigation = () => {
         return t.navigation.contact;
       case 'LOGIN':
         return t.navigation.login || 'Login';
+      case 'PROFILE':
+        return t.navigation.profile || 'Profile';
       default:
         return routeName;
     }
@@ -32,15 +36,19 @@ const Navigation = () => {
 
   return (
     <nav className="nav-menu">
-      {navRoutes.map((route) => (
-        <Link
-          key={route.path}
-          to={route.path}
-          className={`nav-link ${isActive(route.path) ? 'active' : ''}`}
-        >
-          {getTranslatedName(route.name)}
-        </Link>
-      ))}
+      {navRoutes.map((route) => {
+        const path = (route.name === 'LOGIN' && isAuthenticated) ? '/profile' : route.path;
+        const label = (route.name === 'LOGIN' && isAuthenticated) ? getTranslatedName('PROFILE') : getTranslatedName(route.name);
+        return (
+          <Link
+            key={route.path}
+            to={path}
+            className={`nav-link ${isActive(path) ? 'active' : ''}`}
+          >
+            {label}
+          </Link>
+        );
+      })}
     </nav>
   );
 };
