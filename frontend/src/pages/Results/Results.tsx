@@ -863,14 +863,18 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
     return <FancyLoader />;
   }
 
+  // Use the currently selected character (from dock) for character introductions (red areas).
+  // Fall back to the best match when there is no explicit selection yet.
+  const displayedCard = matchedCard || bestMatchCard;
+
   return (
     <div className="results-container" lang={language}>
       <div className="results-layout">
         <div className="results-left">
           <div className="character-portrait">
             <img 
-              src={bestMatchCard.image}
-              alt={language === 'en' ? bestMatchCard.name.en : bestMatchCard.name.zh}
+              src={displayedCard.image}
+              alt={language === 'en' ? displayedCard.name.en : displayedCard.name.zh}
               onError={(e) => handleImageError(e, '350x350')}
             />
           </div>
@@ -883,8 +887,18 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
               animationKey={animationKey} 
               selectedCharacter={matchedCard}
             />
-            
-            {/* Character comparison section */}
+          </div>
+        </div>
+        
+        <div className="results-right">
+          <div className="character-info">
+            <h1 className="character-name">
+              {language === 'en' ? displayedCard?.name.en : displayedCard?.name.zh}
+            </h1>
+            <h2 className="character-title">
+              {language === 'en' ? displayedCard?.title.en : displayedCard?.title.zh}
+            </h2>
+            {/* Moved archetype dock under the character name/title */}
             <div className="character-comparison">
               <div className="comparison-title">
                 {language === 'en' ? 'Compare with other archetypes' : '与其他原型比较'}
@@ -921,30 +935,20 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
                 })}
               </div>
             </div>
-          </div>
-        </div>
-        
-        <div className="results-right">
-          <div className="character-info">
-            <h1 className="character-name">
-              {language === 'en' ? bestMatchCard?.name.en : bestMatchCard?.name.zh}
-            </h1>
-            <h2 className="character-title">
-              {language === 'en' ? bestMatchCard?.title.en : bestMatchCard?.title.zh}
-            </h2>
             
             <div className="mythology-description">
-              <p>{language === 'en' ? bestMatchCard?.mythology.en : bestMatchCard?.mythology.zh}</p>
+              <p>{language === 'en' ? displayedCard?.mythology.en : displayedCard?.mythology.zh}</p>
             </div>
           </div>
           
-          <div className="workplace-description">
-            <p>{language === 'en' ? bestMatchCard?.description.en : bestMatchCard?.description.zh}</p>
-          </div>
-          
-          <div className="user-results">
-            <h3>{language === 'en' ? 'Your Test Results' : '您的测试结果'}</h3>
-            <div className="results-grid">
+          <section className="personalized-section">
+            <div className="workplace-description">
+              <p>{language === 'en' ? bestMatchCard?.description.en : bestMatchCard?.description.zh}</p>
+            </div>
+            
+            <div className="user-results">
+              <h3>{language === 'en' ? 'Your Test Results' : '您的测试结果'}</h3>
+              <div className="results-grid">
               {Object.entries(tagScores).map(([tag, score], index) => (
                 <div key={tag} className="result-item" style={{ animationDelay: `${1.3 + index * 0.1}s` }}>
                   <span className="result-label">
@@ -962,8 +966,9 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
                   <span className="result-value">{score.toFixed(2)}%</span>
                 </div>
               ))}
+              </div>
             </div>
-          </div>
+          </section>
         </div>
       </div>
       {/* Sticky CTA bar */}

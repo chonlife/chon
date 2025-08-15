@@ -252,6 +252,33 @@
   text-align: left;
 }
 
+.results-right .character-comparison {
+  width: 100%;
+  margin-top: 6px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(240, 189, 192, 0.15);
+}
+
+.results-right .character-comparison .character-grid {
+  justify-content: center;
+  gap: 6px;
+}
+
+.results-right .character-comparison .dock-card {
+  width: 72px;
+  min-width: 72px;
+  padding: 0.4rem 0.35rem;
+}
+
+.results-right .character-comparison .character-image {
+  width: 38px;
+  height: 38px;
+}
+
+.results-right .character-comparison .dock-card-name {
+  font-size: 0.65rem;
+}
+
 .results-right .character-info .character-name {
   font-size: 2.8rem !important;
   margin: 0 0 0.2rem 0;
@@ -342,6 +369,31 @@
   animation: fadeInRight 0.8s ease-out 1.0s forwards;
   opacity: 0;
   padding: 0 0.5rem;
+}
+
+.personalized-section {
+  margin-top: 0.5rem;
+  background: rgba(240, 189, 192, 0.06);
+  border: 1px solid rgba(240, 189, 192, 0.18);
+  border-radius: 12px;
+  padding: 1rem 1rem 1rem 1rem;
+}
+
+.personalized-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #F0BDC0;
+  font-size: 0.85rem;
+  background: rgba(240, 189, 192, 0.12);
+  border: 1px solid rgba(240, 189, 192, 0.25);
+  padding: 4px 8px;
+  border-radius: 999px;
+  margin: 0 0 0.6rem 0.1rem;
+}
+
+.personalized-badge .badge-icon {
+  display: inline-block;
 }
 
 .user-results h3 {
@@ -1497,7 +1549,7 @@
 /* Character comparison section */
 .character-comparison {
   width: 100%;
-  margin: 20px auto 0;
+  margin: 5px auto 0;
   padding: 15px;
   background-color: rgba(0, 0, 0, 0);
   border-radius: 12px;
