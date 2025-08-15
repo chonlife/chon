@@ -32,6 +32,12 @@ export interface SignupPayload {
   username: string;
 }
 
+export interface LoginPayload {
+  email?: string | null;
+  phone_number?: string | null;
+  password: string;
+}
+
 /**
  * Save user's intro choice to backend
  * @param choice user's choice, yes or no
@@ -70,6 +76,26 @@ export const hasSavedSubmission = async (userId: string): Promise<boolean> => {
     console.error('Error checking existing submissions:', error);
     return false;
   }
+};
+
+/**
+ * Login by email or phone_number and password
+ */
+export const login = async (payload: LoginPayload): Promise<{ success: boolean; user?: { user_id: string; username: string } } > => {
+  try {
+    const response = await axios.post(`${API_URL}/api/login`, payload);
+    return response.data;
+  } catch (error) {
+    return { success: false } as any;
+  }
+};
+
+/**
+ * Fetch user's responses
+ */
+export const getUserResponses = async (userId: string) => {
+  const response = await axios.get(`${API_URL}/api/user-responses/${userId}`);
+  return response.data;
 };
 
 /**
@@ -139,5 +165,7 @@ export default {
   saveIntroChoice,
   hasSavedSubmission,
   saveAllQuestionResponses,
-  createAccount
+  createAccount,
+  login,
+  getUserResponses
 }; 

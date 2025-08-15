@@ -133,6 +133,13 @@ def _hash_password(password: str, salt: str | None = None):
     hash_bytes = hashlib.pbkdf2_hmac('sha256', password.encode('utf-8'), salt_bytes, 100_000)
     return binascii.hexlify(hash_bytes).decode('utf-8'), binascii.hexlify(salt_bytes).decode('utf-8')
 
+def _verify_password(password: str, salt_hex: str, expected_hash_hex: str) -> bool:
+    try:
+        calc_hash_hex, _ = _hash_password(password, salt_hex)
+        return calc_hash_hex == expected_hash_hex
+    except Exception:
+        return False
+
 @app.route('/api/batch-question-responses', methods=['POST'])
 def batch_save_question_responses():
     """
@@ -260,6 +267,58 @@ def signup():
         return jsonify({'success': True})
     except Exception as e:
         print(f"Error in signup: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/login', methods=['POST', 'OPTIONS'])
+def login():
+    """
+    Authenticate a user by email OR phone_number and password.
+    Expects JSON:
+    {
+      "email": "..." OR "phone_number": "+1 555...",
+      "password": "..."
+    }
+    """
+    if request.method == 'OPTIONS':
+        return ('', 204)
+
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'Invalid JSON'}), 400
+
+        email = data.get('email')
+        phone = data.get('phone_number')
+        password = data.get('password')
+
+        if (not email and not phone) or not password:
+            return jsonify({'error': 'Provide email or phone_number and password'}), 400
+
+        # Lookup user by email or phone
+        if email:
+            q = supabase.table('users').select('*').eq('email', email).limit(1).execute()
+        else:
+            q = supabase.table('users').select('*').eq('phone_number', phone).limit(1).execute()
+
+        user_rows = q.data or []
+        if not user_rows:
+            return jsonify({'error': 'Invalid credentials'}), 401
+
+        user = user_rows[0]
+        if not _verify_password(password, user.get('password_salt', ''), user.get('password_hash', '')):
+            return jsonify({'error': 'Invalid credentials'}), 401
+
+        return jsonify({
+            'success': True,
+            'user': {
+                'user_id': user.get('user_id'),
+                'username': user.get('username'),
+                'email': user.get('email'),
+                'phone_number': user.get('phone_number'),
+            }
+        })
+    except Exception as e:
+        print(f"Error in login: {e}")
         return jsonify({'error': str(e)}), 500
 
 @app.route('/api/user-responses/<user_id>', methods=['GET'])

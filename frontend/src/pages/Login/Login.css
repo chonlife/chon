@@ -53,19 +53,48 @@
   z-index: 1;
 }
 
-.login-content {
-  margin-top: 2rem;
-  padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  position: relative;
-  z-index: 1;
-  border-radius: 4px;
-  background-color: rgba(255, 255, 255, 0.03);
+/* Ensure consistent field width and inline country picker without shifting layout */
+.login-container .account-signup-form {
+  width: 360px;
+  margin: 0 auto;
 }
 
-.login-content p {
-  font-size: 1.2rem;
-  line-height: 1.5;
+.phone-inline {
+  padding-top: 14px; /* provide room for floating label */
+}
+
+.phone-inline label {
+  transform: translateY(-22px) scale(0.86);
+  background: #0a0a0a;
+  color: #F0BDC0;
+  line-height: 1;
+}
+
+.phone-inline input:focus ~ label,
+.phone-inline input:not(:placeholder-shown) ~ label {
+  transform: translateY(-22px) scale(0.86);
+  background: #0a0a0a;
+  color: #F0BDC0;
+}
+
+.phone-row {
+  display: grid;
+  grid-template-columns: 120px 1fr; /* smaller picker on left */
+  gap: 8px;
+  align-items: center;
+}
+
+.country-select-inline {
+  height: 40px;
+  padding: 0 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(12,12,12,0.6);
+  color: #fff;
+}
+
+.phone-row input {
+  height: 40px;
 }
 
 @media (max-width: 1200px) {

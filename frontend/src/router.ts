@@ -3,6 +3,7 @@ import Home from './pages/Home/Home';
 import PersonalityTest from './pages/PersonalityTest/PersonalityTest';
 import Contact from './pages/Contact/Contact';
 import Login from './pages/Login/Login';
+import Profile from './pages/Profile/Profile.tsx';
 
 export interface Route {
   path: string;
@@ -36,6 +37,12 @@ const routes: Route[] = [
     component: Login,
     name: 'LOGIN',
     showInNav: true,
+  },
+  {
+    path: '/profile',
+    component: Profile,
+    name: 'PROFILE',
+    showInNav: false,
   },
 ];
 

@@ -10,6 +10,7 @@ import { useLanguage } from './contexts/LanguageContext.tsx'
 import { useEffect, useState } from 'react'
 import './App.css'
 import Results from './pages/Results/Results.tsx'
+import Profile from './pages/Profile/Profile.tsx'
 
 function App() {
   const { language } = useLanguage();
@@ -61,6 +62,7 @@ function App() {
         <Route path="/results" element={<Results />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       {!shouldHideNavigation && (
