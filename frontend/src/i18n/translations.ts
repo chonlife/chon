@@ -138,9 +138,9 @@ const translations: TranslationsType = {
       content: 'Our test is being developed to help corporations understand how to better integrate mothers into the workplace.',
       identity: {
         title: 'I AM',
-        mother: 'MOTHER',
-        corporate: 'Senior manager, director, vice president,\npartner, managing director, president,\nC-suite executives, Board of Directors, Founders, etc.',
-        both: 'MOTHER + CORPORATE LEADER',
+        mother: 'Mother',
+        corporate: 'Corporate Manager',
+        both: 'Mother + Corporate Manager',
         other: 'Not a robot and not yet one of the above'
       },
       motherQuestionnaire: {
