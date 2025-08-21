@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext.tsx';
+import { useLanguage } from '../../contexts/LanguageContext';
 import { cardsData, findBestMatch, mapTagStatsToScores, CardData } from '../../utils/archetypes';
 import { getOrComputeTagStats } from '../../utils/scoring';
 
 const Profile: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuth();
+  const { language } = useLanguage();
   const navigate = useNavigate();
   useEffect(() => {
     if (!isAuthenticated) {
@@ -76,7 +78,7 @@ const Profile: React.FC = () => {
   return (
     <main className="personality-test-container">
       <div style={{ maxWidth: 560, margin: '0 auto', color: '#fff' }}>
-        <h1 style={{ textAlign: 'center' }}>Welcome, {username}</h1>
+        <h1 style={{ textAlign: 'center' }}>{language === 'en' ? `Welcome, ${username}` : `欢迎你，${username}`}</h1>
         {bestMatch && (
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: 24, marginBottom: 48 }}>
             <img
@@ -93,9 +95,13 @@ const Profile: React.FC = () => {
             disabled={!isResultsReady}
             aria-busy={!isResultsReady}
           >
-            {isResultsReady ? 'View results' : 'Loading results...'}
+            {isResultsReady 
+              ? (language === 'en' ? 'View results' : '查看结果')
+              : (language === 'en' ? 'Loading results...' : '正在加载结果...')}
           </button>
-          <button className="secondary-button" onClick={() => { logout(); navigate('/login', { replace: true }); }}>Log out</button>
+          <button className="secondary-button" onClick={() => { logout(); navigate('/login', { replace: true }); }}>
+            {language === 'en' ? 'Log out' : '退出登录'}
+          </button>
         </div>
       </div>
     </main>
