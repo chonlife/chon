@@ -488,9 +488,9 @@ export const questions: Question[] = [
     textZh: '视觉空间与逻辑训练有多大价值？',
     tags: ['客观能力'],
     scaleLabels: {
-      minEn: 'Not beneficial',
+      minEn: 'Not valuable',
       minZh: '毫无价值',
-      maxEn: 'Extremely beneficial',
+      maxEn: 'Extremely valuable',
       maxZh: '极具价值'
     }
   },
@@ -498,8 +498,8 @@ export const questions: Question[] = [
   {
     id: 33,
     type: 'scale-question',
-    textEn: 'How valuable are self-customized kids’ avatars and tokens for interactions?',
-    textZh: '促进互动的自定义儿童虚拟形象和代币有多大价值？',
+    textEn: 'How engaging are self-customized kids’ avatars and tokens for interactions?',
+    textZh: '促进互动的自定义儿童虚拟形象和代币有多大吸引力？',
     tags: ['社交情商'],
     scaleLabels: {
       minEn: 'Not engaging',
@@ -512,14 +512,14 @@ export const questions: Question[] = [
   {
     id: 34,
     type: 'scale-question',
-    textEn: 'How valuable is mentorship matching for mothers of the same industry?',
-    textZh: '一个将业内母亲“导师匹配”的功能有多大价值？',
+    textEn: 'How important is mentorship matching for mothers of the same industry?',
+    textZh: '一个将业内母亲“导师匹配”的功能有多大重要性？',
     tags: ['社交情商'],
     scaleLabels: {
       minEn: 'Not important',
-      minZh: '毫无价值',
+      minZh: '不重要',
       maxEn: 'Extremely important',
-      maxZh: '极具价值'
+      maxZh: '非常重要'
     }
   },
   
@@ -532,7 +532,7 @@ export const questions: Question[] = [
     scaleLabels: {
       minEn: 'Not valuable',
       minZh: '毫无价值',
-      maxEn: 'Extremely helpful',
+      maxEn: 'Extremely valuable',
       maxZh: '极具价值'
     }
   },
@@ -558,9 +558,9 @@ export const questions: Question[] = [
     textZh: '母亲这一身份的加入如何改善客户关系？',
     tags: ['情绪管理'],
     scaleLabels: {
-      minEn: 'Not beneficial',
+      minEn: 'Not effective',
       minZh: '毫无价值',
-      maxEn: 'Extremely beneficial',
+      maxEn: 'Extremely effective',
       maxZh: '极具价值'
     }
   },
@@ -642,10 +642,10 @@ export const questions: Question[] = [
     textZh: '母亲的沟通与倾听能力对领导力有多重要？',
     tags: ['社交情商'],
     scaleLabels: {
-      minEn: 'Extremely important',
-      minZh: '非常重要',
-      maxEn: 'Not valuable at all',
-      maxZh: '毫无价值'
+      minEn: 'Not important at all',
+      minZh: '完全不重要',
+      maxEn: 'Extremely important',
+      maxZh: '非常重要'
     }
   },
   
@@ -656,10 +656,10 @@ export const questions: Question[] = [
     textZh: '母亲的责任感和担当对工作有多重要？',
     tags: ['客观能力', '奉献精神'],
     scaleLabels: {
-      minEn: 'Extremely important',
-      minZh: '非常重要',
-      maxEn: 'Not important at all',
-      maxZh: '完全不重要'
+      minEn: 'Not important at all',
+      minZh: '完全不重要',
+      maxEn: 'Extremely important',
+      maxZh: '非常重要'
     }
   },
   
@@ -750,8 +750,8 @@ export const questions: Question[] = [
   {
     id: 51,
     type: 'scale-question',
-    textEn: 'Does your mother’s role influence your early understanding of leadership?',
-    textZh: '您的母亲是否影响了童年时期您对领导力的认知？',
+    textEn: 'Does your mother’s role influence your understanding of leadership in childhood?',
+    textZh: '您的母亲是否影响了您童年时期对领导力的认知？',
     tags: ['自我意识'],
     scaleLabels: {
       minEn: 'Not at all',
@@ -917,10 +917,10 @@ export const questions: Question[] = [
     textZh: '成为母亲如何影响您的领导风格？',
     tags: ['情绪调节'],
     scaleLabels: {
-      minEn: 'Negative – worse at communication',
-      minZh: '消极影响 – 降低沟通能力',
-      maxEn: 'Positive – better at communication',
-      maxZh: '积极影响 – 提升沟通能力'
+      minEn: 'Negative',
+      minZh: '消极影响',
+      maxEn: 'Positive',
+      maxZh: '积极影响'
     }
   },
   
@@ -1025,24 +1025,24 @@ export const questions: Question[] = [
     textZh: '展示您以往的工作有多大价值？',
     tags: ['自我意识'],
     scaleLabels: {
-      minEn: 'Extremely valuable',
-      minZh: '极具价值',
-      maxEn: 'Not valuable at all',
-      maxZh: '毫无价值'
+      minEn: 'Not valuable at all',
+      minZh: '毫无价值',
+      maxEn: 'Extremely valuable',
+      maxZh: '极具价值'
     }
   },
   
   {
     id: 72,
     type: 'scale-question',
-    textEn: 'How does better cognitive ability enhance your problem-solving abilities?',
-    textZh: '更强的认知能力如何提升您的解决问题能力？',
+    textEn: 'How helpful is cognitive ability to enhance your problem-solving abilities?',
+    textZh: '更强的认知能力对于提升您的解决问题能力有多大帮助？',
     tags: ['客观能力'],
     scaleLabels: {
-      minEn: 'Extremely helpful',
-      minZh: '非常有帮助',
-      maxEn: 'Not helpful at all',
-      maxZh: '完全无帮助'
+      minEn: 'Not helpful at all',
+      minZh: '完全无帮助',
+      maxEn: 'Extremely helpful',
+      maxZh: '非常有帮助'
     }
   },
   
@@ -1053,10 +1053,10 @@ export const questions: Question[] = [
     textZh: '您成为母亲前心理准备如何？',
     tags: ['核心耐力'],
     scaleLabels: {
-      minEn: 'Very prepared',
-      minZh: '非常充分',
-      maxEn: 'Not prepared at all',
-      maxZh: '完全没有准备'
+      minEn: 'Not prepared at all',
+      minZh: '完全没有准备',
+      maxEn: 'Very prepared',
+      maxZh: '准备非常充分'
     }
   },
   
@@ -1067,10 +1067,10 @@ export const questions: Question[] = [
     textZh: '母亲身份是否改变了个人价值？',
     tags: ['自我意识'],
     scaleLabels: {
-      minEn: 'Completely',
-      minZh: '完全改变',
-      maxEn: 'No change',
-      maxZh: '没有改变'
+      minEn: 'No change',
+      minZh: '没有改变',
+      maxEn: 'Completely',
+      maxZh: '完全改变'
     }
   },
   
@@ -1081,10 +1081,10 @@ export const questions: Question[] = [
     textZh: '在成为母亲的过程中，家人或社群对您支持吗？',
     tags: ['社交情商'],
     scaleLabels: {
-      minEn: 'Extremely supported',
-      minZh: '非常支持',
-      maxEn: 'Not supported at all',
-      maxZh: '完全没有支持'
+      minEn: 'Not supported at all',
+      minZh: '完全没有支持',
+      maxEn: 'Extremely supported',
+      maxZh: '非常支持'
     }
   },
   
@@ -1095,10 +1095,10 @@ export const questions: Question[] = [
     textZh: '母亲身份是否为您带来了情感满足？',
     tags: ['奉献精神'],
     scaleLabels: {
-      minEn: 'Extremely fulfilling',
-      minZh: '非常满足',
-      maxEn: 'No emotion at all',
-      maxZh: '完全没有支持'
+      minEn: 'No emotion at all',
+      minZh: '完全没有支持',
+      maxEn: 'Extremely fulfilling',
+      maxZh: '非常满足'
     }
   },
   
@@ -1109,10 +1109,10 @@ export const questions: Question[] = [
     textZh: '母亲身份让你情绪上更坚强了吗？',
     tags: ['情绪调节', '核心耐力'],
     scaleLabels: {
-      minEn: 'Much stronger',
-      minZh: '显著增强',
-      maxEn: 'Much weaker',
-      maxZh: '明显减弱'
+      minEn: 'Much weaker',
+      minZh: '明显减弱',
+      maxEn: 'Much stronger',
+      maxZh: '显著增强'
     }
   },
   
@@ -1123,10 +1123,10 @@ export const questions: Question[] = [
     textZh: '母亲身份是否影响了您设定边界的能力？',
     tags: ['自我意识'],
     scaleLabels: {
-      minEn: 'Improved greatly',
-      minZh: '显著提升',
-      maxEn: 'Significantly weakened',
-      maxZh: '显著减弱'
+      minEn: 'Significantly weakened',
+      minZh: '显著减弱',
+      maxEn: 'Improved greatly',
+      maxZh: '显著提升'
     }
   },
   
@@ -1151,10 +1151,10 @@ export const questions: Question[] = [
     textZh: '您对母亲身份与自我之间的平衡是否满意？',
     tags: ['自我意识'],
     scaleLabels: {
-      minEn: 'Very satisfied',
-      minZh: '非常满意',
-      maxEn: 'Very dissatisfied',
-      maxZh: '非常不满意'
+      minEn: 'Very dissatisfied',
+      minZh: '非常不满意',
+      maxEn: 'Very satisfied',
+      maxZh: '非常满意'
     }
   },
   
@@ -1167,10 +1167,10 @@ export const questions: Question[] = [
     textLifeZh: '您的团队是否支持职业发展和身心健康？',
     tags: ['自我意识'],
     scaleLabels: {
-      minEn: 'Very supportive',
-      minZh: '非常重视',
-      maxEn: 'Not supportive at all',
-      maxZh: '完全不重视'
+      minEn: 'Not supportive at all',
+      minZh: '完全不重视',
+      maxEn: 'Very supportive',
+      maxZh: '非常重视'
     }
   },
   
@@ -1183,10 +1183,10 @@ export const questions: Question[] = [
     textLifeZh: '您在团队工作中是否有建立有意义的关系的机会？',
     tags: ['社交情商'],
     scaleLabels: {
-      minEn: 'A lot – strong connections',
-      minZh: '很多 – 多为良好关系',
-      maxEn: 'None – mostly isolated interactions',
-      maxZh: '没有 – 多为孤立互动'
+      minEn: 'None – mostly isolated interactions',
+      minZh: '没有 – 多为孤立互动',
+      maxEn: 'A lot – strong connections',
+      maxZh: '很多 – 多为良好关系'
     }
   },
   
@@ -1197,10 +1197,10 @@ export const questions: Question[] = [
     textZh: '您在工作中是否感受到他人的善意之举？',
     tags: ['奉献精神'],
     scaleLabels: {
-      minEn: 'Very frequently',
-      minZh: '非常频繁',
-      maxEn: 'Never',
-      maxZh: '从未'
+      minEn: 'Never',
+      minZh: '从未',
+      maxEn: 'Very frequently',
+      maxZh: '非常频繁'
     }
   },
   
@@ -1213,10 +1213,10 @@ export const questions: Question[] = [
     textLifeZh: '您是否会给予团队成员支持或关心？',
     tags: ['奉献精神'],
     scaleLabels: {
-      minEn: 'Frequently offer support',
-      minZh: '经常主动给予支持',
-      maxEn: 'Do not engage in offering support',
-      maxZh: '基本不提供支持'
+      minEn: 'Do not engage in offering support',
+      minZh: '基本不提供支持',
+      maxEn: 'Frequently offer support',
+      maxZh: '经常主动给予支持'
     }
   },
   
@@ -1227,10 +1227,10 @@ export const questions: Question[] = [
     textZh: '您是否在团队中感觉到被认可？',
     tags: ['自我意识'],
     scaleLabels: {
-      minEn: 'Always',
-      minZh: '总是被认可',
-      maxEn: 'Never',
-      maxZh: '几乎从未被认可'
+      minEn: 'Never',
+      minZh: '几乎从未被认可',
+      maxEn: 'Always',
+      maxZh: '总是被认可'
     }
   },
   
@@ -1243,10 +1243,10 @@ export const questions: Question[] = [
     textLifeZh: '您的团队是否鼓励基于信任与相互尊重的合作？',
     tags: ['客观能力', '奉献精神'],
     scaleLabels: {
-      minEn: 'Strongly across all levels',
-      minZh: '在所有层面都出色',
-      maxEn: 'Does not at all',
-      maxZh: '几乎没有'
+      minEn: 'Does not at all',
+      minZh: '几乎没有',
+      maxEn: 'Strongly across all levels',
+      maxZh: '在所有层面都出色'
     }
   },
   
@@ -1259,10 +1259,10 @@ export const questions: Question[] = [
     textLifeZh: '面对困难或需要帮助时，您能否与团队成员沟通？',
     tags: ['社交情商', '情绪调节'],
     scaleLabels: {
-      minEn: 'Very comfortable',
-      minZh: '非常自然',
-      maxEn: 'Very uncomfortable',
-      maxZh: '很不愿意'
+      minEn: 'Very uncomfortable',
+      minZh: '很不愿意',
+      maxEn: 'Very comfortable',
+      maxZh: '非常自然'
     }
   },
   
@@ -1275,10 +1275,10 @@ export const questions: Question[] = [
     textLifeZh: '以人为本的工作团队文化是否重要？',
     tags: ['社交情商'],
     scaleLabels: {
-      minEn: 'Extremely important',
-      minZh: '非常重要',
-      maxEn: 'Not important at all',
-      maxZh: '几乎不重要'
+      minEn: 'Not important at all',
+      minZh: '几乎不重要',
+      maxEn: 'Extremely important',
+      maxZh: '非常重要'
     }
   },
   
@@ -1291,10 +1291,10 @@ export const questions: Question[] = [
     textLifeZh: '您是否因团队归属感或团队成员关怀提升工作积极性？',
     tags: ['情绪调节'],
     scaleLabels: {
-      minEn: 'Very often',
-      minZh: '经常',
-      maxEn: 'Never',
-      maxZh: '从未'
+      minEn: 'Never',
+      minZh: '从未',
+      maxEn: 'Very often',
+      maxZh: '经常'
     }
   },
 ];
@@ -1315,7 +1315,7 @@ export const questionsMenu: QuestionMenu[] = [
         sectionTitleZh: "I. 关于工作与生活的平衡",
         sectionLifeTitleEn: "I. About Life Balance",
         sectionLifeTitleZh: "I. 关于生活平衡",
-        questions: [59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 25]
+        questions: [59, 60, 61, 62, 63, 68, 64, 65, 66, 69, 70, 25]
       },
       {
         sectionId: 2,
@@ -1380,7 +1380,7 @@ export const questionsMenu: QuestionMenu[] = [
         sectionId: 2,
         sectionTitleEn: "II. About Work-Life Balance",
         sectionTitleZh: "II. 关于工作与生活的平衡",
-        questions: [59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70]
+        questions: [59, 60, 61, 62, 63, 68, 64, 65, 66, 69, 70]
       },
       {
         sectionId: 3,
