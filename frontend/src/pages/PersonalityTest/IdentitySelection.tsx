@@ -117,7 +117,6 @@ export default function IdentitySelection({
                 className={`role-option ${selectedRole === role.value ? 'selected' : ''}`}
                 onClick={() => onRoleSelect(selectedRole === role.value ? null : role.value)}
               >
-                <div className="role-checkbox"></div>
                 <span>{language === 'en' ? role.en : role.zh}</span>
               </div>
             ))}

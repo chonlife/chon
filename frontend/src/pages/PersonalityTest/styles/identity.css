@@ -273,10 +273,6 @@
 
 /* Responsive styles */
 @media (max-width: 768px) {
-  .role-selection {
-    width: 90%; /* Slightly wider on smaller screens */
-  }
-
   .role-selection-title {
     font-size: 1.2rem;
     margin-bottom: 0.8rem;
@@ -297,13 +293,23 @@
   .role-option span {
     font-size: 1rem;
   }
+
+  .identity-option {
+    padding-left: 2.5rem;
+  }
+
+  .identity-checkbox {
+    width: 18px;
+    height: 18px;
+    left: 0.8rem;
+  }
+
+  .option-container.selected .identity-checkbox::after {
+    font-size: 12px;
+  }
 }
 
 @media (max-width: 480px) {
-  .role-selection {
-    width: 95%; /* Even wider on mobile */
-  }
-
   .role-selection-title {
     font-size: 1.1rem;
     margin-bottom: 0.6rem;
@@ -324,62 +330,9 @@
   .role-option span {
     font-size: 0.95rem;
   }
-}
 
-/* Media queries for smaller screens */
-@media (max-width: 768px) {
-  .identity-selection {
-    padding: 1rem;
-  }
-  
-  .option-container {
-    padding-left: 32px;
-  }
-}
-
-@media (max-width: 480px) {
   .identity-title {
     font-size: 1.8rem;
-  }
-  
-  .option-container {
-    padding-left: 30px;
-  }
-  
-  .identity-checkbox {
-    width: 20px;
-    height: 20px;
-  }
-  
-  .identity-option {
-    padding: 0.9rem;
-  }
-  
-  .identity-option p {
-    font-size: 1rem;
-  }
-} 
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .identity-option {
-    padding-left: 2.5rem;
-  }
-
-  .identity-checkbox {
-    width: 18px;
-    height: 18px;
-    left: 0.8rem;
-  }
-
-  .option-container.selected .identity-checkbox::after {
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .identity-option {
-    padding-left: 2.2rem;
   }
 
   .identity-checkbox {
@@ -388,7 +341,17 @@
     left: 0.7rem;
   }
 
+  .identity-option {
+    padding: 0.9rem;
+  }
+
+  .identity-option p {
+    font-size: 1rem;
+  }
+
   .option-container.selected .identity-checkbox::after {
     font-size: 11px;
   }
-} 
+}
+
+ 
