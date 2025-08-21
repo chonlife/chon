@@ -3,10 +3,13 @@
   flex: 1;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
   padding: 3rem 8rem;
   position: relative;
   z-index: 1;
   font-family: 'Kaisei Decol', serif;
+  min-height: 100vh;
 }
 
 /* 中文文本的特定样式 - 更高优先级 */
@@ -90,6 +93,7 @@
   margin: 0 0 1.5rem 0;
   padding: 0;
   max-width: 900px;
+  width: 100%;
 }
 
 /* 统一段落行距和间距控制 */
