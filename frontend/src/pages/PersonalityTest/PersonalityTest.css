@@ -7,9 +7,6 @@
 /* Questionnaire styles */
 @import './styles/questionnaire.css';
 
-/* Responsive styles */
-@import './styles/responsive.css';
-
 /* Mobile optimizations */
 @import './styles/mobile.css';
 
@@ -429,7 +426,7 @@
   }
   
   .identity-selection {
-    max-width: 500px;
+    max-width: 550px;
     padding: 1rem;
   }
   
@@ -469,7 +466,7 @@
   }
   
   .identity-selection {
-    max-width: 100%;
+    max-width: 90%;
     padding: 0.8rem;
     gap: 0.8rem;
   }
