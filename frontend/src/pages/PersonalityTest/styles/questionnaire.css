@@ -541,7 +541,7 @@
   position: relative;
   width: 100%;
   max-width: 400px;
-  margin: 0 auto 0 200px; /* Leave space for exit buttons on the left */
+  margin: 0 auto 0 220px; /* More space for full-text buttons */
   border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
@@ -1095,6 +1095,14 @@
   background: rgba(240, 189, 192, 0.15);
   border-color: #F0BDC0;
   color: #333;
+}
+
+/* Medium screens - still show button text but need more space */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .question-progress-bar {
+    max-width: 350px;
+    margin: 0 auto 0 200px; /* Adjust for medium screens */
+  }
 }
 
 /* Responsive design for enhanced header */

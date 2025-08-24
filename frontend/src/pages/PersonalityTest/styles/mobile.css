@@ -156,6 +156,13 @@ button,
   }
 }
 
+/* 中等屏幕优化 - 按钮显示文字但需要更多空间 */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .questionnaire-content {
+    padding-top: 75px !important; /* Extra space for medium screens with full button text */
+  }
+}
+
 /* 在移动设备上添加一些额外优化 */
 @media (max-width: 768px) {
   /* 确保问卷内容有足够的顶部间距 - 新header设计 */
