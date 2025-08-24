@@ -744,10 +744,16 @@
   font-size: 16px;
   font-family: inherit;
   background-color: #fff;
+  color: #333; /* Ensure selected value is visible on white background */
   cursor: pointer;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  min-width: 120px;
-  width: 120px;
+  min-width: 160px;
+  width: 160px;
+}
+
+/* Ensure options also use readable text color */
+.weight-unit-select option {
+  color: #333;
 }
 
 .weight-unit-select:focus {

@@ -15,6 +15,7 @@ const BirthWeightInput: React.FC<BirthWeightInputProps> = ({
 }) => {
   const [weight, setWeight] = useState<string>('');
   const [unit, setUnit] = useState<string>('');
+  console.log('Unit:', unit);
 
   // Parse the stored value when component mounts or value changes
   useEffect(() => {
@@ -29,15 +30,13 @@ const BirthWeightInput: React.FC<BirthWeightInputProps> = ({
         const numberMatch = value.match(/(\d*\.?\d*)/);
         if (numberMatch && numberMatch[1]) {
           setWeight(numberMatch[1]);
-          // Keep current unit if set, otherwise leave empty for hint
-          if (!unit) {
-            setUnit('');
-          }
+          // Don't change unit if there's already one selected
         }
       }
-    } else {
+    } else if (value === '') {
+      // Only reset if explicitly empty, not on initial load
       setWeight('');
-      setUnit(''); // Start with empty to show hint
+      // Don't reset unit automatically - let user keep their selection
     }
   }, [value]);
 
@@ -89,7 +88,7 @@ const BirthWeightInput: React.FC<BirthWeightInputProps> = ({
         />
         <select
           className="weight-unit-select"
-          value={unit}
+          value={unit || ''}
           onChange={e => handleUnitChange(e.target.value)}
         >
           <option value="" disabled>
