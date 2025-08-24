@@ -72,8 +72,8 @@ const BirthWeightInput: React.FC<BirthWeightInputProps> = ({
   };
 
   const weightPlaceholder = language === 'en' ? 'Enter weight' : '输入体重';
-  const kgLabel = language === 'en' ? 'kg' : 'kg';
-  const lbLabel = language === 'en' ? 'lb' : 'lb';
+  const kgLabel = language === 'en' ? 'kg' : '千克';
+  const lbLabel = language === 'en' ? 'lb' : '磅';
 
   return (
     <div className="birth-weight-input-container">
