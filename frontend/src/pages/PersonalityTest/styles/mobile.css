@@ -17,6 +17,11 @@ button,
 
 /* 优化小屏幕上的Scale Questions */
 @media (max-width: 480px) {
+  /* 确保问卷内容有足够的顶部间距 */
+  .questionnaire-content {
+    padding-top: 75px !important; /* Force adequate top padding to clear fixed elements */
+  }
+  
   /* 增大点击区域 */
   .scale-option {
     padding: 10px;
@@ -117,6 +122,7 @@ button,
   /* 避免内容溢出 */
   .questionnaire-content {
     padding: 0.5rem;
+    padding-top: 70px; /* Ensure adequate top padding to clear progress bar and exit buttons */
   }
 }
 
@@ -152,6 +158,11 @@ button,
 
 /* 在移动设备上添加一些额外优化 */
 @media (max-width: 768px) {
+  /* 确保问卷内容有足够的顶部间距 */
+  .questionnaire-content {
+    padding-top: 80px !important; /* Force adequate top padding to clear fixed elements */
+  }
+  
   /* Privacy statement移动端优化 */
   .privacy-statement.mother-privacy,
   .privacy-statement.other-privacy {
