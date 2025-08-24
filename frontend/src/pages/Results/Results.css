@@ -623,7 +623,7 @@
   }
 
   .character-portrait, .hexagon-chart {
-    max-width: 250px;
+    max-width: 300px; /* Increased to not constrain children */
     margin: 0;
   }
   
@@ -658,17 +658,17 @@
   }
   
   .character-portrait {
-    max-width: 220px;
+    max-width: 280px !important;
     margin: 0 auto;
   }
   
   .hexagon-chart {
-    max-width: 100%;
+    max-width: 400px;
     margin: 0 auto;
   }
   
   .svg-hexagon-chart {
-    max-width: 420px;
+    max-width: 400px;
     margin: 0 auto;
   }
 }
@@ -685,16 +685,16 @@
   }
 
   .character-portrait {
-    max-width: 200px;
+    max-width: 230px !important; /* Should work without !important now */
   }
   
   .hexagon-chart {
-    max-width: 100%;
+    max-width: 280px; /* Increased to allow SVG child to grow */
   }
   
   .svg-hexagon-chart {
-    max-width: 350px;
-    padding: 1rem;
+    max-width: 280px; /* Now can actually reach this size */
+    padding: 0.8rem;
   }
 
   .dock-card-image {
@@ -736,20 +736,20 @@
   }
   
   .character-portrait {
-    max-width: 180px;
+    max-width: 160px; /* Reduced for better proportion */
   }
   
   .svg-hexagon-chart {
-    max-width: 320px;
-    padding: 0.8rem;
+    max-width: 280px; /* Reduced to match portrait size better */
+    padding: 0.6rem;
   }
   
   .character-name {
-    font-size: 2rem;
+    font-size: 1.8rem; /* Slightly smaller */
   }
   
   .character-title {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
   
   .character-cards-dock {
@@ -781,28 +781,28 @@
   }
 
   .character-portrait {
-    max-width: 150px;
+    max-width: 180px; /* Should work without !important now */
   }
   
   .svg-hexagon-chart {
-    max-width: 300px;
-    padding: 0.6rem;
+    max-width: 260px; /* Better proportioned for small screens */
+    padding: 0.5rem;
   }
 
   .character-cards-dock {
     padding: 0.5rem;
-    gap: 0.4rem;
-    max-width: 350px;
+    gap: 0.3rem;
+    max-width: 320px; /* Reduced size */
   }
 
   .dock-card-image {
-    width: 32px;
-    height: 32px;
+    width: 30px; /* Smaller for narrow screens */
+    height: 30px;
     margin-bottom: 0.3rem;
   }
 
   .dock-card-name {
-    font-size: 0.55rem;
+    font-size: 0.5rem;
   }
 
   .result-label {
@@ -816,12 +816,12 @@
   }
 
   .character-name {
-    font-size: 1.7rem;
+    font-size: 1.6rem; /* Reduced */
     line-height: 1.1;
   }
 
   .character-title {
-    font-size: 1rem;
+    font-size: 0.9rem; /* Reduced */
     margin: 0.2rem 0 0.8rem 0;
     padding-top: 0.4rem;
   }
@@ -847,34 +847,35 @@
   }
   
   .character-portrait {
-    max-width: 130px;
+    max-width: 120px; /* Even smaller for narrow screens */
   }
   
   .svg-hexagon-chart {
-    max-width: 280px;
-    padding: 0.5rem;
+    max-width: 240px; /* Consistent proportion with portrait */
+    padding: 0.4rem;
   }
   
   .character-name {
-    font-size: 1.5rem;
+    font-size: 1.4rem; /* Further reduced */
   }
   
   .character-title {
-    font-size: 0.9rem;
+    font-size: 0.8rem; /* Further reduced */
   }
   
   .character-cards-dock {
-    max-width: 320px;
-    gap: 0.3rem;
+    max-width: 300px; /* More compact */
+    gap: 0.2rem;
+    padding: 0.4rem 0.5rem;
   }
   
   .dock-card-image {
-    width: 30px;
-    height: 30px;
+    width: 28px; /* Even smaller */
+    height: 28px;
   }
   
   .dock-card-name {
-    font-size: 0.5rem;
+    font-size: 0.45rem;
   }
   
   .result-label {
@@ -895,21 +896,35 @@
   }
   
   .character-portrait {
-    max-width: 120px;
+    max-width: 100px; /* Very compact for extreme narrow screens */
   }
   
   .svg-hexagon-chart {
-    max-width: 250px;
+    max-width: 220px; /* Proportional to portrait */
+    padding: 0.3rem;
   }
   
   .character-cards-dock {
     max-width: 280px;
-    padding: 0.4rem;
+    padding: 0.3rem;
+    gap: 0.1rem;
   }
   
   .dock-card-image {
-    width: 28px;
-    height: 28px;
+    width: 26px; /* Even smaller */
+    height: 26px;
+  }
+  
+  .dock-card-name {
+    font-size: 0.4rem;
+  }
+  
+  .character-name {
+    font-size: 1.2rem;
+  }
+  
+  .character-title {
+    font-size: 0.7rem;
   }
 }
 
@@ -1134,36 +1149,7 @@
   color: #F0BDC0;
 }
 
-/* 媒体查询以确保在小屏幕上也能看到完整的标签 */
-@media (max-width: 768px) {
-  .svg-hexagon-chart {
-    max-width: 400px;
-    padding: 1.2rem;
-    margin-top: 1rem;
-    margin-bottom: 2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .svg-hexagon-chart {
-    max-width: 350px;
-    padding: 0.5rem;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-  }
-  
-  .info-card {
-    padding: 10px;
-  }
-  
-  .info-card-header {
-    font-size: 12px;
-  }
-  
-  .info-card-value {
-    font-size: 24px;
-  }
-}
+/* Removed duplicate media queries that were overriding our responsive design */
 
 /* 分数提示框样式 */
 .score-tooltip {
@@ -1747,5 +1733,46 @@
   .sticky-cta__content {
     width: calc(100% - 24px);
     justify-content: space-between;
+    padding: 8px 12px; /* Reduced padding */
+    gap: 8px; /* Reduced gap */
+  }
+  .sticky-cta__text {
+    font-size: 12px; /* Smaller text */
+  }
+  .sticky-cta__button {
+    font-size: 12px; /* Smaller buttons */
+    padding: 8px 12px; /* Compact button padding */
+  }
+}
+
+@media (max-width: 480px) {
+  .sticky-cta__content {
+    padding: 6px 10px; /* Even more compact */
+    gap: 6px;
+  }
+  .sticky-cta__text {
+    font-size: 11px;
+  }
+  .sticky-cta__button {
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+}
+
+@media (max-width: 380px) {
+  .sticky-cta__content {
+    flex-direction: column; /* Stack vertically on very narrow screens */
+    gap: 6px;
+    padding: 8px;
+    text-align: center;
+  }
+  .sticky-cta__text {
+    font-size: 10px;
+    line-height: 1.2;
+  }
+  .sticky-cta__button {
+    font-size: 10px;
+    padding: 6px 8px;
+    width: 100%;
   }
 }
