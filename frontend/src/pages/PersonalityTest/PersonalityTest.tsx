@@ -638,15 +638,25 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
   const topActions = (
     <div className="exit-actions">
       {/* Restart button (was Exit) */}
-      <button type="button" className="exit-button restart-button" lang={language} onClick={handleRestart}>
-        <img src={new URL('./Restart.svg', import.meta.url).toString()} alt="Restart" style={{ width: 18, height: 18, marginRight: 6 }} />
-        {language === 'en' ? 'Restart' : '重新开始'}
+      <button type="button" className="exit-button restart-button show-tooltip" lang={language} onClick={handleRestart}>
+        <img src={new URL('./Restart.svg', import.meta.url).toString()} alt="Restart" style={{ width: 18, height: 18 }} />
+        <span className="exit-button-text" style={{ marginLeft: 6 }}>
+          {language === 'en' ? 'Restart' : '重新开始'}
+        </span>
+        <div className="exit-button-tooltip">
+          {language === 'en' ? 'Restart' : '重新开始'}
+        </div>
       </button>
       {/* Save & Exit only on questionnaire pages */}
       {step === 'questionnaire' && (
-        <button type="button" className="exit-button save-exit-button" lang={language} onClick={handleSaveAndExit}>
-          <img src={new URL('./Save.svg', import.meta.url).toString()} alt="Save & Exit" style={{ width: 18, height: 18, marginRight: 6 }} />
-          {language === 'en' ? 'Save & Exit' : '保存并退出'}
+        <button type="button" className="exit-button save-exit-button show-tooltip" lang={language} onClick={handleSaveAndExit}>
+          <img src={new URL('./Save.svg', import.meta.url).toString()} alt="Save & Exit" style={{ width: 18, height: 18 }} />
+          <span className="exit-button-text" style={{ marginLeft: 6 }}>
+            {language === 'en' ? 'Save & Exit' : '保存并退出'}
+          </span>
+          <div className="exit-button-tooltip">
+            {language === 'en' ? 'Save & Exit' : '保存并退出'}
+          </div>
         </button>
       )}
     </div>

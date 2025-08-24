@@ -13,7 +13,7 @@
   flex: 1;
   width: 100%;
   box-sizing: border-box;
-  padding-top: 50px;
+  padding-top: 80px; /* Updated for new enhanced header */
 }
 
 /* Mother questionnaire specific styles */
@@ -512,50 +512,65 @@
   }
 }
 
-/* Questionnaire Progress Bar */
+/* Enhanced Header - Using existing progress container */
+
+/* Updated Progress Bar Container - Fixed positioning */
 .question-progress-container {
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding: 8px 0;
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 980;
+  right: 0;
+  width: 100%;
   background-color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  padding: 12px 20px;
   display: flex;
   justify-content: center;
+  align-items: center;
+  min-height: 60px;
+  box-sizing: border-box;
 }
 
 .question-progress-bar {
-  height: 8px;
+  height: 10px;
   background-color: #f1f1f1;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
   position: relative;
-  width: 80%;
-  max-width: 700px;
-  margin: 0 auto;
-  margin-left: 40px; /* Add space for exit button */
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 0 200px; /* Leave space for exit buttons on the left */
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .question-progress-fill {
   height: 100%;
-  background-color: #F0BDC0;
-  border-radius: 10px;
+  background: linear-gradient(90deg, #F0BDC0 0%, #e3a6a9 100%);
+  border-radius: 12px;
   transition: width 0.6s ease;
   position: absolute;
   left: 0;
   top: 0;
+  box-shadow: 0 1px 3px rgba(240, 189, 192, 0.3);
 }
 
 .question-progress-text {
-  text-align: right;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #666;
   font-weight: 500;
+  margin-left: 12px;
+  white-space: nowrap;
+  min-width: 35px;
+}
+
+/* Progress container with text */
+.progress-with-text {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 450px;
 }
 
 /* Question Container */
@@ -890,15 +905,15 @@
   }
 }
 
-/* Exit actions */
+/* Exit actions - Positioned within progress bar area */
 .exit-actions {
   position: fixed;
-  top: 10px;
+  top: 12px;
   left: 20px;
   display: flex;
   gap: 10px;
-  z-index: 1100;
   align-items: center;
+  z-index: 1001;
 }
 
 /* Ensure buttons inside the actions bar do not use fixed positioning */
@@ -945,48 +960,97 @@
   100% { opacity: 0; }
 }
 
-/* Exit button styles */
+/* Enhanced Exit button styles */
 .exit-button {
-  position: static; /* placed inside .exit-actions bar */
-  font-size: 1rem;
-  color: white;
+  position: static;
+  font-size: 0.9rem;
+  color: #333;
   text-decoration: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: 8px 14px;
+  border-radius: 6px;
   transition: all 0.3s ease;
   z-index: 1;
   display: flex;
   align-items: center;
   font-weight: 500;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Button text (hidden on mobile) */
+.exit-button-text {
+  transition: opacity 0.3s ease;
+}
+
+/* Tooltip styles */
+.exit-button-tooltip {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  margin-top: 5px;
+  pointer-events: none;
+}
+
+/* Tooltip arrow */
+.exit-button-tooltip::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-bottom-color: rgba(0, 0, 0, 0.9);
+}
+
+/* Show tooltip on hover (only when text is hidden) */
+.exit-button.show-tooltip:hover .exit-button-tooltip {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Differentiate buttons */
-/* Restart: white background, black text */
+/* Restart: clean white style */
 .restart-button {
   background: #fff;
-  color: #000;
-  border: 1px solid #ddd;
+  color: #333;
+  border: 1px solid #d0d0d0;
 }
 
 .restart-button:hover {
-  background: #f7f7f7;
-  color: #000;
-  border-color: #ccc;
+  background: #f5f5f5;
+  color: #333;
+  border-color: #bbb;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-/* Save & Exit: subtle ghost (brand-outline) */
+/* Save & Exit: brand accent style */
 .save-exit-button {
-  background: transparent;
-  color: #333;
+  background: #F0BDC0;
+  color: white;
   border: 1px solid #F0BDC0;
-  font-weight: 400;
+  font-weight: 500;
 }
 
 .save-exit-button:hover {
-  background: rgba(240, 189, 192, 0.15);
-  border-color: #F0BDC0;
-  color: #333;
+  background: #e3a6a9;
+  border-color: #e3a6a9;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(240, 189, 192, 0.3);
 }
 
 .white-theme .exit-button {
@@ -1033,31 +1097,86 @@
   color: #333;
 }
 
-/* 调整移动端exit button尺寸和位置 */
+/* Responsive design for enhanced header */
 @media (max-width: 768px) {
-  .exit-button {
-    top: 8px;
-    left: 15px;
-    font-size: 0.9rem;
-    padding: 6px 12px;
+  .question-progress-container {
+    padding: 12px 15px;
+    min-height: 56px; /* Slightly taller to contain icon buttons */
   }
   
-  .question-progress-container {
-    margin-top: 40px;
+  .exit-actions {
+    top: 12px;
+    left: 15px;
+  }
+  
+  .exit-button {
+    font-size: 0.85rem;
+    padding: 8px; /* Square padding for icon-only mode */
+    min-width: 36px;
+    justify-content: center;
+  }
+  
+  /* Hide button text on tablets and show tooltips */
+  .exit-button-text {
+    display: none;
+  }
+  
+  /* Adjust icon margins when text is hidden */
+  .exit-button img {
+    margin-right: 0 !important;
+  }
+  
+  .question-progress-bar {
+    height: 8px;
+    max-width: 280px; /* Shorter bar for better clearance */
+    margin: 0 auto 0 110px; /* More left margin to clear buttons */
+  }
+  
+  .question-progress-text {
+    font-size: 0.8rem;
+    margin-left: 8px;
   }
 }
 
 @media (max-width: 480px) {
-  .exit-button {
-    top: 6px;
-    left: 10px;
-    font-size: 0.8rem;
-    padding: 5px 10px;
-    border-radius: 3px;
+  .question-progress-container {
+    padding: 10px 12px;
+    min-height: 50px; /* Slightly taller for mobile too */
   }
   
-  .question-progress-container {
-    margin-top: 35px;
+  .exit-actions {
+    top: 10px;
+    left: 12px;
+    gap: 6px;
+  }
+  
+  .exit-button {
+    font-size: 0.8rem;
+    padding: 6px; /* Even more compact for mobile */
+    border-radius: 4px;
+    min-width: 32px;
+    justify-content: center;
+  }
+  
+  /* Hide button text on mobile and show tooltips */
+  .exit-button-text {
+    display: none;
+  }
+  
+  /* Adjust icon margins when text is hidden */
+  .exit-button img {
+    margin-right: 0 !important;
+  }
+  
+  .question-progress-bar {
+    height: 6px;
+    max-width: 220px; /* Even shorter for mobile */
+    margin: 0 auto 0 90px; /* More left margin for mobile */
+  }
+  
+  .question-progress-text {
+    font-size: 0.75rem;
+    margin-left: 6px;
   }
 }
 
