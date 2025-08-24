@@ -53,6 +53,16 @@ export const tagMapping: Record<string, string> = {
   '核心耐力': 'coreEndurance'
 };
 
+// Question 25 option to character ID mapping for tie-breaking
+export const question25CharacterMapping: Record<string, string> = {
+  'A': 'prometheus',  // Redistribute corporate shares
+  'B': 'wukong',      // Create 72 versions of yourself
+  'C': 'odin',        // Omnipotent prophet
+  'D': 'venus',       // Divine product allure
+  'E': 'nuwa',        // Reconstruct economic system
+  'F': 'athena'       // Strategic advantage
+};
+
 export const cardsData: CardData[] = [
   {
     id: 'odin',
@@ -201,6 +211,20 @@ export function mapTagStatsToScores(tagStats: Record<string, any> | null | undef
   return userScores;
 }
 
+// Helper function to get user's question 25 answer from localStorage
+function getQuestion25Answer(): string | null {
+  try {
+    const answers = localStorage.getItem('chon_personality_answers');
+    if (!answers) return null;
+    const parsedAnswers = JSON.parse(answers);
+    const question25Answer = parsedAnswers[25];
+    return question25Answer?.value || null;
+  } catch (error) {
+    console.error('Error reading question 25 answer:', error);
+    return null;
+  }
+}
+
 export function findBestMatch(
   userScores: Record<string, number>,
   allCards: CardData[] = cardsData
@@ -224,9 +248,32 @@ export function findBestMatch(
     return { card, index, matchScore };
   });
 
+  // Sort by match score first
   const sortedCharacters = charactersWithScores.sort((a, b) => b.matchScore - a.matchScore);
+  
+  // Handle ties using question 25 preference
+  const topScore = sortedCharacters[0].matchScore;
+  const tiedCharacters = sortedCharacters.filter(char => char.matchScore === topScore);
+  
+  let bestMatch = sortedCharacters[0].card;
+  
+  // If there's a tie, try to break it using question 25
+  if (tiedCharacters.length > 1) {
+    const question25Answer = getQuestion25Answer();
+    if (question25Answer && question25CharacterMapping[question25Answer]) {
+      const preferredCharacterId = question25CharacterMapping[question25Answer];
+      const preferredCharacter = tiedCharacters.find(char => char.card.id === preferredCharacterId);
+      
+      if (preferredCharacter) {
+        bestMatch = preferredCharacter.card;
+        // Move the preferred character to the front of the sorted list
+        const otherCharacters = sortedCharacters.filter(char => char.card.id !== preferredCharacterId);
+        sortedCharacters.splice(0, sortedCharacters.length, preferredCharacter, ...otherCharacters);
+      }
+    }
+  }
+  
   const sortedCards = sortedCharacters.map(item => item.card);
-  const bestMatch = sortedCards[0];
   return { sortedCards, bestMatch };
 }
 
