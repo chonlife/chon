@@ -3,6 +3,7 @@ import { Question, QuestionnaireType } from './questionnaires';
 import { StoredAnswer } from './PersonalityTest';
 import CountryAutocomplete from './CountryAutocomplete';
 import ChildrenCountDropdown from './ChildrenCountDropdown';
+import BirthWeightInput from './BirthWeightInput';
 
 interface QuestionBlockProps {
   question: Question;
@@ -29,6 +30,8 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
   const isCountryQuestion = question.id === 3 && question.type === 'text-input';
   // Special handling for children count dropdown on question id 52
   const isChildrenCountQuestion = question.id === 52 && question.type === 'text-input';
+  // Special handling for birth weight input on question id 54
+  const isBirthWeightQuestion = question.id === 54 && question.type === 'text-input';
 
   return (
     <div id={`question-${question.id}`} className="question-container">
@@ -60,7 +63,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
           ))}
         </div>
       )}
-      {question.type === 'text-input' && !isCountryQuestion && !isChildrenCountQuestion && (
+      {question.type === 'text-input' && !isCountryQuestion && !isChildrenCountQuestion && !isBirthWeightQuestion && (
         <div className="text-input-container">
           <input
             type="text"
@@ -85,6 +88,14 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
           onChange={(val) => onTextInput(question, val)}
           language={language}
           placeholder={language === 'en' ? 'Select or type number of children...' : '选择或输入孩子数量...'}
+        />
+      )}
+      {isBirthWeightQuestion && (
+        <BirthWeightInput
+          value={typeof currentAnswer?.value === 'string' ? currentAnswer.value : ''}
+          onChange={(val) => onTextInput(question, val)}
+          language={language}
+          placeholder={language === 'en' ? 'Enter birth weight...' : '输入出生体重...'}
         />
       )}
       {question.type === 'scale-question' && (

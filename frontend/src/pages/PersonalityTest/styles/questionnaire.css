@@ -702,6 +702,69 @@
   background-color: #F7F7F7;
 }
 
+/* Birth Weight Input */
+.birth-weight-input-container {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.weight-input-wrapper {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+
+.weight-number-input {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 16px;
+  font-family: inherit;
+  background-color: #fff;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  min-width: 0;
+}
+
+.weight-number-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.weight-number-input::placeholder {
+  color: #999;
+}
+
+.weight-unit-select {
+  padding: 12px 16px;
+  border: 2px solid #e0e0e0;
+  border-radius: 6px;
+  font-size: 16px;
+  font-family: inherit;
+  background-color: #fff;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  min-width: 120px;
+  width: 120px;
+}
+
+.weight-unit-select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.weight-unit-select:hover {
+  border-color: #ccc;
+}
+
+.weight-unit-select option[disabled] {
+  color: #999;
+  font-style: italic;
+}
+
 /* Navigation Buttons */
 .question-navigation, 
 .first-page-navigation {
