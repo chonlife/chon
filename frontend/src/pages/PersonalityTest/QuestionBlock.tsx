@@ -2,6 +2,7 @@ import React from 'react';
 import { Question, QuestionnaireType } from './questionnaires';
 import { StoredAnswer } from './PersonalityTest';
 import CountryAutocomplete from './CountryAutocomplete';
+import ChildrenCountDropdown from './ChildrenCountDropdown';
 
 interface QuestionBlockProps {
   question: Question;
@@ -26,6 +27,8 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
 }) => {
   // Special handling for country autocomplete on question id 3
   const isCountryQuestion = question.id === 3 && question.type === 'text-input';
+  // Special handling for children count dropdown on question id 52
+  const isChildrenCountQuestion = question.id === 52 && question.type === 'text-input';
 
   return (
     <div id={`question-${question.id}`} className="question-container">
@@ -57,7 +60,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
           ))}
         </div>
       )}
-      {question.type === 'text-input' && !isCountryQuestion && (
+      {question.type === 'text-input' && !isCountryQuestion && !isChildrenCountQuestion && (
         <div className="text-input-container">
           <input
             type="text"
@@ -74,6 +77,14 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
           onChange={(val) => onTextInput(question, val)}
           language={language}
           placeholder={language === 'en' ? 'Start typing a country or region...' : '输入国家/地区名称...'}
+        />
+      )}
+      {isChildrenCountQuestion && (
+        <ChildrenCountDropdown
+          value={typeof currentAnswer?.value === 'string' ? currentAnswer.value : ''}
+          onChange={(val) => onTextInput(question, val)}
+          language={language}
+          placeholder={language === 'en' ? 'Select or type number of children...' : '选择或输入孩子数量...'}
         />
       )}
       {question.type === 'scale-question' && (
