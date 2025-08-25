@@ -13,11 +13,19 @@ import Results from './results/Results.tsx';
 import AccountSignup from '../Signup/AccountSignup.tsx';
 import IntroSection from './intro/IntroSection.tsx';
 import PrivacyStatement from './privacy/PrivacyStatement.tsx';
+import { findFirstIncompleteSection, findFirstUnansweredQuestionInSection, getSectionByIndex, getOptionById, computeNextAnswersForMultipleChoice, calculatedQuestionnaireProgress, hasInProgressQuestionnaire, hasCompletedQuestionnaire } from '../../features/personality-test/selectors/questions.ts';
+import { calculateTagResults } from '../../features/personality-test/selectors/results.ts';
 
 // API Configuration
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
-type TestStep = 'intro' | 'identity' | 'privacy' | 'questionnaire' | 'results' | 'account';
+export type TestStep = 'intro' | 'identity' | 'privacy' | 'questionnaire' | 'results' | 'account';
+
+export const VALID_TEST_STEPS: TestStep[] = ['intro', 'identity', 'privacy', 'questionnaire', 'results', 'account'];
+
+export const isValidStep = (step: string): step is TestStep => {
+  return VALID_TEST_STEPS.includes(step as TestStep);
+};
 
 interface PersonalityTestProps {
   onWhiteThemeChange?: (isWhite: boolean) => void;
@@ -51,65 +59,12 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
   const hasMountedAnswersRef = useRef<boolean>(false);
   const hasMountedSectionRef = useRef<boolean>(false);
 
-  // Add interface definition
-  interface TagStats {
-    userScore: number;
-    totalPossibleScore: number;
-    scorePercentage: number;
-    averageScore: number;
-    answeredQuestions: number;
-  }
-
-  // Helpers: sections and progress
-  const getMenuByIdentity = (identity: QuestionnaireType): QuestionMenu | null => {
-    return questionsMenu.find(m => m.identity === identity) || null;
-  };
-
-  const getSectionByIndex = (
-    identity: QuestionnaireType,
-    index: number
-  ): QuestionSection | null => {
-    const menu = getMenuByIdentity(identity);
-    if (!menu) return null;
-    return menu.sections[index] ?? null;
-  };
-
-  const isQuestionAnswered = (
-    questionId: number,
-    storedAnswers: Record<number, StoredAnswer>
-  ): boolean => {
-    return storedAnswers[questionId] !== undefined;
-  };
-
-  const findFirstIncompleteSection = (
-    identity: QuestionnaireType,
-    storedAnswers: Record<number, StoredAnswer>
-  ): number => {
-    const menu = getMenuByIdentity(identity);
-    if (!menu) return 0;
-    for (let i = 0; i < menu.sections.length; i += 1) {
-      const sec = menu.sections[i];
-      const allAnswered = sec.questions.every(qid => isQuestionAnswered(qid, storedAnswers));
-      if (!allAnswered) return i;
-    }
-    // If everything answered, point to last section
-    return Math.max(0, menu.sections.length - 1);
-  };
-
-  const findFirstUnansweredQuestionInSection = (
-    section: QuestionSection,
-    storedAnswers: Record<number, StoredAnswer>
-  ): number | null => {
-    const target = section.questions.find(qid => !isQuestionAnswered(qid, storedAnswers));
-    return target ?? null;
-  };
-
   const renderQuestionsSection = (identity: QuestionnaireType, currentSection: number) => {
     const menu = questionsMenu.find(menu => menu.identity === identity) || null;
     if (!menu) {
       return null;
     }
-    const progress = calculatedQuestionnaireProgress(menu);
+    const progress = calculatedQuestionnaireProgress(menu, answers);
     let section: QuestionSection | null = null;
     if (currentSection < menu.sections.length) {
       section = menu.sections[currentSection];
@@ -189,11 +144,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
       setStep('intro');
     }
   }, []);
-  
-  // 验证步骤值是否有效
-  const isValidStep = (step: string): boolean => {
-    return ['intro', 'identity', 'privacy', 'questionnaire', 'results', 'account'].includes(step);
-  };
   
   // 保存答案到本地存储（跳过首次挂载，避免覆盖已保存数据）
   useEffect(() => {
@@ -428,12 +378,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
     setStep('privacy');
   };
 
-  // Helpers for handling multiple choice answers
-  const getOptionById = (question: Question, optionId: string) => {
-    const qAny: any = question as any;
-    return qAny.options?.find((o: any) => o.id === optionId);
-  };
-
   const updateGenderIfApplicable = (question: Question, optionId: string) => {
     if (question.id !== 1) return;
     const opt: any = getOptionById(question, optionId);
@@ -454,42 +398,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
     const isNo = en.includes('no') || zh.includes('否');
     if (isYes) setWorkedInCoporate(true);
     if (isNo) setWorkedInCoporate(false);
-  };
-
-  const computeNextAnswersForMultipleChoice = (
-    question: Question,
-    optionId: string,
-    currentAnswers: Record<number, StoredAnswer>
-  ): { updatedAnswers: Record<number, StoredAnswer>; isMultiSelect: boolean } => {
-    const isMulti = question.type === 'multiple-choice' && (question as any).multiSelect;
-    if (isMulti) {
-      const prev = currentAnswers[question.id]?.value;
-      const prevArray: string[] = Array.isArray(prev) ? prev : [];
-      const nextArray = prevArray.includes(optionId)
-        ? prevArray.filter(v => v !== optionId)
-        : [...prevArray, optionId];
-
-      if (nextArray.length === 0) {
-        const newAnswers = { ...currentAnswers };
-        delete newAnswers[question.id];
-        return { updatedAnswers: newAnswers, isMultiSelect: true };
-      }
-      return {
-        updatedAnswers: {
-          ...currentAnswers,
-          [question.id]: { value: nextArray }
-        },
-        isMultiSelect: true
-      };
-    }
-    // Single select default
-    return {
-      updatedAnswers: {
-        ...currentAnswers,
-        [question.id]: { value: optionId }
-      },
-      isMultiSelect: false
-    };
   };
 
   const handlePrivacyContinue = () => {
@@ -575,7 +483,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
   // 完成问卷并跳转到结果页面的函数
   const finishQuestionnaire = () => {
     // Calculate final results
-    calculateTagResults();
+    calculateTagResults(answers);
     setStep('results');
     if (selectedIdentity) {
       questionnaireApi
@@ -649,30 +557,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
     ? 'personality-test-container no-header' 
     : 'personality-test-container';
 
-  const getTotalQuestions = (menu: QuestionMenu): number => {
-    return menu.sections.reduce((acc, section) => acc + section.questions.length, 0);
-  };
-  
-    // 计算问卷进度
-  const calculatedQuestionnaireProgress = (menu: QuestionMenu) => {
-    // For "both" option, calculate progress based on active questionnaire
-    const answeredCount = Object.keys(answers).length;
-    const total = getTotalQuestions(menu);
-    return total > 0 ? (answeredCount / total) * 100 : 0;
-  };
-
-  // Add check for in-progress questionnaire
-  const hasInProgressQuestionnaire = (): boolean => {
-    const savedStep = localStorage.getItem('chon_personality_step');
-    return savedStep !== null && savedStep !== 'intro' && isValidStep(savedStep as TestStep);
-  };
-
-  // Add check for completed questionnaire
-  const hasCompletedQuestionnaire = (): boolean => {
-    const savedStep = localStorage.getItem('chon_personality_step');
-    return savedStep === 'results';
-  };
-
   // Add function to clear all test data
   const clearTestData = () => {
     localStorage.removeItem('chon_personality_answers');
@@ -712,108 +596,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
     } else {
       setStep('identity');
     }
-  };
-
-  // Calculate final statistics for each tag
-  const calculateTagResults = () => {
-    const tagStats: Record<string, TagStats> = {};
-    const allTags = ['自我意识', '奉献精神', '社交情商', '情绪调节', '客观能力', '核心耐力'];
-    
-    // Initialize stats for each tag
-    allTags.forEach(tag => {
-      tagStats[tag] = {
-        userScore: 0,
-        totalPossibleScore: 0,
-        scorePercentage: 0,
-        averageScore: 0,
-        answeredQuestions: 0
-      };
-    });
-
-    // Calculate stats using stored answers
-    Object.entries(answers).forEach(([questionId, answer]) => {
-      // Resolve tags considering gender-specific fields if available
-      const qid = Number(questionId);
-      // We don't have direct access to question meta here; tags are saved on answer for scale questions only.
-      // Extend: if answer.tags exists, optionally override with gender-specific tags stored in a hidden convention
-      // For current code path, inject gender-specific tags at save time in handleScaleAnswer below.
-      if (answer.tags) {
-        let score: number;
-        const valueStr = Array.isArray(answer.value) ? '' : (answer.value as string);
-        if (['A', 'B', 'C', 'D', 'E'].includes(valueStr)) {
-          const scoreMap: Record<string, number> = {'A': 1, 'B': 2, 'C': 3, 'D': 4, 'E': 5};
-          score = scoreMap[valueStr] || 0;
-        } else {
-          score = parseInt(valueStr, 10) || 0;
-        }
-
-        if (score > 0) {
-          answer.tags.forEach(tag => {
-            if (tagStats[tag]) {
-              tagStats[tag].userScore += score;
-              tagStats[tag].totalPossibleScore += 5; // Max score is 5
-              tagStats[tag].answeredQuestions += 1;
-            }
-          });
-        }
-      }
-    });
-
-    // Calculate percentages and averages
-    allTags.forEach(tag => {
-      const stats = tagStats[tag];
-      stats.scorePercentage = stats.totalPossibleScore > 0 
-        ? Math.min(100, Number(((stats.userScore / stats.totalPossibleScore) * 100).toFixed(2))) 
-        : 0;
-      stats.averageScore = stats.answeredQuestions > 0 
-        ? Number((stats.userScore / stats.answeredQuestions).toFixed(2)) 
-        : 0;
-    });
-
-    // Save the final stats
-    localStorage.setItem('tagStats', JSON.stringify(tagStats));
-    return tagStats;
-  };
-
-  // 获取标签统计数据
-  const getTagStats = (): Record<string, any> => {
-    const savedStats = localStorage.getItem('tagStats');
-    if (savedStats) {
-      try {
-        return JSON.parse(savedStats);
-      } catch (e) {
-        console.error('Error parsing saved tag statistics:', e);
-        return {};
-      }
-    }
-    return {};
-  };
-
-
-
-  // 导出结果的函数，可以在需要导出用户结果时调用
-  const exportResults = () => {
-    const tagResults = calculateTagResults();
-    const allAnswers = answers;
-    
-    // 在这里你可以加入导出逻辑，例如发送到服务器或下载为文件
-    console.log('Tag Results:', tagResults);
-    console.log('All Answers:', allAnswers);
-    
-    // 示例：将结果转换为JSON并下载
-    const resultsBlob = new Blob(
-      [JSON.stringify({ tagResults, allAnswers }, null, 2)], 
-      { type: 'application/json' }
-    );
-    
-    const url = URL.createObjectURL(resultsBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `personality_test_results_${new Date().toISOString()}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
   };
 
   // Render content based on step
@@ -886,8 +668,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
               {language === 'en' ? 'Progress saved' : '进度已保存'}
             </div>
           )}
-          
-          {/* 只为非母亲问卷页面显示背景 */}
+        
           {step !== 'privacy' && step !== 'questionnaire' && (
             <>
               <div className="molecule-background"></div>

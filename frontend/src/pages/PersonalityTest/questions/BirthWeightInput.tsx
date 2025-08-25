@@ -15,7 +15,6 @@ const BirthWeightInput: React.FC<BirthWeightInputProps> = ({
 }) => {
   const [weight, setWeight] = useState<string>('');
   const [unit, setUnit] = useState<string>('');
-  console.log('Unit:', unit);
 
   // Parse the stored value when component mounts or value changes
   useEffect(() => {
