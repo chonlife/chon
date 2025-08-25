@@ -1,6 +1,6 @@
 import React from 'react';
-import { useLanguage } from '../../contexts/LanguageContext';
-import './PersonalityTest.css';
+import { useLanguage } from '../../../contexts/LanguageContext';
+import '../PersonalityTest.css';
 
 interface PrivacyStatementProps {
   selectedIdentity: string | null;

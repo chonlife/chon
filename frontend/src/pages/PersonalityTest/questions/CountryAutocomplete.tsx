@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import countries from './country-list.json';
+import countries from '../../../lib/data/country-list.json';
 
 interface CountryItem {
   country_code: number;

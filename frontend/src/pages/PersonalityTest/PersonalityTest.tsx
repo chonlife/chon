@@ -6,12 +6,12 @@ import './PersonalityTest.css';
 import { scrollToNextQuestion, scrollToFirstQuestionOfNextPage, scrollToQuestion, scrollToPageTop } from './ScrollUtils.ts';
 import questionnaireApi from '../../api/questionnaire.ts';
 import { Question, QuestionSection, QuestionnaireType, questionsMenu, QuestionMenu } from './questionnaires.ts';
-import IdentitySelection, { IdentityType, CorporateRole } from './IdentitySelection.tsx';
-import QuestionsSection from './QuestionsSection.tsx';
-import Results from '../Results/Results.tsx';
+import IdentitySelection, { IdentityType, CorporateRole } from './identity/IdentitySelection.tsx';
+import QuestionsSection from './questions/QuestionsSection.tsx';
+import Results from './results/Results.tsx';
 import AccountSignup from '../Signup/AccountSignup.tsx';
-import IntroSection from './IntroSection.tsx';
-import PrivacyStatement from './PrivacyStatement.tsx';
+import IntroSection from './intro/IntroSection.tsx';
+import PrivacyStatement from './privacy/PrivacyStatement.tsx';
 
 // API Configuration
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
@@ -639,7 +639,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
     <div className="exit-actions">
       {/* Restart button (was Exit) */}
       <button type="button" className="exit-button restart-button show-tooltip" lang={language} onClick={handleRestart}>
-        <img src={new URL('./Restart.svg', import.meta.url).toString()} alt="Restart" style={{ width: 18, height: 18 }} />
+        <img src={new URL('../../icons/Restart.svg', import.meta.url).toString()} alt="Restart" style={{ width: 18, height: 18 }} />
         <span className="exit-button-text" style={{ marginLeft: 6 }}>
           {language === 'en' ? 'Restart' : '重新开始'}
         </span>
@@ -650,7 +650,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       {/* Save & Exit only on questionnaire pages */}
       {step === 'questionnaire' && (
         <button type="button" className="exit-button save-exit-button show-tooltip" lang={language} onClick={handleSaveAndExit}>
-          <img src={new URL('./Save.svg', import.meta.url).toString()} alt="Save & Exit" style={{ width: 18, height: 18 }} />
+          <img src={new URL('../../icons/Save.svg', import.meta.url).toString()} alt="Save & Exit" style={{ width: 18, height: 18 }} />
           <span className="exit-button-text" style={{ marginLeft: 6 }}>
             {language === 'en' ? 'Save & Exit' : '保存并退出'}
           </span>

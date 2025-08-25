@@ -2,7 +2,7 @@ import axios from 'axios';
 import { questions } from '../pages/PersonalityTest/questionnaires';
 import { getUserId } from '../utils/userIdentification';
 import { StoredAnswer } from '../pages/PersonalityTest/PersonalityTest';
-import { CorporateRole } from '../pages/PersonalityTest/IdentitySelection';
+import { CorporateRole } from '../pages/PersonalityTest/identity/IdentitySelection';
 
 // API Configuration
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';

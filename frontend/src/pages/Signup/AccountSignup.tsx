@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import questionnaireApi, { QuestionnaireType } from '../../api/questionnaire';
 import { StoredAnswer } from '../PersonalityTest/PersonalityTest';
-import { CorporateRole } from '../PersonalityTest/IdentitySelection';
-import countries from '../PersonalityTest/country-list.json';
+import { CorporateRole } from '../PersonalityTest/identity/IdentitySelection.tsx';
+import countries from '../../lib/data/country-list.json';
 import { getUserId } from '../../utils/userIdentification';
 import './AccountSignup.css';
 import { useAuth } from '../../contexts/AuthContext.tsx';

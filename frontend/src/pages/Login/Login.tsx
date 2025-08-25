@@ -5,7 +5,7 @@ import { useAuth } from '../../contexts/AuthContext.tsx';
 import questionnaireApi from '../../api/questionnaire';
 import './Login.css';
 import '../Signup/AccountSignup.css';
-import countries from '../PersonalityTest/country-list.json';
+import countries from '../../lib/data/country-list.json';
 
 const Login = () => {
   const { language } = useLanguage();

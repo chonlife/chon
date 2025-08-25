@@ -1,9 +1,9 @@
 import React from 'react';
-import { Question, QuestionnaireType, questions, QuestionSection } from './questionnaires';
-import { StoredAnswer } from './PersonalityTest';
+import { Question, QuestionnaireType, questions, QuestionSection } from '../questionnaires';
+import { StoredAnswer } from '../PersonalityTest';
 import QuestionBlock from './QuestionBlock';
 import ProgressBar from './ProgressBar';
-import './PersonalityTest.css';
+import '../PersonalityTest.css';
 import QuestionNavigation from './QuestionNavigation';
 
 interface QuestionsSectionProps {

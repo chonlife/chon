@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useLanguage } from '../../contexts/LanguageContext';
-import { useAuth } from '../../contexts/AuthContext.tsx';
+import { useLanguage } from '../../../contexts/LanguageContext.tsx';
+import { useAuth } from '../../../contexts/AuthContext.tsx';
 import './Results.css';
-import { cardsData as sharedCardsData, tagLabels as sharedTagLabels, findBestMatch as sharedFindBestMatch, mapTagStatsToScores, CardData, TagTranslations } from '../../utils/archetypes';
+import { cardsData as sharedCardsData, tagLabels as sharedTagLabels, findBestMatch as sharedFindBestMatch, mapTagStatsToScores, CardData, TagTranslations } from '../../../utils/archetypes.ts';
 
 // CardData and TagTranslations are imported from shared utils
 

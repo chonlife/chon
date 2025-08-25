@@ -9,7 +9,7 @@ import NotFound from './pages/NotFound/NotFound.tsx'
 import { useLanguage } from './contexts/LanguageContext.tsx'
 import { useEffect, useState } from 'react'
 import './App.css'
-import Results from './pages/Results/Results.tsx'
+import Results from './pages/PersonalityTest/results/Results.tsx'
 import Profile from './pages/Profile/Profile.tsx'
 
 function App() {

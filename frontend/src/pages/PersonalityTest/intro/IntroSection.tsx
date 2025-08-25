@@ -1,6 +1,6 @@
 import React from 'react';
-import { useLanguage } from '../../contexts/LanguageContext';
-import './PersonalityTest.css';
+import { useLanguage } from '../../../contexts/LanguageContext';
+import '../PersonalityTest.css';
 
 interface IntroSectionProps {
   userIntroChoice: string | null;
