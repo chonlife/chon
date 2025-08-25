@@ -4,6 +4,9 @@
 /* Identity selection styles */
 @import './styles/identity.css';
 
+/* Privacy styles */
+@import './styles/privacy.css';
+
 /* Questionnaire styles */
 @import './styles/questionnaire.css';
 

@@ -4,7 +4,7 @@ import { TestStep, isValidStep } from "../../../pages/PersonalityTest/Personalit
 
 const getTotalQuestions = (menu: QuestionMenu): number => {
     return menu.sections.reduce((acc, section) => acc + section.questions.length, 0);
-  };
+};
   
 // 计算问卷进度
 export const calculatedQuestionnaireProgress = (menu: QuestionMenu, storedAnswers: Record<number, StoredAnswer>) => {
@@ -109,4 +109,4 @@ export const computeNextAnswersForMultipleChoice = (
       },
       isMultiSelect: false
     };
-  };
+};
