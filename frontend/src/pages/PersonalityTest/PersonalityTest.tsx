@@ -243,6 +243,10 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
       });
   };
 
+  const handleIntroBeginTest = () => {
+    setStep('identity');
+  };
+
   // Handlers for identity section
   const handleIdentitySelect = (identity: IdentityType) => {
     if (identity === 'other') {
@@ -508,6 +512,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
           <IntroSection 
             userIntroChoice={userIntroChoice}
             onOptionClick={handleIntroOptionClick}
+            onBeginTest={handleIntroBeginTest}
           />
         );
       case 'identity':

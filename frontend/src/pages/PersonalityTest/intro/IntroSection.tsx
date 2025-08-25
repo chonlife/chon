@@ -8,11 +8,13 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 interface IntroSectionProps {
   userIntroChoice: string | null;
   onOptionClick: (choice: string) => void;
+  onBeginTest: () => void;
 }
 
 const IntroSection: React.FC<IntroSectionProps> = ({
   userIntroChoice,
   onOptionClick,
+  onBeginTest,
 }) => {
   const { t, language } = useLanguage();
   const [introStats, setIntroStats] = useState({
@@ -78,6 +80,7 @@ const IntroSection: React.FC<IntroSectionProps> = ({
           </button>
         </div>
       ) : (
+        <>
           <div className="progress-container" lang={language}>
             <div className="percentage-labels" lang={language}>
               <span className="agree-label" lang={language}>
@@ -94,6 +97,17 @@ const IntroSection: React.FC<IntroSectionProps> = ({
               ></div>
             </div>
           </div>
+          
+          <div className="test-buttons">
+            <button 
+              className="begin-test-button" 
+              onClick={onBeginTest}
+              lang={language}
+            >
+              {t.intro.beginTest}
+            </button>
+          </div>
+        </>
       )}
     </div>
   );
