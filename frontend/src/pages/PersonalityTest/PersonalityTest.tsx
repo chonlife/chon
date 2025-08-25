@@ -16,13 +16,8 @@ import PrivacyStatement from './privacy/PrivacyStatement.tsx';
 import { findFirstIncompleteSection, findFirstUnansweredQuestionInSection, getSectionByIndex, getOptionById, computeNextAnswersForMultipleChoice, calculatedQuestionnaireProgress, hasInProgressQuestionnaire, hasCompletedQuestionnaire } from '../../features/personality-test/selectors/questions.ts';
 import { calculateTagResults } from '../../features/personality-test/selectors/results.ts';
 
-// API Configuration
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
-
-export type TestStep = 'intro' | 'identity' | 'privacy' | 'questionnaire' | 'results' | 'account';
-
-export const VALID_TEST_STEPS: TestStep[] = ['intro', 'identity', 'privacy', 'questionnaire', 'results', 'account'];
-
+export const VALID_TEST_STEPS = ['intro', 'identity', 'privacy', 'questionnaire', 'results', 'account'] as const;
+export type TestStep = typeof VALID_TEST_STEPS[number];
 export const isValidStep = (step: string): step is TestStep => {
   return VALID_TEST_STEPS.includes(step as TestStep);
 };
@@ -47,12 +42,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
   // Update answers type to store more information
   const [answers, setAnswers] = useState<Record<number, StoredAnswer>>({});
   const [showSaveIndicator, setShowSaveIndicator] = useState(false);
-  // Remove loading from state
-  const [introStats, setIntroStats] = useState({
-    yesCount: 0,
-    noCount: 0,
-    yesPercentage: 65
-  });
 
   const [selectedRole, setSelectedRole] = useState<CorporateRole | null>(null);
   const initializedSectionRef = useRef<boolean>(false);
@@ -276,52 +265,15 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
     }
   }, [step, onWhiteThemeChange, onHideUIChange, onViewportRestrictionChange]);
 
-  // 添加获取intro统计数据的函数
-  const fetchIntroStats = async () => {
-    try {
-      const response = await fetch(`${API_URL}/api/intro-stats`);
-      if (!response.ok) {
-        throw new Error(`HTTP error ${response.status}`);
-      }
-      
-      const data = await response.json();
-      
-      // Update UI with the stats
-      setIntroStats({
-        yesCount: data.yes_count,
-        noCount: data.no_count,
-        yesPercentage: data.yes_percentage
-      });
-      
-    } catch (error) {
-      // Keep current stats on error
-    }
-  };
-
-  // 在用户选择yes/no后获取最新统计数据
-  useEffect(() => {
-    if (userIntroChoice) {
-      // 稍微延迟，让后端有时间更新数据
-      const timer = setTimeout(() => {
-        fetchIntroStats();
-      }, 800);
-      
-      return () => clearTimeout(timer);
-    }
-  }, [userIntroChoice]);
-
   // 在组件挂载或step变为'intro'时进行初始化
   useEffect(() => {
     if (step === 'intro') {
       // 重置userIntroChoice，确保用户每次回到intro页面时都会看到选项
       setUserIntroChoice(null);
-      
-      // 同时预加载统计数据，但不会影响UI显示
-      fetchIntroStats();
     }
   }, [step]);
 
-  const handleOptionClick = (choice: string) => {
+  const handleIntroOptionClick = (choice: string) => {
     setUserIntroChoice(choice);
     
     // Save intro choice with user ID
@@ -329,10 +281,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
       .catch(error => {
         console.error('Error saving intro choice:', error);
       });
-  };
-  
-  const handleBeginTest = () => {
-    setStep('identity');
   };
 
   const handleIdentitySelect = (identity: IdentityType) => {
@@ -605,14 +553,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
         return (
           <IntroSection 
             userIntroChoice={userIntroChoice}
-            introStats={introStats}
-            hasCompletedQuestionnaire={hasCompletedQuestionnaire}
-            hasInProgressQuestionnaire={hasInProgressQuestionnaire}
-            onOptionClick={handleOptionClick}
-            onBeginTest={handleBeginTest}
-            onContinueTest={continueTest}
-            onClearTestData={clearTestData}
-            onSetResultsStep={() => setStep('results')}
+            onOptionClick={handleIntroOptionClick}
           />
         );
       case 'identity':

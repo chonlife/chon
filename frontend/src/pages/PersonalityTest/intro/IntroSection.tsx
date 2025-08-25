@@ -1,35 +1,55 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../../contexts/LanguageContext';
 import '../PersonalityTest.css';
 
+// API Configuration
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+
 interface IntroSectionProps {
   userIntroChoice: string | null;
-  introStats: {
-    yesCount: number;
-    noCount: number;
-    yesPercentage: number;
-  };
-  hasCompletedQuestionnaire: () => boolean;
-  hasInProgressQuestionnaire: () => boolean;
   onOptionClick: (choice: string) => void;
-  onBeginTest: () => void;
-  onContinueTest: () => void;
-  onClearTestData: () => void;
-  onSetResultsStep: () => void;
 }
 
 const IntroSection: React.FC<IntroSectionProps> = ({
   userIntroChoice,
-  introStats,
-  hasCompletedQuestionnaire,
-  hasInProgressQuestionnaire,
   onOptionClick,
-  onBeginTest,
-  onContinueTest,
-  onClearTestData,
-  onSetResultsStep
 }) => {
   const { t, language } = useLanguage();
+  const [introStats, setIntroStats] = useState({
+    yesCount: 0,
+    noCount: 0,
+    yesPercentage: 65
+  });
+
+  const fetchIntroStats = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/intro-stats`);
+      if (!response.ok) {
+        throw new Error(`HTTP error ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      // Update UI with the stats
+      setIntroStats({
+        yesCount: data.yes_count,
+        noCount: data.no_count,
+        yesPercentage: data.yes_percentage
+      });
+      
+    } catch (error) {
+      // Keep current stats on error
+    }
+  };
+
+  // Fetch initial stats when component mounts
+  useEffect(() => {
+    fetchIntroStats();
+  }, []);
+
+  const handleOptionClick = (choice: string) => {
+    onOptionClick(choice);
+  };
   
   const wrappedQuestion = `<span lang="${language}">${language === 'en' ? t.intro.question : '母亲是天生的领导者。'}</span>`;
   
@@ -44,21 +64,20 @@ const IntroSection: React.FC<IntroSectionProps> = ({
         <div className="test-options" lang={language}>
           <button 
             className="test-option-button"
-            onClick={() => onOptionClick('yes')}
+            onClick={() => handleOptionClick('yes')}
             lang={language}
           >
             {t.intro.yes}
           </button>
           <button 
             className="test-option-button"
-            onClick={() => onOptionClick('no')}
+            onClick={() => handleOptionClick('no')}
             lang={language}
           >
             {t.intro.no}
           </button>
         </div>
       ) : (
-        <>
           <div className="progress-container" lang={language}>
             <div className="percentage-labels" lang={language}>
               <span className="agree-label" lang={language}>
@@ -75,53 +94,6 @@ const IntroSection: React.FC<IntroSectionProps> = ({
               ></div>
             </div>
           </div>
-          
-          <div className="test-buttons">
-            {hasCompletedQuestionnaire() ? (
-              <>
-                <button 
-                  className="begin-test-button" 
-                  onClick={onSetResultsStep}
-                  lang={language}
-                >
-                  {t.intro.viewResult}
-                </button>
-                <button 
-                  className="restart-test-button" 
-                  onClick={onClearTestData}
-                  lang={language}
-                >
-                  {t.intro.restartTest}
-                </button>
-              </>
-            ) : hasInProgressQuestionnaire() ? (
-              <>
-                <button 
-                  className="begin-test-button" 
-                  onClick={onContinueTest}
-                  lang={language}
-                >
-                  {t.intro.continueTest}
-                </button>
-                <button 
-                  className="restart-test-button" 
-                  onClick={onClearTestData}
-                  lang={language}
-                >
-                  {t.intro.restartTest}
-                </button>
-              </>
-            ) : (
-              <button 
-                className="begin-test-button" 
-                onClick={onBeginTest}
-                lang={language}
-              >
-                {t.intro.beginTest}
-              </button>
-            )}
-          </div>
-        </>
       )}
     </div>
   );
