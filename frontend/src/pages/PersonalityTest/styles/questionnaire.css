@@ -585,11 +585,13 @@
 
 .question-navigation .prev-button {
   margin-right: 0;
+  order: 1;
 }
 
 .question-navigation .next-button,
 .question-navigation .finish-button {
-  margin-left: 0;
+  margin-left: auto;
+  order: 2;
 }
 
 .nav-button {
