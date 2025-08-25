@@ -19,7 +19,7 @@ interface IdentitySelectionProps {
   selectedIdentity: IdentityType | null;
   selectedRole: CorporateRole | null;
   onIdentitySelect: (identity: IdentityType) => void;
-  onRoleSelect: (role: CorporateRole | null) => void;
+  onCorporateRoleSelect: (role: CorporateRole | null) => void;
   onContinue: () => void;
 }
 
@@ -39,7 +39,7 @@ export default function IdentitySelection({
   selectedIdentity,
   selectedRole,
   onIdentitySelect,
-  onRoleSelect,
+  onCorporateRoleSelect,
   onContinue
 }: IdentitySelectionProps): React.ReactElement {
   const { t, language } = useLanguage();
@@ -115,7 +115,7 @@ export default function IdentitySelection({
               <div
                 key={role.value}
                 className={`role-option ${selectedRole === role.value ? 'selected' : ''}`}
-                onClick={() => onRoleSelect(selectedRole === role.value ? null : role.value)}
+                onClick={() => onCorporateRoleSelect(selectedRole === role.value ? null : role.value)}
               >
                 <span>{language === 'en' ? role.en : role.zh}</span>
               </div>
@@ -128,7 +128,7 @@ export default function IdentitySelection({
         className={`option-container ${isIdentitySelected('other') ? 'selected' : ''}`}
         onClick={() => {
           onIdentitySelect('other');
-          onRoleSelect(null); // Clear role selection when selecting 'other'
+          onCorporateRoleSelect(null); // Clear role selection when selecting 'other'
         }}
       >
         <div 

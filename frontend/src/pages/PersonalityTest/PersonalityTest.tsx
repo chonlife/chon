@@ -13,6 +13,7 @@ import Results from './results/Results.tsx';
 import AccountSignup from '../Signup/AccountSignup.tsx';
 import IntroSection from './intro/IntroSection.tsx';
 import PrivacyStatement from './privacy/PrivacyStatement.tsx';
+import TopActions from './components/TopActions.tsx';
 import { findFirstIncompleteSection, findFirstUnansweredQuestionInSection, getSectionByIndex, getOptionById, computeNextAnswersForMultipleChoice, calculatedQuestionnaireProgress, hasInProgressQuestionnaire, hasCompletedQuestionnaire } from '../../features/personality-test/selectors/questions.ts';
 import { calculateTagResults } from '../../features/personality-test/selectors/results.ts';
 
@@ -48,51 +49,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
   const hasMountedAnswersRef = useRef<boolean>(false);
   const hasMountedSectionRef = useRef<boolean>(false);
 
-  const renderQuestionsSection = (identity: QuestionnaireType, currentSection: number) => {
-    const menu = questionsMenu.find(menu => menu.identity === identity) || null;
-    if (!menu) {
-      return null;
-    }
-    const progress = calculatedQuestionnaireProgress(menu, answers);
-    let section: QuestionSection | null = null;
-    if (currentSection < menu.sections.length) {
-      section = menu.sections[currentSection];
-      const showBack = currentSection > 0;
-      const showNext = currentSection < menu.sections.length - 1;
-      const showFinish = currentSection === menu.sections.length - 1;
-      return (
-        <QuestionsSection 
-          key={section.sectionId} 
-          section={section}
-          language={language}
-          identity={selectedIdentity}
-          progress={progress}
-          showBack={showBack}
-          showNext={showNext}
-          showFinish={showFinish}
-          currentAnswers={answers}
-          workedInCorporate={workedInCoporate}
-          onMultipleChoice={handleMultipleChoiceAnswer}
-          onTextInput={handleTextAnswer}
-          onScale={handleScaleAnswer}
-          onNext={handleNextQuestionSection}
-          onBack={handleBackQuestionSection}
-          onFinish={finishQuestionnaire}
-          scrollToFirstQuestionOfNextPage={scrollToFirstQuestionOfNextPage}
-        />
-      )
-    }
-    return null;
-  }
-
-  const handleNextQuestionSection = () => {
-    setCurrentSection(currentSection + 1);
-  }
-
-  const handleBackQuestionSection = () => {
-    setCurrentSection(currentSection - 1);
-  }
-  
+  /* =============== Effects =============== */
   // 从本地存储加载初始数据（合并初始化）
   useEffect(() => {
     const savedAnswers = localStorage.getItem('chon_personality_answers');
@@ -273,6 +230,9 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
     }
   }, [step]);
 
+
+  /* =============== Handlers =============== */
+  // Handlers for intro section
   const handleIntroOptionClick = (choice: string) => {
     setUserIntroChoice(choice);
     
@@ -283,6 +243,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
       });
   };
 
+  // Handlers for identity section
   const handleIdentitySelect = (identity: IdentityType) => {
     if (identity === 'other') {
       setSelectedIdentity(selectedIdentity === 'other' ? null : 'other');
@@ -311,7 +272,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
     }
   };
 
-  const handleRoleSelect = (role: CorporateRole | null) => {
+  const handleCorporateRoleSelect = (role: CorporateRole | null) => {
     setSelectedRole(role);
   };
 
@@ -326,28 +287,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
     setStep('privacy');
   };
 
-  const updateGenderIfApplicable = (question: Question, optionId: string) => {
-    if (question.id !== 1) return;
-    const opt: any = getOptionById(question, optionId);
-    const en = (opt?.textEn || '').toLowerCase();
-    const zh = opt?.textZh || '';
-    const isFemale = en.includes('female') || zh.includes('女');
-    const isMale = en.includes('male') || zh.includes('男');
-    if (isFemale) setGender('Female');
-    if (isMale) setGender('Male');
-  };
-
-  const updateCorporateIfApplicable = (question: Question, optionId: string) => {
-    if (![2, 4].includes(question.id)) return;
-    const opt: any = getOptionById(question, optionId);
-    const en = (opt?.textEn || '').toLowerCase();
-    const zh = opt?.textZh || '';
-    const isYes = en.includes('yes') || zh.includes('是');
-    const isNo = en.includes('no') || zh.includes('否');
-    if (isYes) setWorkedInCoporate(true);
-    if (isNo) setWorkedInCoporate(false);
-  };
-
+  // Handlers for privacy section
   const handlePrivacyContinue = () => {
     // 设置为问卷步骤
     setStep('questionnaire');
@@ -362,6 +302,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
     }
   };
 
+  // Handlers for questionnaire section
   // Handle answer selection for multiple choice questions
   const handleMultipleChoiceAnswer = (question: Question, optionId: string) => {
     const currentAnswers = answers;
@@ -428,6 +369,36 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
     }, 100);
   };
 
+  const updateGenderIfApplicable = (question: Question, optionId: string) => {
+    if (question.id !== 1) return;
+    const opt: any = getOptionById(question, optionId);
+    const en = (opt?.textEn || '').toLowerCase();
+    const zh = opt?.textZh || '';
+    const isFemale = en.includes('female') || zh.includes('女');
+    const isMale = en.includes('male') || zh.includes('男');
+    if (isFemale) setGender('Female');
+    if (isMale) setGender('Male');
+  };
+
+  const updateCorporateIfApplicable = (question: Question, optionId: string) => {
+    if (![2, 4].includes(question.id)) return;
+    const opt: any = getOptionById(question, optionId);
+    const en = (opt?.textEn || '').toLowerCase();
+    const zh = opt?.textZh || '';
+    const isYes = en.includes('yes') || zh.includes('是');
+    const isNo = en.includes('no') || zh.includes('否');
+    if (isYes) setWorkedInCoporate(true);
+    if (isNo) setWorkedInCoporate(false);
+  };
+
+  const handleNextQuestionSection = () => {
+    setCurrentSection(currentSection + 1);
+  }
+
+  const handleBackQuestionSection = () => {
+    setCurrentSection(currentSection - 1);
+  }
+
   // 完成问卷并跳转到结果页面的函数
   const finishQuestionnaire = () => {
     // Calculate final results
@@ -438,20 +409,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
         .saveAllQuestionResponses(answers, selectedIdentity, selectedRole)
         .catch(() => {});
     }
-  };
-
-  // Restart button (replaces Exit) on questionnaire/privacy screens
-  const handleRestart = (e?: React.MouseEvent) => {
-    const confirmRestart = window.confirm(
-      language === 'en'
-        ? 'Restart the test? All progress will be cleared.'
-        : '重新开始测试？所有进度将被清除。'
-    );
-    if (!confirmRestart) {
-      e?.preventDefault();
-      return;
-    }
-    clearTestData();
   };
 
   // Save & Exit button on questionnaire screens only
@@ -473,40 +430,21 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
     navigate('/');
   };
 
-  const topActions = (
-    <div className="exit-actions">
-      {/* Restart button (was Exit) */}
-      <button type="button" className="exit-button restart-button show-tooltip" lang={language} onClick={handleRestart}>
-        <img src={new URL('../../icons/Restart.svg', import.meta.url).toString()} alt="Restart" style={{ width: 18, height: 18 }} />
-        <span className="exit-button-text" style={{ marginLeft: 6 }}>
-          {language === 'en' ? 'Restart' : '重新开始'}
-        </span>
-        <div className="exit-button-tooltip">
-          {language === 'en' ? 'Restart' : '重新开始'}
-        </div>
-      </button>
-      {/* Save & Exit only on questionnaire pages */}
-      {step === 'questionnaire' && (
-        <button type="button" className="exit-button save-exit-button show-tooltip" lang={language} onClick={handleSaveAndExit}>
-          <img src={new URL('../../icons/Save.svg', import.meta.url).toString()} alt="Save & Exit" style={{ width: 18, height: 18 }} />
-          <span className="exit-button-text" style={{ marginLeft: 6 }}>
-            {language === 'en' ? 'Save & Exit' : '保存并退出'}
-          </span>
-          <div className="exit-button-tooltip">
-            {language === 'en' ? 'Save & Exit' : '保存并退出'}
-          </div>
-        </button>
-      )}
-    </div>
-  );
+  // Restart button (replaces Exit) on questionnaire/privacy screens
+  const handleRestart = (e?: React.MouseEvent) => {
+    const confirmRestart = window.confirm(
+      language === 'en'
+        ? 'Restart the test? All progress will be cleared.'
+        : '重新开始测试？所有进度将被清除。'
+    );
+    if (!confirmRestart) {
+      e?.preventDefault();
+      return;
+    }
+    handleClearTestData();
+  };
 
-  // Only white theme steps should have no-header class
-  const containerClass = step === 'privacy' || step === 'questionnaire'
-    ? 'personality-test-container no-header' 
-    : 'personality-test-container';
-
-  // Add function to clear all test data
-  const clearTestData = () => {
+  const handleClearTestData = () => {
     localStorage.removeItem('chon_personality_answers');
     localStorage.removeItem('chon_personality_step');
     localStorage.removeItem('chon_personality_identity');
@@ -521,30 +459,46 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
     setSelectedRole(null);
     setUserIntroChoice(null);
     setCurrentSection(0);
-    setStep('identity');
+    setStep('intro');
   };
 
-  // Continue test from saved progress
-  const continueTest = () => {
-    const savedStep = localStorage.getItem('chon_personality_step');
-    if (savedStep && savedStep !== 'intro' && isValidStep(savedStep)) {
-      const nextStep = savedStep as TestStep;
-      setStep(nextStep);
-      if (nextStep === 'questionnaire') {
-        // 恢复或计算 section（滚动逻辑由 effect 处理）
-        const savedSectionStr = localStorage.getItem('chon_personality_section');
-        const savedSection = savedSectionStr ? parseInt(savedSectionStr, 10) : NaN;
-        if (!Number.isNaN(savedSection)) {
-          setCurrentSection(savedSection);
-        } else if (selectedIdentity) {
-          const firstIncomplete = findFirstIncompleteSection(selectedIdentity, answers);
-          setCurrentSection(firstIncomplete);
-        }
-      }
-    } else {
-      setStep('identity');
+  /* =============== Render =============== */
+  const renderQuestionsSection = (identity: QuestionnaireType, currentSection: number) => {
+    const menu = questionsMenu.find(menu => menu.identity === identity) || null;
+    if (!menu) {
+      return null;
     }
-  };
+    const progress = calculatedQuestionnaireProgress(menu, answers);
+    let section: QuestionSection | null = null;
+    if (currentSection < menu.sections.length) {
+      section = menu.sections[currentSection];
+      const showBack = currentSection > 0;
+      const showNext = currentSection < menu.sections.length - 1;
+      const showFinish = currentSection === menu.sections.length - 1;
+      return (
+        <QuestionsSection 
+          key={section.sectionId} 
+          section={section}
+          language={language}
+          identity={selectedIdentity}
+          progress={progress}
+          showBack={showBack}
+          showNext={showNext}
+          showFinish={showFinish}
+          currentAnswers={answers}
+          workedInCorporate={workedInCoporate}
+          onMultipleChoice={handleMultipleChoiceAnswer}
+          onTextInput={handleTextAnswer}
+          onScale={handleScaleAnswer}
+          onNext={handleNextQuestionSection}
+          onBack={handleBackQuestionSection}
+          onFinish={finishQuestionnaire}
+          scrollToFirstQuestionOfNextPage={scrollToFirstQuestionOfNextPage}
+        />
+      )
+    }
+    return null;
+  }
 
   // Render content based on step
   const renderContent = () => {
@@ -562,7 +516,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
             selectedIdentity={selectedIdentity}
             selectedRole={selectedRole}
             onIdentitySelect={handleIdentitySelect}
-            onRoleSelect={handleRoleSelect}
+            onCorporateRoleSelect={handleCorporateRoleSelect}
             onContinue={handleIdentityContinue}
           />
         );
@@ -597,6 +551,11 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
     }
   };
 
+  // Only white theme steps should have no-header class
+  const containerClass = step === 'privacy' || step === 'questionnaire'
+  ? 'personality-test-container no-header' 
+  : 'personality-test-container';
+
   return (
     <>
       {step === 'results' ? (
@@ -618,7 +577,14 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
           )}
           
       {/* Show top actions (Restart; Save & Exit on questionnaire) */}
-      {(step === 'privacy' || step === 'questionnaire') && topActions}
+      {(step === 'privacy' || step === 'questionnaire') && (
+        <TopActions 
+          step={step}
+          language={language}
+          onRestart={handleRestart}
+          onSaveAndExit={handleSaveAndExit}
+        />
+      )}
           
           {renderContent()}
           
