@@ -11,13 +11,23 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import Results from './pages/PersonalityTest/results/Results.tsx'
 import Profile from './pages/Profile/Profile.tsx'
+import { useViewportControl } from './hooks/useViewportControl'
 
 function App() {
   const { language } = useLanguage();
   const [whiteTheme, setWhiteTheme] = useState(false);
   const [hideUI, setHideUI] = useState(false);
+  const [restrictViewport, setRestrictViewport] = useState(false);
   const location = useLocation();
   const isPersonalityTest = location.pathname.includes('/personality-test');
+
+  // Use viewport control hook to manage mobile viewport restrictions
+  useViewportControl(restrictViewport, {
+    userScalable: false,
+    maximumScale: 1.0,
+    minimumScale: 1.0,
+    initialScale: 1.0
+  });
 
   // 当语言变化时，更新HTML根元素的lang属性
   useEffect(() => {
@@ -29,6 +39,7 @@ function App() {
     if (!isPersonalityTest) {
       setWhiteTheme(false);
       setHideUI(false);
+      setRestrictViewport(false);
     }
   }, [location.pathname, isPersonalityTest]);
 
@@ -40,6 +51,11 @@ function App() {
   // Handler for hiding UI elements
   const handleHideUIChange = (shouldHide: boolean) => {
     setHideUI(shouldHide);
+  };
+
+  // Handler for viewport restrictions
+  const handleViewportRestrictionChange = (shouldRestrict: boolean) => {
+    setRestrictViewport(shouldRestrict);
   };
 
   // 只有在PersonalityTest页面且hideUI为true时才隐藏导航栏和语言选择器
@@ -56,6 +72,7 @@ function App() {
             <PersonalityTest 
               onWhiteThemeChange={handleWhiteThemeChange} 
               onHideUIChange={handleHideUIChange}
+              onViewportRestrictionChange={handleViewportRestrictionChange}
             />
           } 
         />

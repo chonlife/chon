@@ -22,27 +22,8 @@ type TestStep = 'intro' | 'identity' | 'privacy' | 'questionnaire' | 'results' |
 interface PersonalityTestProps {
   onWhiteThemeChange?: (isWhite: boolean) => void;
   onHideUIChange?: (shouldHide: boolean) => void;
+  onViewportRestrictionChange?: (shouldRestrict: boolean) => void;
 }
-
-// MetaTags Component for Mobile Optimization
-const MetaTags = () => {
-  React.useEffect(() => {
-    // Ensure the viewport meta tag is set correctly for this page
-    const viewportMeta = document.querySelector('meta[name="viewport"]');
-    if (viewportMeta) {
-      viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no');
-    }
-    
-    // Cleanup function to restore the original meta tag when component unmounts
-    return () => {
-      if (viewportMeta) {
-        viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0');
-      }
-    };
-  }, []);
-  
-  return null;
-};
 
 // Add interface for stored answer
 export interface StoredAnswer {
@@ -50,7 +31,7 @@ export interface StoredAnswer {
   tags?: string[];
 }
 
-const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTestProps) => {
+const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestrictionChange }: PersonalityTestProps) => {
   const { t, language } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
@@ -343,7 +324,13 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
       const shouldHideUI = step === 'privacy' || step === 'questionnaire';
       onHideUIChange(shouldHideUI);
     }
-  }, [step, onWhiteThemeChange, onHideUIChange]);
+
+    // 根据步骤决定是否限制viewport缩放
+    if (onViewportRestrictionChange) {
+      const shouldRestrictViewport = step === 'privacy' || step === 'questionnaire';
+      onViewportRestrictionChange(shouldRestrictViewport);
+    }
+  }, [step, onWhiteThemeChange, onHideUIChange, onViewportRestrictionChange]);
 
   // 添加获取intro统计数据的函数
   const fetchIntroStats = async () => {
@@ -899,7 +886,6 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange }: PersonalityTest
         <Results onCreateAccount={() => setStep('account')} onRestart={() => handleRestart()} />
       ) : (
         <main className={containerClass} lang={language}>
-          <MetaTags />
           
           {showSaveIndicator && (
             <div className="save-indicator">
