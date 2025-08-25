@@ -1,4 +1,4 @@
-import { questions, Question, ScaleQuestion } from '../pages/PersonalityTest/questionnaires';
+import { questions, Question, ScaleQuestion } from '../features/personality-test/data/questionnaires';
 
 export interface TagStats {
   userScore: number;

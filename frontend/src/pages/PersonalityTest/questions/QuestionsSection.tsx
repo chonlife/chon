@@ -1,5 +1,6 @@
 import React from 'react';
-import { Question, QuestionnaireType, questions, QuestionSection } from '../questionnaires';
+import { Question, QuestionnaireType, QuestionSection } from '../../../features/personality-test/types/question';
+import { questions } from '../../../features/personality-test/data/questions';
 import { StoredAnswer } from '../PersonalityTest';
 import QuestionBlock from './QuestionBlock';
 import ProgressBar from './ProgressBar';

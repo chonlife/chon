@@ -5,7 +5,8 @@ import LanguageSelector from '../../components/LanguageSelector/LanguageSelector
 import './PersonalityTest.css';
 import { scrollToNextQuestion, scrollToFirstQuestionOfNextPage, scrollToQuestion, scrollToPageTop } from './ScrollUtils.ts';
 import questionnaireApi from '../../api/questionnaire.ts';
-import { Question, QuestionSection, QuestionnaireType, questionsMenu, QuestionMenu } from './questionnaires.ts';
+import { Question, QuestionSection, QuestionnaireType, QuestionMenu } from '../../features/personality-test/types/question.ts';
+import { questionsMenu } from '../../features/personality-test/data/menu.ts';
 import IdentitySelection, { IdentityType, CorporateRole } from './identity/IdentitySelection.tsx';
 import QuestionsSection from './questions/QuestionsSection.tsx';
 import Results from './results/Results.tsx';

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { questions } from '../pages/PersonalityTest/questionnaires';
+import { questions } from '../features/personality-test/data/questions';
 import { getUserId } from '../utils/userIdentification';
 import { StoredAnswer } from '../pages/PersonalityTest/PersonalityTest';
 import { CorporateRole } from '../pages/PersonalityTest/identity/IdentitySelection';
