@@ -1,6 +1,5 @@
 import React from 'react';
-import { Question, QuestionnaireType } from '../../../features/personality-test/types/question';
-import { StoredAnswer } from '../PersonalityTest';
+import { Question, QuestionnaireType, StoredAnswer } from '../../../features/personality-test/types/question';
 import CountryAutocomplete from './CountryAutocomplete';
 import ChildrenCountDropdown from './ChildrenCountDropdown';
 import BirthWeightInput from './BirthWeightInput';

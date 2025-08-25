@@ -5,7 +5,7 @@ import LanguageSelector from '../../components/LanguageSelector/LanguageSelector
 import './PersonalityTest.css';
 import { scrollToNextQuestion, scrollToFirstQuestionOfNextPage, scrollToQuestion, scrollToPageTop } from './ScrollUtils.ts';
 import questionnaireApi from '../../api/questionnaire.ts';
-import { Question, QuestionSection, QuestionnaireType, QuestionMenu } from '../../features/personality-test/types/question.ts';
+import { Question, QuestionSection, QuestionnaireType, QuestionMenu, StoredAnswer } from '../../features/personality-test/types/question.ts';
 import { questionsMenu } from '../../features/personality-test/data/menu.ts';
 import IdentitySelection, { IdentityType, CorporateRole } from './identity/IdentitySelection.tsx';
 import QuestionsSection from './questions/QuestionsSection.tsx';
@@ -23,12 +23,6 @@ interface PersonalityTestProps {
   onWhiteThemeChange?: (isWhite: boolean) => void;
   onHideUIChange?: (shouldHide: boolean) => void;
   onViewportRestrictionChange?: (shouldRestrict: boolean) => void;
-}
-
-// Add interface for stored answer
-export interface StoredAnswer {
-  value: string | string[];
-  tags?: string[];
 }
 
 const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestrictionChange }: PersonalityTestProps) => {

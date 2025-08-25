@@ -57,3 +57,8 @@ export interface QuestionSection {
   sectionLifeTitleZh?: string;
   questions: number[];
 }
+
+export interface StoredAnswer {
+  value: string | string[];
+  tags?: string[];
+}

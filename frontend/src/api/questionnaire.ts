@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { questions } from '../features/personality-test/data/questions';
 import { getUserId } from '../utils/userIdentification';
-import { StoredAnswer } from '../pages/PersonalityTest/PersonalityTest';
+import { StoredAnswer } from '../features/personality-test/types/question.ts';
 import { CorporateRole } from '../pages/PersonalityTest/identity/IdentitySelection';
 
 // API Configuration

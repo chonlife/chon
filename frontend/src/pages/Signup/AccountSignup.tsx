@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import questionnaireApi, { QuestionnaireType } from '../../api/questionnaire';
-import { StoredAnswer } from '../PersonalityTest/PersonalityTest';
+import { StoredAnswer } from '../../features/personality-test/types/question.ts';
 import { CorporateRole } from '../PersonalityTest/identity/IdentitySelection.tsx';
 import countries from '../../lib/data/country-list.json';
 import { getUserId } from '../../utils/userIdentification';
