@@ -61,11 +61,8 @@ const PrivacyStatement: React.FC<PrivacyStatementProps> = ({
     </>
   );
 
-  // Add class based on selectedIdentity
-  const privacyClass = selectedIdentity === 'mother' ? 'mother-privacy' : 'other-privacy';
-
   return (
-    <div className={`privacy-statement ${privacyClass}`} lang={language} style={{ overflowX: 'hidden', maxWidth: '100%' }}>
+    <div className="privacy-statement" lang={language} style={{ overflowX: 'hidden', maxWidth: '100%' }}>
       <div className="privacy-text" lang={language}>
         {language === 'en' ? privacyTextEn : privacyTextZh}
       </div>

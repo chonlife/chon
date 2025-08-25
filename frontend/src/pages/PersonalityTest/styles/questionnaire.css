@@ -16,80 +16,6 @@
   padding-top: 80px; /* Updated for new enhanced header */
 }
 
-/* Mother questionnaire specific styles */
-.mother-questionnaire {
-  background-color: transparent;
-  color: black;
-  min-height: calc(100vh - 20px);
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding: 2rem 4rem 4rem 4rem;
-  align-items: flex-start;
-  text-align: left;
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 10;
-}
-
-/* Other questionnaire specific styles */
-.other-questionnaire {
-  background-color: transparent;
-  color: black;
-  min-height: calc(100vh - 20px);
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  padding: 2rem 4rem 4rem 4rem;
-  align-items: flex-start;
-  text-align: left;
-  overflow: hidden;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 10;
-}
-
-.other-questionnaire .questionnaire-title {
-  color: black;
-  text-align: left;
-  background-color: rgba(255, 255, 255, 0);
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  display: inline-block;
-  margin-bottom: 2rem;
-  width: auto;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0);
-}
-
-.mother-questionnaire .questionnaire-title {
-  color: black;
-  text-align: left;
-  background-color: rgba(255, 255, 255, 0);
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  display: inline-block;
-  margin-bottom: 2rem;
-  width: auto;
-  box-shadow: 0 2px 10px rgba(0, 0, 0,0);
-}
-
-.questionnaire-title {
-  font-size: 2rem;
-  color: white;
-  text-align: center;
-  margin-bottom: 1.5rem;
-  font-weight: normal;
-  letter-spacing: 0.1em;
-  width: 100%;
-}
-
 /* Privacy statement styles */
 .privacy-statement {
   max-width: 900px;
@@ -310,100 +236,31 @@
   }
 }
 
-/* 重写母亲隐私页面的Continue按钮样式 */
-.privacy-statement.mother-privacy .privacy-continue {
-  background-color: #F0BDC0;
-  color: black;
-  box-shadow: 0 4px 10px rgba(240, 189, 192, 0.3);
-  border-radius: 4px;
-  margin-top: 10px;
-  padding: 0.6rem 3rem 0.6rem 1.5rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  min-width: 260px;
-  max-width: 340px;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
 
-.privacy-statement.mother-privacy .privacy-continue span {
-  position: relative;
-  z-index: 2;
-  display: inline-block;
-}
-
-/* 分离箭头为一个单独的元素 */
-.privacy-statement.mother-privacy .privacy-continue .continue-arrow {
-  position: absolute;
-  right: 1.2rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.9rem;
-  line-height: 1;
-  margin-left: 12px;
-  transition: transform 0.3s ease;
-  display: inline-block;
-}
-
-.privacy-statement.mother-privacy .privacy-continue:hover {
-  background-color: #e3a6a9;
-  color: white;
-  box-shadow: 0 6px 15px rgba(240, 189, 192, 0.5);
-  transform: translateY(-4px);
-}
-
-.privacy-statement.mother-privacy .privacy-continue:hover .continue-arrow {
-  transform: translate(5px, -50%);
-}
 
 /* 为移动设备优化privacy页面 */
 @media (max-width: 900px) {
-  .privacy-statement.mother-privacy {
+  .privacy-statement {
     padding: 2.5rem 3rem 3rem 3rem;
-  }
-  
-  .privacy-statement.other-privacy {
-    padding: 2.5rem 3rem 3rem 3rem;
-  }
-  
-  .mother-privacy .privacy-text {
-    font-size: 1.3rem;
-    line-height: 1.6;
-    padding: 1.5rem;
-    max-width: 95%;
-  }
-  
-  .other-privacy .privacy-text {
-    font-size: 1.3rem;
-    line-height: 1.6;
-    padding: 1.5rem;
-    max-width: 95%;
   }
   
   .privacy-text {
-    font-size: 1.7rem;
+    font-size: 1.3rem;
+    line-height: 1.6;
+    padding: 1.5rem;
+    max-width: 95%;
     margin-bottom: 2.5rem;
   }
 }
 
 @media (max-width: 768px) {
-  .privacy-statement.mother-privacy {
+  .privacy-statement {
     padding: 2rem 1.5rem 2rem 1.5rem;
     justify-content: flex-start;
     padding-top: 4rem;
   }
   
-  .privacy-statement.other-privacy {
-    padding: 2rem 1.5rem 2rem 1.5rem;
-    justify-content: flex-start;
-    padding-top: 4rem;
-  }
-  
-  .mother-privacy .privacy-text,
-  .other-privacy .privacy-text {
+  .privacy-text {
     font-size: 1.15rem;
     line-height: 1.8;
     padding: 1.2rem;
@@ -411,12 +268,6 @@
     margin-bottom: 2rem;
   }
   
-  .privacy-text {
-    font-size: 1.5rem;
-    line-height: 1.6;
-    margin-bottom: 2.2rem;
-  }
-  
   /* 调整段落间距 */
   .privacy-text p {
     margin-bottom: 1.8rem;
@@ -429,44 +280,23 @@
     max-width: 260px;
   }
   
-  .mother-privacy .privacy-continue,
-  .other-privacy .privacy-continue {
-    padding: 0.6rem 2.8rem 0.6rem 1.4rem;
-    font-size: 0.95rem;
-    min-width: 200px;
-    max-width: 260px;
-  }
-  
-  .mother-privacy .privacy-continue .continue-arrow,
-  .other-privacy .privacy-continue .continue-arrow {
+  .privacy-continue .continue-arrow {
     right: 1rem;
     font-size: 0.8rem;
   }
 }
 
 @media (max-width: 480px) {
-  .privacy-statement.mother-privacy {
+  .privacy-statement {
     padding: 1.5rem 1rem 1.5rem 1rem;
     padding-top: 3.5rem;
   }
   
-  .privacy-statement.other-privacy {
-    padding: 1.5rem 1rem 1.5rem 1rem;
-    padding-top: 3.5rem;
-  }
-  
-  .mother-privacy .privacy-text,
-  .other-privacy .privacy-text {
+  .privacy-text {
     font-size: 1rem;
     line-height: 1.7;
     padding: 0.8rem 1rem;
     margin-bottom: 1.5rem;
-  }
-  
-  .privacy-text {
-    font-size: 1.2rem;
-    line-height: 1.5;
-    margin-bottom: 1.8rem;
   }
   
   /* 调整段落间距 */
@@ -481,32 +311,21 @@
     max-width: 210px;
   }
   
-  .mother-privacy .privacy-continue,
-  .other-privacy .privacy-continue {
-    padding: 0.5rem 2.4rem 0.5rem 1.1rem;
-    font-size: 0.9rem;
-    min-width: 160px;
-    max-width: 210px;
-  }
-  
-  .mother-privacy .privacy-continue .continue-arrow,
-  .other-privacy .privacy-continue .continue-arrow {
+  .privacy-continue .continue-arrow {
     right: 0.8rem;
     font-size: 0.7rem;
   }
 }
 
 @media (max-width: 360px) {
-  .mother-privacy .privacy-continue,
-  .other-privacy .privacy-continue {
+  .privacy-continue {
     padding: 0.4rem 2.2rem 0.4rem 0.9rem;
     font-size: 0.85rem;
     min-width: 140px;
     max-width: 180px;
   }
   
-  .mother-privacy .privacy-continue .continue-arrow,
-  .other-privacy .privacy-continue .continue-arrow {
+  .privacy-continue .continue-arrow {
     right: 0.7rem;
     font-size: 0.65rem;
   }
@@ -554,23 +373,6 @@
   left: 0;
   top: 0;
   box-shadow: 0 1px 3px rgba(240, 189, 192, 0.3);
-}
-
-.question-progress-text {
-  font-size: 0.85rem;
-  color: #666;
-  font-weight: 500;
-  margin-left: 12px;
-  white-space: nowrap;
-  min-width: 35px;
-}
-
-/* Progress container with text */
-.progress-with-text {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  max-width: 450px;
 }
 
 /* Question Container */
@@ -771,45 +573,37 @@
   font-style: italic;
 }
 
-/* Navigation Buttons */
-.question-navigation, 
-.first-page-navigation {
+/* Navigation positioning - inline with content, buttons at edges */
+.question-navigation {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
   margin-top: 2rem;
+  position: relative;
 }
 
-/* 确保在有多个按钮时的位置正确 */
 .question-navigation .prev-button {
-  margin-right: auto;
+  margin-right: 0;
 }
 
-.question-navigation .next-button {
-  margin-left: 1rem;
-}
-
-/* 特别指定第一页导航样式 */
-.first-page-true .question-navigation {
-  justify-content: flex-end;
-  display: flex;
-  width: 100%;
-}
-
-.first-page-true .question-navigation .next-button {
-  margin-left: auto;
+.question-navigation .next-button,
+.question-navigation .finish-button {
+  margin-left: 0;
 }
 
 .nav-button {
   padding: 0.8rem 2rem;
   font-size: 1rem;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
   min-width: 120px;
   background-color: white;
   border: 1px solid #e0e0e0;
   color: #333;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-weight: 500;
 }
 
 .next-button {
@@ -990,21 +784,6 @@
   position: static;
   top: auto;
   left: auto;
-}
-
-.clear-answers-button {
-  padding: 0.8rem 1.5rem;
-  background-color: rgba(240, 68, 68, 0.1);
-  color: #f04444;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
-}
-
-.clear-answers-button:hover {
-  background-color: rgba(240, 68, 68, 0.2);
 }
 
 /* Save Progress indication */
@@ -1208,11 +987,6 @@
     max-width: 280px; /* Shorter bar for better clearance */
     margin: 0 auto 0 110px; /* More left margin to clear buttons */
   }
-  
-  .question-progress-text {
-    font-size: 0.8rem;
-    margin-left: 8px;
-  }
 }
 
 @media (max-width: 480px) {
@@ -1249,11 +1023,6 @@
     height: 6px;
     max-width: 220px; /* Even shorter for mobile */
     margin: 0 auto 0 90px; /* More left margin for mobile */
-  }
-  
-  .question-progress-text {
-    font-size: 0.75rem;
-    margin-left: 6px;
   }
 }
 
@@ -1621,21 +1390,17 @@
   }
 }
 
-/* 改进导航按钮在移动端的布局 */
+/* Enhanced navigation button layout for mobile */
 @media (max-width: 480px) {
-  .question-navigation {
-    flex-direction: row;
-    justify-content: space-between;
-    width: 100%;
-  }
-  
+  /* Keep the fixed bottom navigation styling intact */
   .nav-button {
-    min-width: 45%;
-    padding: 0.8rem 0.5rem;
+    min-width: 90px;
+    padding: 0.8rem 1rem;
     font-size: 0.85rem;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 6px;
   }
   
   .question-container {
@@ -1711,44 +1476,6 @@ html[data-privacy="true"] {
   margin-right: 0 !important;
 }
 
-/* 超小屏幕优化 */
-@media (max-width: 360px) {
-  .mother-privacy .privacy-text,
-  .other-privacy .privacy-text {
-    font-size: 0.9rem;
-    line-height: 1.6;
-    padding: 0.6rem 0.8rem;
-    margin-bottom: 1.2rem;
-  }
-  
-  .privacy-text {
-    font-size: 1.1rem;
-    line-height: 1.4;
-    margin-bottom: 1.5rem;
-  }
-  
-  /* 调整段落间距 */
-  .privacy-text p {
-    margin-bottom: 1.2rem;
-  }
-  
-  /* 调整continue按钮大小 */
-  .mother-privacy .privacy-continue,
-  .other-privacy .privacy-continue {
-    padding: 0.3rem 1.4rem 0.3rem 0.8rem;
-    font-size: 0.75rem;
-    min-width: 80px;
-    max-width: 130px;
-  }
-  
-  .mother-privacy .privacy-continue .continue-arrow,
-  .other-privacy .privacy-continue .continue-arrow {
-    right: 0.5rem;
-    font-size: 0.65rem;
-    margin-left: 6px;
-  }
-}
-
 /* 根据语言调整文本样式 */
 [lang="zh"] .privacy-text {
   line-height: 1.9; /* 为中文文本增加行高 */
@@ -1768,21 +1495,9 @@ html[data-privacy="true"] {
   }
 }
 
-/* 为第一页调整特殊样式 */
-.first-page-true .question-navigation {
-  justify-content: flex-end;
-}
-
 /* 第一页为所有continue按钮强制指定样式 */
 .first-page-questions .question-navigation {
   display: flex !important;
   justify-content: flex-end !important;
   width: 100% !important;
 }
-
-/* 特别强调first-page-true的样式优先级 */
-.first-page-true .question-navigation {
-  display: flex !important;
-  justify-content: flex-end !important;
-  width: 100% !important;
-} 
