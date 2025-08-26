@@ -1,0 +1,94 @@
+/* Navigation positioning - inline with content, buttons at edges */
+.question-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-top: 2rem;
+    position: relative;
+}
+  
+.question-navigation .prev-button {
+    margin-right: 0;
+    order: 1;
+}
+  
+.question-navigation .next-button,
+.question-navigation .finish-button {
+    margin-left: auto;
+    order: 2;
+}
+  
+.nav-button {
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    color: #333;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-weight: 500;
+}
+  
+.next-button {
+    background-color: #F0BDC0;
+    color: white;
+    border: none;
+}
+  
+  .nav-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .next-button:hover {
+    background-color: #e3a6a9;
+    box-shadow: 0 4px 8px rgba(240, 189, 192, 0.3);
+  }
+  
+  .nav-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+
+@media (max-width: 768px) {
+    .nav-button {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+        min-width: 100px;
+      }
+}
+
+@media (max-width: 480px) {
+    .nav-button {
+        min-width: 90px;
+        padding: 0.8rem 1rem;
+        font-size: 0.85rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 6px;
+    }
+
+      /* Navigation styling for mobile */
+    .question-navigation {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        flex-direction: row;
+    }
+}
+
+@media (max-width: 360px) {
+    /* 精简导航按钮 - for very small screens */
+    .nav-button {
+        padding: 0.7rem 1rem;
+        font-size: 0.8rem;
+        min-width: 80px;
+    }
+}

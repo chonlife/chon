@@ -43,19 +43,6 @@ button,
     font-weight: 500;
   }
   
-  /* Navigation styling for mobile */
-  .question-navigation {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    flex-direction: row;
-  }
-  
-  .nav-button {
-    padding: 0.8rem 1.2rem;
-    font-size: 0.9rem;
-  }
-  
   /* 更紧凑的问题容器 */
   .question-container {
     margin-bottom: 1rem;
@@ -107,13 +94,6 @@ button,
     height: 24px;
   }
   
-  /* 精简导航按钮 - for very small screens */
-  .nav-button {
-    padding: 0.7rem 1rem;
-    font-size: 0.8rem;
-    min-width: 80px;
-  }
-  
   /* 避免内容溢出 */
   .questionnaire-content {
     padding: 0.5rem;
@@ -130,16 +110,6 @@ button,
 .personality-test-container {
   max-width: 100vw;
   overflow-x: hidden;
-}
-
-/* 优化退出按钮在移动端位置 */
-@media (max-width: 480px) {
-  .exit-button {
-    top: 10px;
-    left: 10px;
-    padding: 6px 10px;
-    font-size: 0.85rem;
-  }
 }
 
 /* 移动设备上改进背景展示 */
@@ -164,86 +134,11 @@ button,
   .questionnaire-content {
     padding-top: 70px !important; /* Updated for new enhanced header on tablets */
   }
-  
-  /* Privacy statement移动端优化 */
-  .privacy-statement {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    text-align: center;
-    padding: 3rem 1rem 2rem 1rem;
-    padding-top: 4.5rem; /* 增加顶部填充，为exit button留出更多空间 */
-    padding-bottom: 6rem;
-    overflow-y: auto; /* 允许内容滚动 */
-    max-height: 100vh;
-  }
-  
-  .privacy-text {
-    max-width: 100%;
-    font-size: 1rem;
-    line-height: 1.4;
-    text-align: left;
-    margin-bottom: 1.5rem;
-    padding: 0.5rem;
-  }
-  
-  .privacy-continue {
-    margin-top: 0.5rem;
-    font-size: 0.85rem;
-    padding: 0.5rem 1.2rem 0.5rem 0.8rem;
-    min-width: 220px;
-    max-width: 240px;
-  }
-  
-  .privacy-continue .continue-arrow {
-    right: 0.6rem;
-    font-size: 0.8rem;
-  }
 }
 
 @media (max-width: 480px) {
-  /* Privacy statement小屏幕设备进一步优化 */
-  .privacy-statement {
-    padding: 3rem 0.8rem 1.5rem 0.8rem;
-    padding-top: 4rem; /* 为exit button留出空间 */
-  }
-  
-  .privacy-text {
-    font-size: 0.9rem;
-    line-height: 1.3;
-    padding: 0.3rem;
-    margin-bottom: 1rem;
-  }
-  
-  .privacy-continue {
-    font-size: 0.8rem;
-    padding: 0.4rem 1rem 0.4rem 0.7rem;
-    min-width: 180px;
-    max-width: 200px;
-  }
-  
-  .privacy-continue .continue-arrow {
-    right: 0.5rem;
-    font-size: 0.7rem;
-  }
-  
   /* 调整页面内容边距，提供更好的阅读体验 */
   .personality-test-container {
     padding: 2rem 1rem;
-  }
-}
-
-@media (max-width: 360px) {
-  .privacy-continue {
-    padding: 0.3rem 0.8rem 0.3rem 0.6rem;
-    font-size: 0.75rem;
-    min-width: 150px;
-    max-width: 180px;
-  }
-  
-  .privacy-continue .continue-arrow {
-    right: 0.4rem;
-    font-size: 0.65rem;
   }
 }

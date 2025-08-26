@@ -10,6 +10,18 @@
 /* Questionnaire styles */
 @import './styles/questionnaire.css';
 
+/* Question header styles */
+@import './styles/question-header.css';
+
+/* Question navigation styles */
+@import './styles/question-navigation.css';
+
+/* Question scale styles */
+@import './styles/question-scale.css';
+
+/* Question text styles */
+@import './styles/question-text.css';
+
 /* Mobile optimizations */
 @import './styles/mobile.css';
 
