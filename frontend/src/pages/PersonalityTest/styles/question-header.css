@@ -3,7 +3,6 @@
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
     width: 100%;
     background-color: white;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -23,9 +22,9 @@
     overflow: hidden;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     position: relative;
-    width: 100%;
+    width: 90%;
     max-width: 400px;
-    margin: 0 auto 0 220px; /* More space for full-text buttons */
+    margin: 0 auto; /* More space for full-text buttons */
     border: 1px solid rgba(0, 0, 0, 0.05);
 }
   
@@ -199,7 +198,7 @@
 @media (max-width: 1024px) and (min-width: 769px) {
     .question-progress-bar {
       max-width: 350px;
-      margin: 0 auto 0 200px; /* Adjust for medium screens */
+      margin: 0 auto; /* Adjust for medium screens */
     }
 }
 
@@ -235,7 +234,7 @@
     .question-progress-bar {
       height: 8px;
       max-width: 280px; /* Shorter bar for better clearance */
-      margin: 0 auto 0 110px; /* More left margin to clear buttons */
+      margin: 0 auto; /* More left margin to clear buttons */
     }
 }
 
@@ -274,6 +273,6 @@
     .question-progress-bar {
       height: 6px;
       max-width: 220px; /* Even shorter for mobile */
-      margin: 0 auto 0 90px; /* More left margin for mobile */
+      margin: 0 auto; /* More left margin for mobile */
     }
 }

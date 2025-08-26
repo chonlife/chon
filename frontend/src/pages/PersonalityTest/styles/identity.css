@@ -10,6 +10,22 @@
   width: 100%;
 }
 
+.identity-selection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  padding: 1rem;
+  flex: 1;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .option-container {
   position: relative;
   width: 100%;
@@ -35,6 +51,7 @@
   align-items: center;
   justify-content: center;
   padding-left: 3rem; /* Add space for checkbox inside */
+  margin-bottom: 0.6rem;
 }
 
 .identity-option.selected {
@@ -256,6 +273,18 @@
   font-family: 'Alike Angular', serif;
 }
 
+@media (max-width: 900px) {
+  .identity-selection {
+    max-width: 550px;
+    padding: 1rem;
+  }
+  
+  .identity-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.2rem;
+  }  
+}
+
 /* Responsive styles */
 @media (max-width: 768px) {
   .role-selection-title {
@@ -279,19 +308,43 @@
     font-size: 1rem;
   }
 
-  .identity-option {
-    padding-left: 2.5rem;
-  }
-
   .identity-checkbox {
     width: 18px;
     height: 18px;
     left: 0.8rem;
   }
 
+  .identity-selection {
+    max-width: 90%;
+    padding: 0.8rem;
+    gap: 0.8rem;
+  }
+  
+  .identity-title {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+  
+  .identity-option {
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .identity-option p {
+    font-size: 1rem;
+  }
+
   .option-container.selected .identity-checkbox::after {
     font-size: 12px;
   }
+
+  .continue-button {
+    padding: 1rem 2rem;
+    font-size: 1rem;
+    margin-top: 1.5rem;
+    width: 100%;
+    max-width: 300px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -318,6 +371,12 @@
 
   .identity-title {
     font-size: 1.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .identity-selection {
+    padding: 0.5rem;
+    gap: 0.6rem;
   }
 
   .identity-checkbox {
@@ -328,15 +387,38 @@
 
   .identity-option {
     padding: 0.9rem;
+    margin-bottom: 0.4rem;
   }
 
   .identity-option p {
     font-size: 1rem;
+    line-height: 1.2;
   }
 
   .option-container.selected .identity-checkbox::after {
     font-size: 11px;
   }
+
+  .continue-button {
+    padding: 0.8rem 1.5rem;
+    font-size: 0.9rem;
+    margin-top: 1rem;
+  }
 }
 
+@media (max-width: 380px) {
+  .identity-title {
+    font-size: 1.2rem;
+    margin-bottom: 0.6rem;
+  }
+  
+  .identity-option {
+    padding: 0.6rem;
+    margin-bottom: 0.3rem;
+  }
+  
+  .identity-option p {
+    font-size: 0.85rem;
+  }
+}
  

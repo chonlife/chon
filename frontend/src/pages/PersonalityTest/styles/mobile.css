@@ -17,10 +17,6 @@ button,
 
 /* 优化小屏幕上的Scale Questions */
 @media (max-width: 480px) {
-  /* 确保问卷内容有足够的顶部间距 - 新header设计 */
-  .questionnaire-content {
-    padding-top: 65px !important; /* Updated for new enhanced header on mobile */
-  }
   
   /* 增大点击区域 */
   .scale-option {
