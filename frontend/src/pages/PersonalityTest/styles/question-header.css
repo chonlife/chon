@@ -198,7 +198,6 @@
 @media (min-width: 1025px) {
     .question-progress-bar {
       max-width: 450px;
-      margin: 0 auto;
     }
 }
 
@@ -219,6 +218,26 @@
       padding: 8px; /* Square padding for icon-only mode */
       min-width: 36px;
       justify-content: center;
+      border: none !important; /* Remove borders for icon-only mode */
+      background: transparent !important; /* Clean icon-only appearance */
+      border-radius: 6px; /* Keep rounded corners for hover state */
+      box-shadow: none !important; /* Remove shadows for clean look */
+    }
+    
+    /* Override specific button styles for narrow screens */
+    .restart-button,
+    .save-exit-button {
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+    
+    /* Hover states for borderless buttons */
+    .exit-button:hover {
+      background: rgba(240, 189, 192, 0.15) !important; /* Subtle hover background */
+      transform: none; /* Remove transform for cleaner look */
+      border: none !important;
+      box-shadow: none !important; /* No shadow on hover either */
     }
     
     /* Hide button text on tablets and show tooltips */
@@ -234,7 +253,6 @@
     .question-progress-bar {
       height: 8px;
       max-width: 350px; /* More space now that buttons are icon-only */
-      margin: 0 auto;
     }
 }
 
@@ -264,6 +282,17 @@
       justify-content: center;
       top: 10px;
       left: 10px;
+      border: none !important; /* Remove borders for mobile icon-only mode */
+      background: transparent !important; /* Clean mobile appearance */
+      box-shadow: none !important; /* Remove shadows for mobile */
+    }
+    
+    /* Override specific button styles for mobile */
+    .restart-button,
+    .save-exit-button {
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
     }
     
     /* Hide button text on mobile and show tooltips */
@@ -279,8 +308,6 @@
     .question-progress-bar {
       height: 6px;
       max-width: 140px; /* Much shorter to clear exit buttons */
-      margin: 0 auto;
-      margin-left: 80px; /* Push right to avoid button overlap */
     }
 }
 
@@ -288,11 +315,21 @@
     .question-progress-bar {
       height: 5px;
       max-width: 120px; /* Even shorter for very narrow screens */
-      margin-left: 90px; /* More left margin for very small screens */
     }
     
     .exit-button {
       padding: 5px 8px; /* More compact buttons */
       min-width: 28px;
+      border: none !important; /* Remove borders for very narrow screens */
+      background: transparent !important; /* Clean appearance */
+      box-shadow: none !important; /* Remove shadows for very narrow screens */
+    }
+    
+    /* Override specific button styles for very narrow screens */
+    .restart-button,
+    .save-exit-button {
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
     }
 }
