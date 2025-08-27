@@ -52,6 +52,7 @@
   justify-content: center;
   padding-left: 3rem; /* Add space for checkbox inside */
   margin-bottom: 0.6rem;
+  min-height: 44px;
 }
 
 .identity-option.selected {

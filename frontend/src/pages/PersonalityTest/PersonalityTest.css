@@ -16,14 +16,19 @@
 /* Question navigation styles */
 @import './styles/question-navigation.css';
 
+/* Question choice styles */
+@import './styles/question-choice.css';
+
 /* Question scale styles */
 @import './styles/question-scale.css';
 
 /* Question text styles */
-@import './styles/question-text.css';
+@import './styles/question-text-input.css';
 
-/* Mobile optimizations */
-@import './styles/mobile.css';
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
 
 /* No header class to hide navigation */
 .no-header {
@@ -102,6 +107,7 @@
   position: relative;
   min-height: 100vh;
   box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 .personality-test-container[lang="zh"],
@@ -188,6 +194,12 @@
   
   .hexagon-pattern {
     opacity: 0.15;
+  }
+
+  .molecule-background,
+  .hexagon-pattern,
+  .white-theme::after {
+    opacity: 0.2;
   }
 }
 
