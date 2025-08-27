@@ -453,10 +453,9 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
   const { isAuthenticated } = useAuth();
   const [tagScores, setTagScores] = useState<Record<string, number>>({});
   const [activeCardIndex, setActiveCardIndex] = useState(0);
-  const [cards, setCards] = useState<CardData[]>([]);
+  const [cards, setCards] = useState<CardData[]>(sharedCardsData);
   const [matchedCard, setMatchedCard] = useState<CardData | null>(null);
   const [bestMatchCard, setBestMatchCard] = useState<CardData | null>(null); // Add new state
-  const [imagesLoaded, setImagesLoaded] = useState(false);
   const [animationKey, setAnimationKey] = useState(0);
   const [isCardSwitching, setIsCardSwitching] = useState(false);
   
@@ -475,34 +474,7 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-  // 添加图片预加载功能
-  useEffect(() => {
-    const preloadImages = async (imagePaths: string[]) => {
-      try {
-        const promises = imagePaths.map(path => {
-          return new Promise((resolve, reject) => {
-            const img = new Image();
-            img.src = path;
-            img.onload = () => resolve(path);
-            img.onerror = () => reject(path);
-          });
-        });
-        
-        await Promise.allSettled(promises);
-        setImagesLoaded(true);
-      } catch (error) {
-        console.error('Error preloading images:', error);
-        // 即使有错误也设置为已加载，以避免永久加载状态
-        setImagesLoaded(true);
-      }
-    };
-    
-    // 当卡片数据准备好后预加载图片
-    if (cards.length > 0) {
-      const imagePaths = cards.map(card => card.image);
-      preloadImages(imagePaths);
-    }
-  }, [cards]);
+  // 移除图片预加载以加快初始渲染
 
   // Carousel navigation functions
   const getVisibleCards = () => {
@@ -666,7 +638,7 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
     const userScores: Record<string, number> = mapTagStatsToScores(stats);
 
     setTagScores(userScores);
-    setCards(cardsData);
+    // 初始 cards 已设置为共享数据，等待排序后更新
 
     // 匹配最佳符合的卡片
     if (Object.keys(userScores).length > 0) {
@@ -703,14 +675,11 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
     target.style.backgroundColor = '#333';
   }, []);
 
-  // Remove isCardSwitching state since we don't need it anymore
-  if (!bestMatchCard || !imagesLoaded) {
-    return <FancyLoader />;
-  }
+  // 移除加载 gating，立即渲染页面
 
   // Use the currently selected character (from dock) for character introductions (red areas).
   // Fall back to the best match when there is no explicit selection yet.
-  const displayedCard = matchedCard || bestMatchCard;
+  const displayedCard = matchedCard || bestMatchCard || cards[0];
 
   return (
     <div className="results-container" lang={language}>
@@ -769,7 +738,7 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
                 >
                   {getVisibleCards().map((card) => {
                     const originalIndex = cards.findIndex(c => c.id === card.id);
-                    const isBestMatch = card.id === bestMatchCard.id;
+                    const isBestMatch = card.id === bestMatchCard?.id;
                     const isActive = originalIndex === activeCardIndex;
                     
                     return (

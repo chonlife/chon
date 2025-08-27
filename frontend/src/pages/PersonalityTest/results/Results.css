@@ -1517,12 +1517,13 @@
   opacity: 0;
 }
 
-.dock-card:nth-child(1) { animation-delay: 2.1s; }
-.dock-card:nth-child(2) { animation-delay: 2.2s; }
-.dock-card:nth-child(3) { animation-delay: 2.3s; }
-.dock-card:nth-child(4) { animation-delay: 2.4s; }
-.dock-card:nth-child(5) { animation-delay: 2.5s; }
-.dock-card:nth-child(6) { animation-delay: 2.6s; }
+/* Remove staggered animation delays so dock appears immediately */
+.dock-card:nth-child(1) { animation-delay: 0s; }
+.dock-card:nth-child(2) { animation-delay: 0s; }
+.dock-card:nth-child(3) { animation-delay: 0s; }
+.dock-card:nth-child(4) { animation-delay: 0s; }
+.dock-card:nth-child(5) { animation-delay: 0s; }
+.dock-card:nth-child(6) { animation-delay: 0s; }
 
 /* 为Dock卡片添加焦点特效 */
 .dock-card::before {
