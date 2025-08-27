@@ -48,14 +48,16 @@ export const questions: Question[] = [
       textEn: 'How would you describe your racial or ethnic background?',
       textZh: '您如何描述您的种族或民族背景？',
       options: [
-        { id: 'A', textEn: 'African American', textZh: '非裔美国人' },
-        { id: 'B', textEn: 'Hispanic/Latino', textZh: '西班牙裔/拉丁美洲人' },
+        { id: 'A', textEn: 'African descent', textZh: '非洲裔' },
+        { id: 'B', textEn: 'White / European descent', textZh: '白人/欧洲裔' },
         { id: 'C', textEn: 'Asian', textZh: '亚裔/亚洲人' },
-        { id: 'D', textEn: 'Native American/Alaska Native', textZh: '美洲原住民/阿拉斯加原住民' },
-        { id: 'E', textEn: 'Native Hawaiian/Pacific Islander', textZh: '夏威夷原住民/太平洋岛民' },
-        { id: 'F', textEn: 'Middle Eastern/North African', textZh: '中东人/北非人' },
-        { id: 'G', textEn: 'Mixed/Multiracial', textZh: '混血/多民族' },
-        { id: 'H', textEn: 'Other', textZh: '其他' },
+        { id: 'D', textEn: 'Hispanic / Latino / Latin American', textZh: '西班牙裔/拉丁美洲裔' },
+        { id: 'E', textEn: 'Middle Eastern / North African', textZh: '中东人/北非人' },
+        { id: 'F', textEn: 'Indigenous peoples (e.g., Native American)', textZh: '原住民（如印第安人）' },
+        { id: 'G', textEn: 'Pacific Islander (including Native Hawaiian)', textZh: '太平洋岛民' },
+        { id: 'H', textEn: 'Mixed / Multiracial', textZh: '混血/多民族' },
+        { id: 'I', textEn: 'Other', textZh: '其他' },
+        { id: 'J', textEn: 'Prefer not to say', textZh: '不愿回答' }
       ]
     },
     
