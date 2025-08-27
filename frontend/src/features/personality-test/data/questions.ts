@@ -53,11 +53,10 @@ export const questions: Question[] = [
         { id: 'C', textEn: 'Asian', textZh: '亚裔/亚洲人' },
         { id: 'D', textEn: 'Hispanic / Latino / Latin American', textZh: '西班牙裔/拉丁美洲裔' },
         { id: 'E', textEn: 'Middle Eastern / North African', textZh: '中东人/北非人' },
-        { id: 'F', textEn: 'Indigenous peoples (e.g., Native American)', textZh: '原住民（如印第安人）' },
-        { id: 'G', textEn: 'Pacific Islander (including Native Hawaiian)', textZh: '太平洋岛民' },
-        { id: 'H', textEn: 'Mixed / Multiracial', textZh: '混血/多民族' },
-        { id: 'I', textEn: 'Other', textZh: '其他' },
-        { id: 'J', textEn: 'Prefer not to say', textZh: '不愿回答' }
+        { id: 'F', textEn: 'Indigenous peoples / Pacific Islander', textZh: '原住民/太平洋岛民' },
+        { id: 'G', textEn: 'Mixed / Multiracial', textZh: '混血/多民族' },
+        { id: 'H', textEn: 'Other', textZh: '其他' },
+        { id: 'I', textEn: 'Prefer not to say', textZh: '不愿回答' }
       ]
     },
     
