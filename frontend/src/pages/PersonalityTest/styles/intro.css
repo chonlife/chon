@@ -53,7 +53,7 @@
     border-color: #F0BDC0;
     transform: translateY(-2px);
   }
-
+  
   .progress-container {
     width: 100%;
     max-width: 600px;
@@ -99,10 +99,11 @@
     background-color: #F0BDC0;
     transition: width 0.5s ease;
   }
-
+  
   .test-buttons {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 1rem;
     margin-top: 2rem;
     width: 100%;
@@ -135,198 +136,198 @@
     box-shadow: 0 4px 15px rgba(240, 189, 192, 0.3);
     transform: translateY(-2px);
   }
-
-@media (max-width: 1200px) {
-  .intro-content {
-    max-width: 800px;
-    padding: 1.5rem;
+  
+  @media (max-width: 1200px) {
+    .intro-content {
+      max-width: 800px;
+      padding: 1.5rem;
+    }
+  
+    .intro-question {
+      font-size: 2.4rem;
+    }
+  
+    .test-options {
+      gap: 2.5rem;
+    }
   }
   
-  .intro-question {
-    font-size: 2.4rem;
+  @media (max-width: 900px) {
+    .intro-content {
+      max-width: 700px;
+      padding: 1.2rem;
+    }
+  
+    .intro-question {
+      font-size: 2rem;
+      margin-bottom: 1.8rem;
+    }
+  
+    .test-options {
+      gap: 2rem;
+    }
+  
+    .test-option-button {
+      padding: 0.9rem 2rem;
+      font-size: 1.1rem;
+    }
+  
+    .begin-test-button {
+      padding: 1rem 2rem;
+      font-size: 1rem;
+    }
   }
   
-  .test-options {
-    gap: 2.5rem;
-  }
-}
-
-@media (max-width: 900px) {
+  @media (max-width: 768px) {
     .intro-content {
-        max-width: 700px;
-        padding: 1.2rem;
-      }
-      
-      .intro-question {
-        font-size: 2rem;
-        margin-bottom: 1.8rem;
-      }
-      
-      .test-options {
-        gap: 2rem;
-      }
-      
-      .test-option-button {
-        padding: 0.9rem 2rem;
-        font-size: 1.1rem;
-      }
-      
-      .begin-test-button {
-        padding: 1rem 2rem;
-        font-size: 1rem;
-      }
+      padding: 1rem;
+      gap: 1.5rem;
     }
-
-@media (max-width: 768px) {
-    .intro-content {
-        padding: 1rem;
-        gap: 1.5rem;
-      }
-      
-      .intro-question {
-        font-size: 1.8rem;
-        margin-bottom: 1.5rem;
-      }
-      
-      .progress-container {
-        max-width: 100%;
-        margin-bottom: 2rem;
-        padding: 0 0.5rem;
-        width: 100%;
-        box-sizing: border-box;
-      }
-      
-      .percentage-labels {
-        font-size: 0.9rem;
-        width: 100%;
-        flex-wrap: wrap;
-      }
-      
-      .progress-bar {
-        height: 5px;
-        width: 100%;
-      }
-      
-      .test-options {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
-        width: 100%;
-        max-width: 250px;
-        margin-bottom: 2rem;
-      }
-      
-      .test-option-button {
-        width: 100%;
-        padding: 0.8rem 1.5rem;
-        font-size: 1rem;
-        min-width: auto;
-        display: block;
-      }
-      
-      .begin-test-button {
-        padding: 0.8rem 1.5rem;
-        font-size: 0.9rem;
-        min-width: 240px;
-        width: 90%;
-        max-width: 300px;
-      }
+  
+    .intro-question {
+      font-size: 1.8rem;
+      margin-bottom: 1.5rem;
     }
-
-@media (max-width: 480px) {
-    .intro-content {
-        padding: 0.5rem;
-        gap: 1rem;
-      }
-      
-      .intro-question {
-        font-size: 1.5rem;
-        margin-bottom: 1.2rem;
-        padding: 0 0.2rem;
-      }
-
+  
     .progress-container {
-        margin-bottom: 1rem;
-        padding: 0;
-      }
-      
-      .percentage-labels {
-        font-size: 0.75rem;
-        margin-bottom: 0.3rem;
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-      }
-      
-      .agree-label, .disagree-label {
-        max-width: 45%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      
-      .progress-bar {
-        height: 3px;
-      }
-      
-      .progress-fill {
-        transition: width 0.3s ease;
-      }
-      
-      .test-options {
-        max-width: 200px;
-        margin-bottom: 1.5rem;
-      }
-      
-      .test-option-button {
-        padding: 0.7rem 1.2rem;
-        font-size: 0.9rem;
-        min-width: 100px;
-      }
-      
-      .begin-test-button {
-        padding: 0.7rem 1rem;
-        font-size: 0.85rem;
-        width: 90%;
-        max-width: 280px;
-        min-width: auto;
-        letter-spacing: 0.1em;
-      }
+      max-width: 100%;
+      margin-bottom: 2rem;
+      padding: 0 0.5rem;
+      width: 100%;
+      box-sizing: border-box;
     }
-
-@media (max-width: 380px) {
+  
+    .percentage-labels {
+      font-size: 0.9rem;
+      width: 100%;
+      flex-wrap: wrap;
+    }
+  
+    .progress-bar {
+      height: 5px;
+      width: 100%;
+    }
+  
+    .test-options {
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      max-width: 250px;
+      margin-bottom: 2rem;
+    }
+  
+    .test-option-button {
+      width: 100%;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      min-width: auto;
+      display: block;
+    }
+  
+    .begin-test-button {
+      padding: 0.8rem 1.5rem;
+      font-size: 0.9rem;
+      min-width: 240px;
+      width: 90%;
+      max-width: 300px;
+    }
+  }
+  
+  @media (max-width: 480px) {
     .intro-content {
-        padding: 0.3rem;
-      }
-      
-      .intro-question {
-        font-size: 1.3rem;
-        margin-bottom: 1rem;
-      }
-
-      .progress-container {
-        padding: 0;
-      }
-      
-      .percentage-labels {
-        font-size: 0.7rem;
-      }
-      
-      .agree-label, .disagree-label {
-        max-width: 42%;
-      }
-      
-      .begin-test-button {
-        padding: 0.6rem 0.8rem;
-        font-size: 0.75rem;
-        width: 95%;
-        max-width: 260px;
-        letter-spacing: 0.08em;
-        line-height: 1.2;
-      }
-      
-      .test-option-button {
-        padding: 0.6rem 1rem;
-        font-size: 0.85rem;
-      }
+      padding: 0.5rem;
+      gap: 1rem;
     }
+  
+    .intro-question {
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
+      padding: 0 0.2rem;
+    }
+  
+    .progress-container {
+      margin-bottom: 1rem;
+      padding: 0;
+    }
+  
+    .percentage-labels {
+      font-size: 0.75rem;
+      margin-bottom: 0.3rem;
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+    }
+  
+    .agree-label, .disagree-label {
+      max-width: 45%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  
+    .progress-bar {
+      height: 3px;
+    }
+  
+    .progress-fill {
+      transition: width 0.3s ease;
+    }
+  
+    .test-options {
+      max-width: 200px;
+      margin-bottom: 1.5rem;
+    }
+  
+    .test-option-button {
+      padding: 0.7rem 1.2rem;
+      font-size: 0.9rem;
+      min-width: 100px;
+    }
+  
+    .begin-test-button {
+      padding: 0.7rem 1rem;
+      font-size: 0.85rem;
+      width: 90%;
+      max-width: 280px;
+      min-width: auto;
+      letter-spacing: 0.1em;
+    }
+  }
+  
+  @media (max-width: 380px) {
+    .intro-content {
+      padding: 0.3rem;
+    }
+  
+    .intro-question {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+  
+    .progress-container {
+      padding: 0;
+    }
+  
+    .percentage-labels {
+      font-size: 0.7rem;
+    }
+  
+    .agree-label, .disagree-label {
+      max-width: 42%;
+    }
+  
+    .begin-test-button {
+      padding: 0.6rem 0.8rem;
+      font-size: 0.75rem;
+      width: 95%;
+      max-width: 260px;
+      letter-spacing: 0.08em;
+      line-height: 1.2;
+    }
+  
+    .test-option-button {
+      padding: 0.6rem 1rem;
+      font-size: 0.85rem;
+    }
+  }
