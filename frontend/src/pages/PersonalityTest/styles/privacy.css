@@ -290,7 +290,7 @@ html[data-privacy="true"] {
   @media (max-width: 480px) {
     /* Privacy statement小屏幕设备进一步优化 */
     .privacy-statement {
-        padding: 3rem 0.8rem 1.5rem 0.8rem;
+        padding: 3rem 0.8rem 8rem 0.8rem;
         padding-top: 4rem; /* 为exit button留出空间 */
     }
 
@@ -320,6 +320,10 @@ html[data-privacy="true"] {
   }
   
   @media (max-width: 360px) {
+    .privacy-statement {
+        padding-bottom: 10rem; /* Extra space for very small screens */
+    }
+    
     .privacy-continue {
       padding: 0.4rem 2.2rem 0.4rem 0.9rem;
       font-size: 0.85rem;
@@ -337,6 +341,7 @@ html[data-privacy="true"] {
         font-size: 0.75rem;
         min-width: 150px;
         max-width: 180px;
+        margin-bottom: 2rem; /* Additional margin for mobile browsers */
     }
     
     .privacy-continue .continue-arrow {
