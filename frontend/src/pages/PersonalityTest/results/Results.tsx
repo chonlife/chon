@@ -459,6 +459,21 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
   const [imagesLoaded, setImagesLoaded] = useState(false);
   const [animationKey, setAnimationKey] = useState(0);
   const [isCardSwitching, setIsCardSwitching] = useState(false);
+  
+  // Carousel state for narrow screens
+  const [carouselIndex, setCarouselIndex] = useState(0);
+  const [isNarrowScreen, setIsNarrowScreen] = useState(false);
+
+  // Screen size detection for narrow screen carousel
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsNarrowScreen(window.innerWidth <= 480);
+    };
+    
+    checkScreenSize();
+    window.addEventListener('resize', checkScreenSize);
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   // 添加图片预加载功能
   useEffect(() => {
@@ -488,6 +503,77 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
       preloadImages(imagePaths);
     }
   }, [cards]);
+
+  // Carousel navigation functions
+  const getVisibleCards = () => {
+    if (!isNarrowScreen) return cards;
+    
+    const visibleCount = window.innerWidth <= 380 ? 3 : 4;
+    const start = carouselIndex;
+    const end = Math.min(start + visibleCount, cards.length);
+    return cards.slice(start, end);
+  };
+
+  const canNavigateLeft = () => carouselIndex > 0;
+  const canNavigateRight = () => {
+    const visibleCount = window.innerWidth <= 380 ? 3 : 4;
+    return carouselIndex + visibleCount < cards.length;
+  };
+
+  const navigateLeft = () => {
+    if (canNavigateLeft()) {
+      setCarouselIndex(prev => Math.max(0, prev - 1));
+    }
+  };
+
+  const navigateRight = () => {
+    if (canNavigateRight()) {
+      setCarouselIndex(prev => prev + 1);
+    }
+  };
+
+  // Update carousel when active card changes to ensure it's visible
+  useEffect(() => {
+    if (isNarrowScreen && cards.length > 0) {
+      const visibleCount = window.innerWidth <= 380 ? 3 : 4;
+      const visibleStart = carouselIndex;
+      const visibleEnd = carouselIndex + visibleCount;
+      
+      // If active card is not visible, adjust carousel
+      if (activeCardIndex < visibleStart || activeCardIndex >= visibleEnd) {
+        const newCarouselIndex = Math.max(0, Math.min(activeCardIndex, cards.length - visibleCount));
+        setCarouselIndex(newCarouselIndex);
+      }
+    }
+  }, [activeCardIndex, isNarrowScreen, cards.length, carouselIndex]);
+
+  // Touch/swipe handling for mobile devices
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && canNavigateRight()) {
+      navigateRight();
+    }
+    if (isRightSwipe && canNavigateLeft()) {
+      navigateLeft();
+    }
+  };
 
   // Use shared labels and cards
   const tagLabels: Record<string, TagTranslations> = sharedTagLabels;
@@ -643,36 +729,68 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
               <div className="comparison-title">
                 {language === 'en' ? 'Compare with other archetypes' : '与其他原型比较'}
               </div>
-              <div className="character-grid">
-                {cards.map((card, index) => {
-                  const isBestMatch = card.id === bestMatchCard.id;
-                  const isActive = index === activeCardIndex;
-                  
-                  return (
-                    <div 
-                      key={card.id}
-                      onClick={() => handleCardClick(index)}
-                      className={`dock-card ${isActive ? 'active' : ''} ${isBestMatch ? 'best-match' : ''}`}
-                    >
-                      {isBestMatch && (
-                        <div className="best-match-badge">
-                          {language === 'en' ? 'Best Match' : '最佳匹配'}
-                        </div>
-                      )}
-                      <img 
-                        src={card.image} 
-                        alt={language === 'en' ? card.name.en : card.name.zh}
-                        className="character-image"
-                        onError={(e) => handleImageError(e, '50x50')}
-                        loading="eager"
-                        decoding="async"
-                      />
-                      <span className="dock-card-name">
-                        {language === 'en' ? card.name.en : card.name.zh}
-                      </span>
-                    </div>
-                  );
-                })}
+              <div className={`character-grid ${isNarrowScreen ? 'character-grid--carousel' : ''}`}>
+                {/* Navigation arrows for narrow screens */}
+                {isNarrowScreen && (
+                  <button 
+                    className={`carousel-nav carousel-nav--left ${canNavigateLeft() ? '' : 'carousel-nav--disabled'}`}
+                    onClick={navigateLeft}
+                    disabled={!canNavigateLeft()}
+                    aria-label={language === 'en' ? 'Previous characters' : '上一页角色'}
+                  >
+                    ‹
+                  </button>
+                )}
+                
+                <div 
+                  className="character-grid-inner"
+                  onTouchStart={isNarrowScreen ? handleTouchStart : undefined}
+                  onTouchMove={isNarrowScreen ? handleTouchMove : undefined}
+                  onTouchEnd={isNarrowScreen ? handleTouchEnd : undefined}
+                >
+                  {getVisibleCards().map((card) => {
+                    const originalIndex = cards.findIndex(c => c.id === card.id);
+                    const isBestMatch = card.id === bestMatchCard.id;
+                    const isActive = originalIndex === activeCardIndex;
+                    
+                    return (
+                      <div 
+                        key={card.id}
+                        onClick={() => handleCardClick(originalIndex)}
+                        className={`dock-card ${isActive ? 'active' : ''} ${isBestMatch ? 'best-match' : ''}`}
+                      >
+                        {isBestMatch && (
+                          <div className="best-match-badge">
+                            {language === 'en' ? 'Best Match' : '最佳匹配'}
+                          </div>
+                        )}
+                        <img 
+                          src={card.image} 
+                          alt={language === 'en' ? card.name.en : card.name.zh}
+                          className="character-image"
+                          onError={(e) => handleImageError(e, '50x50')}
+                          loading="eager"
+                          decoding="async"
+                        />
+                        <span className="dock-card-name">
+                          {language === 'en' ? card.name.en : card.name.zh}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Navigation arrows for narrow screens */}
+                {isNarrowScreen && (
+                  <button 
+                    className={`carousel-nav carousel-nav--right ${canNavigateRight() ? '' : 'carousel-nav--disabled'}`}
+                    onClick={navigateRight}
+                    disabled={!canNavigateRight()}
+                    aria-label={language === 'en' ? 'Next characters' : '下一页角色'}
+                  >
+                    ›
+                  </button>
+                )}
               </div>
             </div>
             
