@@ -21,19 +21,38 @@
 .question-container {
   background-color: white;
   border-radius: 8px;
-  padding: 1.5rem;
+  padding: 1.25rem 1.75rem;
   margin-bottom: 1.5rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   width: 100%;
   box-sizing: border-box;
 }
 
+/* .first-page-questions .question-container {
+  margin-bottom: 0;
+  padding: 1.5rem 0;
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+} */
+
 .question-text {
+  position: relative;
   font-size: 1.3rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 3.5rem;
   font-weight: 400;
   line-height: 1.4;
   color: #333;
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+
+/* First page with multiple questions */
+.first-page-questions {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
 }
 
 /* Animation */
@@ -73,6 +92,15 @@
     font-size: 1.1rem;
     margin-bottom: 1.25rem;
   }
+
+  /* .first-page-questions .question-container {
+    padding: 1.2rem 0;
+  }
+  
+  .first-page-questions .question-text {
+    font-size: 1.1rem;
+    margin-bottom: 1.2rem;
+  } */
 }
 
 @media (max-width: 480px) {
@@ -83,57 +111,46 @@
   }
   
   .question-container {
-    padding: 1rem;
+    padding: 1rem 0.8rem;
     margin-bottom: 1rem;
     border-radius: 6px;
+  }
+
+  .first-page-questions {
+    gap: 0.8rem;
   }
   
   .question-text {
     font-size: 1.1rem;
     margin-bottom: 1.2rem;
   }
-}
 
-/* First page with multiple questions */
-.first-page-questions {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  width: 100%;
-}
-
-.first-page-questions .question-container {
-  margin-bottom: 0;
-  padding: 1.5rem 0;
-  background-color: transparent;
-  border-radius: 0;
-  box-shadow: none;
-}
-
-.first-page-questions .question-text {
-  font-size: 1.25rem;
-  margin-bottom: 1.5rem;
-}
-
-@media (max-width: 768px) {
-  .first-page-questions .question-container {
-    padding: 1.2rem 0;
-  }
-  
-  .first-page-questions .question-text {
-    font-size: 1.1rem;
-    margin-bottom: 1.2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .first-page-questions .question-container {
+  /* .first-page-questions .question-container {
     padding: 1rem 0;
   }
   
   .first-page-questions .question-text {
     font-size: 1rem;
     margin-bottom: 1rem;
+  } */
+}
+
+
+/* 针对特小屏幕的优化 */
+@media (max-width: 360px) {
+  .question-container {
+    padding: 1rem 0.8rem;
+  }
+  
+  .question-text {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  /* 避免内容溢出 */
+  .questionnaire-content {
+    padding: 0.5rem;
+    padding-top: 60px !important; /* Updated for new enhanced header on very small screens */
   }
 }
 
@@ -159,50 +176,6 @@
   100% { opacity: 0; }
 }
 
-/* 桌面端优化 - 调整样式 */
-@media (min-width: 1024px) {
-  .question-text {
-    position: relative;
-    margin-bottom: 3.5rem !important;
-    padding-top: 5px;
-    padding-bottom: 10px;
-  }
-  
-  .question-container {
-    margin-bottom: 1.25rem;
-    padding: 1.25rem 1.75rem;
-  }
-}
-
-/* 针对特小屏幕的优化 */
-@media (max-width: 360px) {
-  .question-container {
-    padding: 1rem 0.8rem;
-  }
-  
-  .question-text {
-    font-size: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  /* 避免内容溢出 */
-  .questionnaire-content {
-    padding: 0.5rem;
-    padding-top: 60px !important; /* Updated for new enhanced header on very small screens */
-  }
-}
-
-@media (max-width: 480px) {
-  .question-container {
-    padding: 1.2rem 0.8rem;
-    margin-bottom: 1rem;
-  }
-
-  .first-page-questions {
-    gap: 0.8rem;
-  }
-}
-
 /* Section title styles */
 .section-title {
   font-size: 1.8rem;
@@ -215,12 +188,22 @@
   padding-left: 1.75rem;
 }
 
+/* Empty spacer for sections without titles */
+.section-spacer {
+  height: 60px;
+  width: 100%;
+}
+
 @media (max-width: 768px) {
   .section-title {
     font-size: 1.6rem;
     margin-bottom: 1.2rem;
     margin-top: 40px; /* Match tablet spacing */
     padding-left: 1.5rem;
+  }
+  
+  .section-spacer {
+    height: 40px;
   }
 }
 
@@ -231,6 +214,10 @@
     margin-top: 30px; /* Match mobile spacing */
     padding-left: 1rem;
   }
+  
+  .section-spacer {
+    height: 30px;
+  }
 }
 
 @media (max-width: 360px) {
@@ -239,6 +226,10 @@
     margin-bottom: 0.8rem;
     margin-top: 25px; /* Match small mobile spacing */
     padding-left: 0.5rem;
+  }
+  
+  .section-spacer {
+    height: 25px;
   }
 }
 
@@ -254,11 +245,4 @@
 
 .white-theme .question-tags {
   color: #666;
-}
-
-/* 第一页为所有continue按钮强制指定样式 */
-.first-page-questions .question-navigation {
-  display: flex !important;
-  justify-content: flex-end !important;
-  width: 100% !important;
 }

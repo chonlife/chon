@@ -7,6 +7,13 @@
     margin-top: 2rem;
     position: relative;
 }
+
+/* 第一页为所有continue按钮强制指定样式 */
+/* .first-page-questions .question-navigation {
+    display: flex !important;
+    justify-content: flex-end !important;
+    width: 100% !important;
+  } */
   
 .question-navigation .prev-button {
     margin-right: 0;

@@ -72,13 +72,15 @@ const QuestionsSection: React.FC<QuestionsSectionProps> = ({
 
       {/* Render questions */}
       <div className="first-page-questions">
-        {/* Render section title if it exists */}
-        {(section.sectionTitleEn || section.sectionTitleZh) && (
+        {/* Render section title if it exists, otherwise add spacer */}
+        {(section.sectionTitleEn || section.sectionTitleZh) ? (
             <h1 className="section-title">
             {language === 'en'
               ? (!workedInCorporate && section.sectionLifeTitleEn ? section.sectionLifeTitleEn : section.sectionTitleEn)
               : (!workedInCorporate && section.sectionLifeTitleZh ? section.sectionLifeTitleZh : section.sectionTitleZh)}
             </h1>
+        ) : (
+            <div className="section-spacer"></div>
         )}
         {sectionQuestions.map((question) => (
           <QuestionBlock
