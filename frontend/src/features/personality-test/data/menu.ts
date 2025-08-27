@@ -8,7 +8,7 @@ export const questionsMenu: QuestionMenu[] = [
           sectionId: 0,
           sectionTitleEn: "",
           sectionTitleZh: "",
-          questions: [2, 3, 4, 52, 53, 54, 55, 56, 57, 58]
+          questions: [2, 3, 4, 5, 52, 53, 54, 55, 56, 57, 58]
         },
         {
           sectionId: 1,
@@ -40,7 +40,7 @@ export const questionsMenu: QuestionMenu[] = [
           sectionId: 0,
           sectionTitleEn: "",
           sectionTitleZh: "",
-          questions: [6, 1, 2, 3, 7, 8, 9, 10, 11]
+          questions: [6, 1, 2, 3, 5, 7, 8, 9, 10, 11]
         },
         {
           sectionId: 1,
@@ -69,7 +69,7 @@ export const questionsMenu: QuestionMenu[] = [
           sectionId: 0,
           sectionTitleEn: "",
           sectionTitleZh: "",
-          questions: [6, 2, 3, 52, 53, 54, 55, 56, 57, 58, 7, 8, 9, 10, 11]
+          questions: [6, 2, 3, 5, 52, 53, 54, 55, 56, 57, 58, 7, 8, 9, 10, 11]
         },
         {
           sectionId: 1,
@@ -104,7 +104,7 @@ export const questionsMenu: QuestionMenu[] = [
           sectionId: 0,
           sectionTitleEn: "",
           sectionTitleZh: "",
-          questions: [1, 2, 3, 4]
+          questions: [1, 2, 3, 4, 5]
         },
         {
           sectionId: 1,

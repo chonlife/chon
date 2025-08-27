@@ -44,9 +44,19 @@ export const questions: Question[] = [
     },
     {
       id: 5,
-      type: 'text-input',
-      textEn: 'What is your current / most recent job position?',
-      textZh: '您目前或者最近的职位名称是什么？'
+      type: 'multiple-choice',
+      textEn: 'How would you describe your racial or ethnic background?',
+      textZh: '您如何描述您的种族或民族背景？',
+      options: [
+        { id: 'A', textEn: 'African American', textZh: '非裔美国人' },
+        { id: 'B', textEn: 'Hispanic/Latino', textZh: '西班牙裔/拉丁美洲人' },
+        { id: 'C', textEn: 'Asian', textZh: '亚裔/亚洲人' },
+        { id: 'D', textEn: 'Native American/Alaska Native', textZh: '美洲原住民/阿拉斯加原住民' },
+        { id: 'E', textEn: 'Native Hawaiian/Pacific Islander', textZh: '夏威夷原住民/太平洋岛民' },
+        { id: 'F', textEn: 'Middle Eastern/North African', textZh: '中东人/北非人' },
+        { id: 'G', textEn: 'Mixed/Multiracial', textZh: '混血/多民族' },
+        { id: 'H', textEn: 'Other', textZh: '其他' },
+      ]
     },
     
     {
