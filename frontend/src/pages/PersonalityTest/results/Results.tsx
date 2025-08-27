@@ -508,15 +508,21 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
   const getVisibleCards = () => {
     if (!isNarrowScreen) return cards;
     
-    const visibleCount = window.innerWidth <= 380 ? 3 : 4;
+    const visibleCount = getVisibleCount();
     const start = carouselIndex;
-    const end = Math.min(start + visibleCount, cards.length);
-    return cards.slice(start, end);
+    
+    // Ensure we always show the maximum number of cards possible
+    const actualStart = Math.max(0, Math.min(start, cards.length - visibleCount));
+    const actualEnd = Math.min(actualStart + visibleCount, cards.length);
+    
+    return cards.slice(actualStart, actualEnd);
   };
 
+  const getVisibleCount = () => window.innerWidth <= 380 ? 3 : 4;
+  
   const canNavigateLeft = () => carouselIndex > 0;
   const canNavigateRight = () => {
-    const visibleCount = window.innerWidth <= 380 ? 3 : 4;
+    const visibleCount = getVisibleCount();
     return carouselIndex + visibleCount < cards.length;
   };
 
@@ -528,14 +534,15 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
 
   const navigateRight = () => {
     if (canNavigateRight()) {
-      setCarouselIndex(prev => prev + 1);
+      const visibleCount = getVisibleCount();
+      setCarouselIndex(prev => Math.min(prev + 1, cards.length - visibleCount));
     }
   };
 
   // Update carousel when active card changes to ensure it's visible
   useEffect(() => {
     if (isNarrowScreen && cards.length > 0) {
-      const visibleCount = window.innerWidth <= 380 ? 3 : 4;
+      const visibleCount = getVisibleCount();
       const visibleStart = carouselIndex;
       const visibleEnd = carouselIndex + visibleCount;
       
@@ -546,6 +553,18 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
       }
     }
   }, [activeCardIndex, isNarrowScreen, cards.length, carouselIndex]);
+
+  // Reset carousel to show best match when cards are reordered
+  useEffect(() => {
+    if (bestMatchCard && cards.length > 0) {
+      // Find the index of the best match in the current cards array
+      const bestMatchIndex = cards.findIndex(card => card.id === bestMatchCard.id);
+      if (bestMatchIndex !== -1) {
+        setActiveCardIndex(bestMatchIndex);
+        setCarouselIndex(0); // Start carousel from beginning to show best match
+      }
+    }
+  }, [bestMatchCard, cards]);
 
   // Touch/swipe handling for mobile devices
   const [touchStart, setTouchStart] = useState<number | null>(null);
