@@ -194,16 +194,16 @@
     color: #333;
   }
 
-/* Medium screens - still show button text but need more space */
-@media (max-width: 1024px) and (min-width: 769px) {
+/* Large desktop screens - can show full text with more space */
+@media (min-width: 1025px) {
     .question-progress-bar {
-      max-width: 350px;
-      margin: 0 auto; /* Adjust for medium screens */
+      max-width: 450px;
+      margin: 0 auto;
     }
 }
 
 /* Responsive design for enhanced header */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
     .question-progress-container {
       padding: 12px 15px;
       min-height: 56px; /* Slightly taller to contain icon buttons */
@@ -233,8 +233,14 @@
     
     .question-progress-bar {
       height: 8px;
-      max-width: 280px; /* Shorter bar for better clearance */
-      margin: 0 auto; /* More left margin to clear buttons */
+      max-width: 350px; /* More space now that buttons are icon-only */
+      margin: 0 auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .question-progress-bar {
+      max-width: 250px;
     }
 }
 
@@ -272,7 +278,21 @@
     
     .question-progress-bar {
       height: 6px;
-      max-width: 220px; /* Even shorter for mobile */
-      margin: 0 auto; /* More left margin for mobile */
+      max-width: 140px; /* Much shorter to clear exit buttons */
+      margin: 0 auto;
+      margin-left: 80px; /* Push right to avoid button overlap */
+    }
+}
+
+@media (max-width: 360px) {
+    .question-progress-bar {
+      height: 5px;
+      max-width: 120px; /* Even shorter for very narrow screens */
+      margin-left: 90px; /* More left margin for very small screens */
+    }
+    
+    .exit-button {
+      padding: 5px 8px; /* More compact buttons */
+      min-width: 28px;
     }
 }
