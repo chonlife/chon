@@ -463,6 +463,11 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [isNarrowScreen, setIsNarrowScreen] = useState(false);
 
+  // Scroll to top when component mounts
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }, []);
+
   // Screen size detection for narrow screen carousel
   useEffect(() => {
     const checkScreenSize = () => {
