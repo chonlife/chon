@@ -26,6 +26,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
   width: 100%;
   box-sizing: border-box;
+  scroll-margin-top: 100px;
 }
 
 /* .first-page-questions .question-container {

@@ -20,7 +20,7 @@ export const scrollToNextQuestion = (currentQuestionId: number): void => {
     setTimeout(() => {
       nextQuestionElement?.scrollIntoView({ 
         behavior: 'smooth', 
-        block: 'center'
+        block: 'start'
       });
     }, 50);
   }
@@ -54,7 +54,7 @@ export const scrollToFirstQuestionOfNextPage = (): void => {
       if (firstQuestion) {
         firstQuestion.scrollIntoView({ 
           behavior: 'smooth', 
-          block: 'center'
+          block: 'start'
         });
         return;
       }
@@ -68,7 +68,7 @@ export const scrollToFirstQuestionOfNextPage = (): void => {
       if (firstVisibleQuestion) {
         firstVisibleQuestion.scrollIntoView({ 
           behavior: 'smooth', 
-          block: 'center'
+          block: 'start'
         });
       }
     }
@@ -83,6 +83,6 @@ export const scrollToQuestion = (questionId: number): void => {
   // 使用小延迟确保DOM渲染完成
   setTimeout(() => {
     const el = document.getElementById(`question-${questionId}`);
-    el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, 50);
 };
