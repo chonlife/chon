@@ -216,8 +216,16 @@
     gap: 12px;
   }
   
-  .primary-button,
+  .primary-button {
+    order: 1;
+    width: 100%;
+    padding: 16px 20px;
+    min-height: 52px;
+    font-size: 16px;
+  }
+  
   .secondary-button {
+    order: 2;
     width: 100%;
     padding: 16px 20px;
     min-height: 52px;
