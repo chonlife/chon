@@ -1,35 +1,7 @@
 import { cardsData } from "../features/personality-test/data/characters";
+import { CardData } from "../features/personality-test/types/character";
 
 // Shared archetype utilities: types, data, tag mapping, and matching logic
-
-export interface CardData {
-  id: string;
-  name: {
-    en: string;
-    zh: string;
-  };
-  title: {
-    en: string;
-    zh: string;
-  };
-  description: {
-    en: string;
-    zh: string;
-  };
-  mythology: {
-    en: string;
-    zh: string;
-  };
-  tagRanges: {
-    selfAwareness: [number, number];
-    dedication: [number, number];
-    socialIntelligence: [number, number];
-    emotionalRegulation: [number, number];
-    objectivity: [number, number];
-    coreEndurance: [number, number];
-  };
-  image: string;
-}
 
 export interface TagTranslations {
   en: string;

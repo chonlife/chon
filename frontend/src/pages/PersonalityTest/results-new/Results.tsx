@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../../../contexts/LanguageContext.tsx';
 import { useAuth } from '../../../contexts/AuthContext.tsx';
 import './Results.css';
-import { tagLabels as sharedTagLabels, findBestMatch as sharedFindBestMatch, mapTagStatsToScores, CardData, TagTranslations } from '../../../utils/archetypes.ts';
+import { tagLabels as sharedTagLabels, findBestMatch as sharedFindBestMatch, mapTagStatsToScores, TagTranslations } from '../../../utils/archetypes.ts';
 import { cardsData as sharedCardsData } from '../../../features/personality-test/data/characters.ts';
 import { MemoizedHexagonChart } from './HexagonChart.tsx';
+import { CardData } from '../../../features/personality-test/types/character';
 
 interface ResultsProps {
   onCreateAccount?: () => void;

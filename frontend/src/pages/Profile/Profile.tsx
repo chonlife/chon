@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext.tsx';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { CardData, findBestMatch, mapTagStatsToScores } from '../../utils/archetypes';
+import { findBestMatch, mapTagStatsToScores } from '../../utils/archetypes';
 import { cardsData } from '../../features/personality-test/data/characters';
 import { getOrComputeTagStats } from '../../utils/scoring';
+import { CardData } from '../../features/personality-test/types/character';
 
 const Profile: React.FC = () => {
   const { isAuthenticated, user, logout } = useAuth();

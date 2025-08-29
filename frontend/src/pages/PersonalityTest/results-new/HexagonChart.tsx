@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { CardData, TagTranslations } from '../../../utils/archetypes';
+import { TagTranslations } from '../../../utils/archetypes';
+import { CardData } from '../../../features/personality-test/types/character';
 
 export const HexagonChart: React.FC<{
     scores: Record<string, number>,

@@ -1,4 +1,4 @@
-import { CardData } from '../../../utils/archetypes.ts';
+import { CardData } from '../types/character';
 
 export const cardsData: CardData[] = [
     {
