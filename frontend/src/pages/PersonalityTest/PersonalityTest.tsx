@@ -155,14 +155,16 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
       initializedSectionRef.current = true;
     }
 
-    // 滚动定位（基于最新的 currentSection 与 answers）
-    const section = getSectionByIndex(selectedIdentity, currentSection);
-    const targetQ = section ? findFirstUnansweredQuestionInSection(section, answers) : null;
-    if (targetQ != null) {
-      scrollToQuestion(targetQ);
-    } else if (section && section.questions.length > 0) {
-      scrollToQuestion(section.questions[0]);
-    }
+    // 滚动定位到section开始位置，让用户看到section标题
+    setTimeout(() => {
+      const sectionContainer = document.querySelector('[id^="section-"]');
+      if (sectionContainer) {
+        sectionContainer.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'start'
+        });
+      }
+    }, 100);
   }, [step, selectedIdentity, currentSection]);
   
   // 保存身份选择到本地存储

@@ -23,7 +23,42 @@ export const scrollToNextQuestion = (currentQuestionId: number): void => {
         block: 'start'
       });
     }, 50);
+  } else if (currentIndex !== -1 && currentIndex === questionElements.length - 1) {
+    // This is the last question in the section, scroll to continue button if not visible
+    scrollToContinueButtonIfNeeded();
   }
+};
+
+/**
+ * 检查Continue或Finish按钮是否在视口中可见
+ */
+const isContinueButtonVisible = (): boolean => {
+  // Look for either the next button (Continue) or finish button
+  const continueButton = document.querySelector('.question-navigation .next-button, .question-navigation .finish-button');
+  if (!continueButton) return false;
+  
+  const rect = continueButton.getBoundingClientRect();
+  const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+  
+  return rect.top >= 0 && rect.bottom <= windowHeight;
+};
+
+/**
+ * 如果Continue或Finish按钮不可见，则滚动到它
+ */
+export const scrollToContinueButtonIfNeeded = (): void => {
+  setTimeout(() => {
+    if (!isContinueButtonVisible()) {
+      // Look for either the next button (Continue) or finish button
+      const continueButton = document.querySelector('.question-navigation .next-button, .question-navigation .finish-button');
+      if (continueButton) {
+        continueButton.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'center'
+        });
+      }
+    }
+  }, 100);
 };
 
 /**
@@ -77,23 +112,21 @@ export const scrollToFirstQuestionOfNextPage = (): void => {
 
 /**
  * 滚动到下一个section的开始位置
- * 先滚动到页面顶部，然后在短暂延迟后滚动到section容器，让用户看到section标题
+ * 直接平滑滚动到section容器，让用户看到section标题
  */
 export const scrollToSectionStart = (): void => {
-  // 先滚动到页面顶部
-  scrollToPageTop();
-  
-  // 延迟后尝试查找并滚动到当前section容器
+  // 延迟后直接滚动到当前section容器，避免双重滚动造成的停顿
   setTimeout(() => {
     // 查找页面上的section容器
     const sectionContainer = document.querySelector('[id^="section-"]');
     if (sectionContainer) {
+      // 直接滚动到section开始位置，单次平滑动画
       sectionContainer.scrollIntoView({ 
         behavior: 'smooth', 
         block: 'start'
       });
     }
-  }, 500); // 500ms延迟，确保页面已切换
+  }, 200); // 较短延迟，确保DOM已更新但避免长时间等待
 }; 
 
 /**
