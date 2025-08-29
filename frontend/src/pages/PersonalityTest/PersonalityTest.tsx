@@ -9,7 +9,7 @@ import { Question, QuestionSection, QuestionnaireType, QuestionMenu, StoredAnswe
 import { questionsMenu } from '../../features/personality-test/data/menu.ts';
 import IdentitySelection, { IdentityType, CorporateRole } from './identity/IdentitySelection.tsx';
 import QuestionsSection from './questions/QuestionsSection.tsx';
-import Results from './results/Results.tsx';
+import Results from './results-new/Results.tsx';
 import AccountSignup from '../Signup/AccountSignup.tsx';
 import IntroSection from './intro/IntroSection.tsx';
 import PrivacyStatement from './privacy/PrivacyStatement.tsx';

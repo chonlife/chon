@@ -80,18 +80,21 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
 
   // Update carousel when active card changes to ensure it's visible
   useEffect(() => {
-    if (isNarrowScreen && cards.length > 0) {
-      const visibleCount = getVisibleCount();
-      const visibleStart = carouselIndex;
-      const visibleEnd = carouselIndex + visibleCount;
-      
-      // If active card is not visible, adjust carousel
-      if (activeCardIndex < visibleStart || activeCardIndex >= visibleEnd) {
-        const newCarouselIndex = Math.max(0, Math.min(activeCardIndex, cards.length - visibleCount));
-        setCarouselIndex(newCarouselIndex);
-      }
+    if (!isNarrowScreen || cards.length === 0) return;
+
+    const visibleCount = getVisibleCount();
+    const visibleStart = carouselIndex; // read current state
+    const visibleEnd = visibleStart + visibleCount;
+  
+    if (activeCardIndex < visibleStart) {
+      // active moved left of viewport → align left
+      setCarouselIndex(activeCardIndex);
+    } else if (activeCardIndex >= visibleEnd) {
+      // active moved right of viewport → bring it into view, keeping a full page if possible
+      setCarouselIndex(Math.min(activeCardIndex - visibleCount + 1, cards.length - visibleCount));
     }
-  }, [activeCardIndex, isNarrowScreen, cards.length, carouselIndex]);
+    // IMPORTANT: do NOT depend on carouselIndex here, or it will fight with user navigation
+  }, [activeCardIndex, isNarrowScreen, cards.length]); // removed carouselIndex
 
   // Reset carousel to show best match when cards are reordered
   useEffect(() => {
