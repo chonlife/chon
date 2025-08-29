@@ -20,7 +20,7 @@ interface QuestionsSectionProps {
   onMultipleChoice: (question: Question, optionId: string) => void;
   onTextInput: (question: Question, text: string) => void;
   onScale: (question: Question, value: string, identity: QuestionnaireType | null) => void;
-  scrollToFirstQuestionOfNextPage: () => void;
+  scrollToSectionStart: () => void;
   onNext: () => void;
   onBack: () => void;
   onFinish: () => void;
@@ -39,7 +39,7 @@ const QuestionsSection: React.FC<QuestionsSectionProps> = ({
   onMultipleChoice,
   onTextInput,
   onScale,
-  scrollToFirstQuestionOfNextPage,
+  scrollToSectionStart,
   onNext,
   onBack,
   onFinish,
@@ -66,7 +66,7 @@ const QuestionsSection: React.FC<QuestionsSectionProps> = ({
   };
 
   return (
-    <div className="questionnaire-content">
+    <div className="questionnaire-content" id={`section-${section.sectionId}`}>
       {/* Progress bar */}
       <ProgressBar progress={progress} />
 
@@ -105,13 +105,13 @@ const QuestionsSection: React.FC<QuestionsSectionProps> = ({
         onBack={() => {
           if (showBack) {
             onBack();
-            scrollToFirstQuestionOfNextPage();
+            scrollToSectionStart();
           }
         }}
         onNext={() => {
           if (showNext) {
             onNext();
-            scrollToFirstQuestionOfNextPage();
+            scrollToSectionStart();
           }
         }}
         onFinish={onFinish}

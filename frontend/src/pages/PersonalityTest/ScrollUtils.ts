@@ -73,6 +73,27 @@ export const scrollToFirstQuestionOfNextPage = (): void => {
       }
     }
   }, 500); // 500ms延迟，确保页面已切换
+};
+
+/**
+ * 滚动到下一个section的开始位置
+ * 先滚动到页面顶部，然后在短暂延迟后滚动到section容器，让用户看到section标题
+ */
+export const scrollToSectionStart = (): void => {
+  // 先滚动到页面顶部
+  scrollToPageTop();
+  
+  // 延迟后尝试查找并滚动到当前section容器
+  setTimeout(() => {
+    // 查找页面上的section容器
+    const sectionContainer = document.querySelector('[id^="section-"]');
+    if (sectionContainer) {
+      sectionContainer.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start'
+      });
+    }
+  }, 500); // 500ms延迟，确保页面已切换
 }; 
 
 /**

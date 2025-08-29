@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useLanguage } from '../../contexts/LanguageContext.tsx';
 import LanguageSelector from '../../components/LanguageSelector/LanguageSelector.tsx';
 import './PersonalityTest.css';
-import { scrollToNextQuestion, scrollToFirstQuestionOfNextPage, scrollToQuestion, scrollToPageTop } from './ScrollUtils.ts';
+import { scrollToNextQuestion, scrollToQuestion, scrollToPageTop, scrollToSectionStart } from './ScrollUtils.ts';
 import questionnaireApi from '../../api/questionnaire.ts';
-import { Question, QuestionSection, QuestionnaireType, QuestionMenu, StoredAnswer } from '../../features/personality-test/types/question.ts';
+import { Question, QuestionSection, QuestionnaireType, StoredAnswer } from '../../features/personality-test/types/question.ts';
 import { questionsMenu } from '../../features/personality-test/data/menu.ts';
 import IdentitySelection, { IdentityType, CorporateRole } from './identity/IdentitySelection.tsx';
 import QuestionsSection from './questions/QuestionsSection.tsx';
@@ -497,7 +497,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
           onNext={handleNextQuestionSection}
           onBack={handleBackQuestionSection}
           onFinish={finishQuestionnaire}
-          scrollToFirstQuestionOfNextPage={scrollToFirstQuestionOfNextPage}
+          scrollToSectionStart={scrollToSectionStart}
         />
       )
     }
