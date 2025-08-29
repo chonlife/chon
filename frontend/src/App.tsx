@@ -9,7 +9,6 @@ import NotFound from './pages/NotFound/NotFound.tsx'
 import { useLanguage } from './contexts/LanguageContext.tsx'
 import { useEffect, useState } from 'react'
 import './App.css'
-import Results from './pages/PersonalityTest/results/Results.tsx'
 import Profile from './pages/Profile/Profile.tsx'
 import { useViewportControl } from './hooks/useViewportControl'
 
@@ -76,7 +75,6 @@ function App() {
             />
           } 
         />
-        <Route path="/results" element={<Results />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
