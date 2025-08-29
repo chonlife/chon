@@ -208,14 +208,17 @@ const Login = () => {
           </button>
         </div>
       </form>
-      <div style={{ marginTop: 16, display: 'flex', justifyContent: 'center' }}>
-        <button
-          type="button"
-          className="secondary-button"
-          onClick={() => navigate('/personality-test')}
-        >
-          {language === 'en' ? 'Take personality test and create account' : '去完成测试并创建账户'}
-        </button>
+      <div className="signup-link-container">
+        <span className="signup-text">
+          {language === 'en' ? 'No account? ' : '没有账户？'}
+          <button
+            type="button"
+            className="signup-link"
+            onClick={() => navigate('/personality-test')}
+          >
+            {language === 'en' ? 'Take personality test and create account' : '去完成测试并创建账户'}
+          </button>
+        </span>
       </div>
     </div>
   );

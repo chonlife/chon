@@ -232,12 +232,60 @@
   cursor: not-allowed;
 }
 
+/* Signup link styling */
+.signup-link-container {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.signup-text {
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.signup-link {
+  background: transparent;
+  border: none;
+  color: #F5C7CA;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 16px;
+  font-family: inherit;
+  transition: color 0.2s ease;
+  padding: 0;
+  margin: 0;
+  font-weight: 500;
+}
+
+.signup-link:hover {
+  color: #e3a6a9;
+  text-decoration: none;
+}
+
+.signup-link:focus {
+  outline: 2px solid #F0BDC0;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 /* Mobile button improvements */
 @media (max-width: 576px) {
   .primary-button,
   .secondary-button {
     padding: 16px 20px;
     min-height: 52px;
+    font-size: 16px;
+  }
+  
+  .signup-link-container {
+    margin-top: 20px;
+  }
+  
+  .signup-text,
+  .signup-link {
     font-size: 16px;
   }
 } 
