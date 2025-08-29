@@ -117,13 +117,18 @@
 
 @media (max-width: 768px) {
   .login-container {
-    padding: 2rem;
+    padding: 2rem 1.5rem;
   }
   
   .login-container h1 {
     font-size: 2.2rem;
     margin-bottom: 1.5rem;
     text-align: center;
+  }
+  
+  .login-container .account-signup-form {
+    width: 100%;
+    max-width: 400px;
   }
   
   .login-content {
@@ -139,11 +144,27 @@
 
 @media (max-width: 480px) {
   .login-container {
-    padding: 1.5rem;
+    padding: 1.5rem 1rem;
   }
   
   .login-container h1 {
     font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+  
+  .login-container .account-signup-form {
+    width: 100%;
+    max-width: none;
+  }
+  
+  .phone-row {
+    grid-template-columns: 100px 1fr;
+    gap: 6px;
+  }
+  
+  .country-select-inline {
+    font-size: 14px;
+    padding: 0 6px;
   }
   
   .login-content {
@@ -157,5 +178,66 @@
   .login-container .molecule-background {
     width: 100%;
     opacity: 0.08;
+  }
+}
+
+/* Button styles */
+.primary-button {
+  background: #F0BDC0;
+  color: #000;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  min-height: 48px;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.primary-button:hover {
+  background: #e3a6a9;
+  transform: translateY(-1px);
+}
+
+.primary-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.secondary-button {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.3);
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  min-height: 48px;
+  transition: all 0.2s ease;
+  width: 100%;
+  max-width: 400px;
+}
+
+.secondary-button:hover {
+  border-color: rgba(255,255,255,0.5);
+  background: rgba(255,255,255,0.05);
+}
+
+.secondary-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Mobile button improvements */
+@media (max-width: 576px) {
+  .primary-button,
+  .secondary-button {
+    padding: 16px 20px;
+    min-height: 52px;
+    font-size: 16px;
   }
 } 
