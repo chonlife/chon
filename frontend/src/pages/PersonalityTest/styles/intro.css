@@ -183,7 +183,7 @@
       padding: 1rem;
       gap: 1.5rem;
       justify-content: flex-start;
-      padding-top: 0.5rem;
+      padding-top: 8.5rem;
     }
   
     .intro-question {
@@ -241,7 +241,7 @@
       padding: 0.5rem;
       gap: 1rem;
       justify-content: flex-start;
-      padding-top: 1rem;
+      padding-top: 7.5rem;
     }
   
     .intro-question {
@@ -303,7 +303,7 @@
     .intro-content {
       padding: 0.3rem;
       justify-content: flex-start;
-      padding-top: 0.75rem;
+      padding-top: 7.5rem;
     }
   
     .intro-question {
