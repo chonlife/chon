@@ -338,9 +338,6 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
       {/* Sticky CTA bar */}
       <div className="sticky-cta">
         <div className="sticky-cta__content">
-          <div className="sticky-cta__text">
-            {language === 'en' ? 'Save your results for future access' : '保存您的测试结果，未来随时访问'}
-          </div>
           <button
             className="primary-button sticky-cta__button"
             onClick={() => onCreateAccount && onCreateAccount()}

@@ -1860,88 +1860,75 @@
   }
   
   /* Sticky CTA */
-  .sticky-cta {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 68px; /* sit above the character dock */
-    z-index: 1100;
-    display: flex;
-    justify-content: center;
-    pointer-events: none; /* container ignores click */
-  }
-  
-  .sticky-cta__content {
-    pointer-events: all; /* content captures click */
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: rgba(20,20,20,0.9);
-    border: 1px solid rgba(255,255,255,0.15);
-    box-shadow: 0 6px 24px rgba(0,0,0,0.35);
-    padding: 10px 14px;
-    border-radius: 12px;
-    backdrop-filter: blur(8px);
-  }
-  
-  .sticky-cta__text {
-    color: #fff;
-    font-size: 14px;
-    opacity: 0.9;
-  }
-  
-  .sticky-cta__button {
-    white-space: nowrap;
-    font-size: 14px;
-  }
+.sticky-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 60px; /* Simplified positioning to clear language switcher */
+  z-index: 1100;
+  display: flex;
+  justify-content: center;
+  pointer-events: none; /* container ignores click */
+}
+
+.sticky-cta__content {
+  pointer-events: all; /* content captures click */
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: rgba(20,20,20,0.9);
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.35);
+  padding: 14px 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+}
+
+.sticky-cta__button {
+  white-space: nowrap;
+  font-size: 15px;
+  padding: 12px 20px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
   
   @media (max-width: 576px) {
-    .sticky-cta {
-      bottom: 82px; /* allow extra breathing room on small screens */
-    }
-    .sticky-cta__content {
-      width: calc(100% - 24px);
-      justify-content: space-between;
-      padding: 8px 12px; /* Reduced padding */
-      gap: 8px; /* Reduced gap */
-    }
-    .sticky-cta__text {
-      font-size: 12px; /* Smaller text */
-    }
-    .sticky-cta__button {
-      font-size: 12px; /* Smaller buttons */
-      padding: 8px 12px; /* Compact button padding */
-    }
+  .sticky-cta__content {
+    width: calc(100% - 24px);
+    justify-content: center;
+    padding: 12px 16px;
+    gap: 16px;
   }
+  .sticky-cta__button {
+    font-size: 14px;
+    padding: 10px 16px;
+    min-width: 120px;
+  }
+}
   
   @media (max-width: 480px) {
-    .sticky-cta__content {
-      padding: 6px 10px; /* Even more compact */
-      gap: 6px;
-    }
-    .sticky-cta__text {
-      font-size: 11px;
-    }
-    .sticky-cta__button {
-      font-size: 11px;
-      padding: 6px 10px;
-    }
+  .sticky-cta__content {
+    padding: 10px 14px;
+    gap: 14px;
   }
+  .sticky-cta__button {
+    font-size: 13px;
+    padding: 9px 14px;
+    min-width: 110px;
+  }
+}
   
-  @media (max-width: 380px) {
-    .sticky-cta__content {
-      flex-direction: column; /* Stack vertically on very narrow screens */
-      gap: 6px;
-      padding: 8px;
-      text-align: center;
-    }
-    .sticky-cta__text {
-      font-size: 10px;
-      line-height: 1.2;
-    }
-    .sticky-cta__button {
-      font-size: 10px;
-      padding: 6px 8px;
-      width: 100%;
-    }
+  @media (max-width: 320px) {
+  .sticky-cta__content {
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px;
+    width: calc(100% - 16px);
   }
+  .sticky-cta__button {
+    font-size: 12px;
+    padding: 10px 12px;
+    width: 100%;
+    min-width: auto;
+  }
+}
