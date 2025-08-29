@@ -182,6 +182,8 @@
     .intro-content {
       padding: 1rem;
       gap: 1.5rem;
+      justify-content: flex-start;
+      padding-top: 0.5rem;
     }
   
     .intro-question {
@@ -238,6 +240,8 @@
     .intro-content {
       padding: 0.5rem;
       gap: 1rem;
+      justify-content: flex-start;
+      padding-top: 0.25rem;
     }
   
     .intro-question {
@@ -298,6 +302,8 @@
   @media (max-width: 380px) {
     .intro-content {
       padding: 0.3rem;
+      justify-content: flex-start;
+      padding-top: 0.2rem;
     }
   
     .intro-question {
