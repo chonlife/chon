@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext.tsx';
 import { useLanguage } from '../../contexts/LanguageContext';
-import { cardsData, findBestMatch, mapTagStatsToScores, CardData } from '../../utils/archetypes';
+import { CardData, findBestMatch, mapTagStatsToScores } from '../../utils/archetypes';
+import { cardsData } from '../../features/personality-test/data/characters';
 import { getOrComputeTagStats } from '../../utils/scoring';
 
 const Profile: React.FC = () => {
