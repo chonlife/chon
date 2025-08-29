@@ -14,7 +14,7 @@ import AccountSignup from '../Signup/AccountSignup.tsx';
 import IntroSection from './intro/IntroSection.tsx';
 import PrivacyStatement from './privacy/PrivacyStatement.tsx';
 import TopActions from './components/TopActions.tsx';
-import { findFirstIncompleteSection, findFirstUnansweredQuestionInSection, getSectionByIndex, getOptionById, computeNextAnswersForMultipleChoice, calculatedQuestionnaireProgress, hasInProgressQuestionnaire, hasCompletedQuestionnaire } from '../../features/personality-test/selectors/questions.ts';
+import { findFirstIncompleteSection, findFirstUnansweredQuestionInSection, getSectionByIndex, getOptionById, calculatedQuestionnaireProgress, hasInProgressQuestionnaire, hasCompletedQuestionnaire } from '../../features/personality-test/selectors/questions.ts';
 import { calculateTagResults } from '../../features/personality-test/selectors/results.ts';
 
 export const VALID_TEST_STEPS = ['intro', 'identity', 'privacy', 'questionnaire', 'results', 'account'] as const;
@@ -309,25 +309,43 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
   };
 
   // Handlers for questionnaire section
-  // Handle answer selection for multiple choice questions
+  // Handle answer selection for single-select multiple choice questions
   const handleMultipleChoiceAnswer = (question: Question, optionId: string) => {
     const currentAnswers = answers;
     updateGenderIfApplicable(question, optionId);
     updateCorporateIfApplicable(question, optionId);
 
-    const { updatedAnswers, isMultiSelect } = computeNextAnswersForMultipleChoice(
-      question,
-      optionId,
-      currentAnswers
-    );
-    setAnswers(updatedAnswers);
+    setAnswers({
+      ...currentAnswers,
+      [question.id]: { value: optionId }
+    });
 
-    // Auto-scroll only for single-select
-    if (!isMultiSelect) {
-      setTimeout(() => {
-        scrollToNextQuestion(question.id);
-      }, 100);
+    // Auto-scroll for single-select
+    setTimeout(() => {
+      scrollToNextQuestion(question.id);
+    }, 100);
+  };
+
+  // Handle answer selection for multi-select questions
+  const handleMultiSelectAnswer = (question: Question, optionId: string) => {
+    const currentAnswers = answers;
+    const prev = currentAnswers[question.id]?.value;
+    const prevArray: string[] = Array.isArray(prev) ? prev : [];
+    const nextArray = prevArray.includes(optionId)
+      ? prevArray.filter(v => v !== optionId)
+      : [...prevArray, optionId];
+
+    if (nextArray.length === 0) {
+      const newAnswers = { ...currentAnswers };
+      delete newAnswers[question.id];
+      setAnswers(newAnswers);
+    } else {
+      setAnswers({
+        ...currentAnswers,
+        [question.id]: { value: nextArray }
+      });
     }
+    // No auto-scroll for multi-select to allow multiple selections
   };
 
   // Handle text input for free text questions
@@ -494,6 +512,7 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
           currentAnswers={answers}
           workedInCorporate={workedInCoporate}
           onMultipleChoice={handleMultipleChoiceAnswer}
+          onMultiSelect={handleMultiSelectAnswer}
           onTextInput={handleTextAnswer}
           onScale={handleScaleAnswer}
           onNext={handleNextQuestionSection}

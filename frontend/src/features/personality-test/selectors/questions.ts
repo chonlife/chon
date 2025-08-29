@@ -75,38 +75,3 @@ export const getOptionById = (question: Question, optionId: string) => {
     return qAny.options?.find((o: any) => o.id === optionId);
 };
 
-export const computeNextAnswersForMultipleChoice = (
-    question: Question,
-    optionId: string,
-    currentAnswers: Record<number, StoredAnswer>
-  ): { updatedAnswers: Record<number, StoredAnswer>; isMultiSelect: boolean } => {
-    const isMulti = question.type === 'multiple-choice' && (question as any).multiSelect;
-    if (isMulti) {
-      const prev = currentAnswers[question.id]?.value;
-      const prevArray: string[] = Array.isArray(prev) ? prev : [];
-      const nextArray = prevArray.includes(optionId)
-        ? prevArray.filter(v => v !== optionId)
-        : [...prevArray, optionId];
-
-      if (nextArray.length === 0) {
-        const newAnswers = { ...currentAnswers };
-        delete newAnswers[question.id];
-        return { updatedAnswers: newAnswers, isMultiSelect: true };
-      }
-      return {
-        updatedAnswers: {
-          ...currentAnswers,
-          [question.id]: { value: nextArray }
-        },
-        isMultiSelect: true
-      };
-    }
-    // Single select default
-    return {
-      updatedAnswers: {
-        ...currentAnswers,
-        [question.id]: { value: optionId }
-      },
-      isMultiSelect: false
-    };
-};

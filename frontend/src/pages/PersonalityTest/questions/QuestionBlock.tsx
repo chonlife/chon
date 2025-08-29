@@ -3,6 +3,7 @@ import { Question, QuestionnaireType, StoredAnswer } from '../../../features/per
 import CountryAutocomplete from './CountryAutocomplete';
 import ChildrenCountDropdown from './ChildrenCountDropdown';
 import BirthWeightInput from './BirthWeightInput';
+import '../styles/question-multi-select.css';
 
 interface QuestionBlockProps {
   question: Question;
@@ -11,6 +12,7 @@ interface QuestionBlockProps {
   identity: QuestionnaireType | null;
   workedInCorporate: boolean;
   onMultipleChoice: (question: Question, optionId: string) => void;
+  onMultiSelect: (question: Question, optionId: string) => void;
   onTextInput: (question: Question, value: string) => void;
   onScale: (question: Question, value: string, identity: QuestionnaireType | null) => void;
 }
@@ -22,6 +24,7 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
   identity,
   workedInCorporate,
   onMultipleChoice,
+  onMultiSelect,
   onTextInput,
   onScale,
 }) => {
@@ -54,12 +57,34 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
           {question.options?.map(option => (
             <div
               key={option.id}
-              className={`answer-option ${Array.isArray(currentAnswer?.value) ? (currentAnswer?.value as string[]).includes(option.id) ? 'selected' : '' : currentAnswer?.value === option.id ? 'selected' : ''}`}
+              className={`answer-option ${currentAnswer?.value === option.id ? 'selected' : ''}`}
               onClick={() => onMultipleChoice(question, option.id)}
             >
               <p>{option.id}) {language === 'en' ? option.textEn : option.textZh}</p>
             </div>
           ))}
+        </div>
+      )}
+      {question.type === 'multi-select' && (
+        <div className="multi-select-options">
+          {question.options?.map(option => {
+            const isSelected = Array.isArray(currentAnswer?.value) && 
+              (currentAnswer?.value as string[]).includes(option.id);
+            return (
+              <div
+                key={option.id}
+                className={`multi-select-option ${isSelected ? 'selected' : ''}`}
+                onClick={() => onMultiSelect(question, option.id)}
+              >
+                <div className="multi-select-checkbox">
+                  <div className="multi-select-checkbox-check"></div>
+                </div>
+                <div className="multi-select-option-text">
+                  {option.id}) {language === 'en' ? option.textEn : option.textZh}
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
       {question.type === 'text-input' && !isCountryQuestion && !isChildrenCountQuestion && !isBirthWeightQuestion && (

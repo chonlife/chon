@@ -723,8 +723,7 @@ export const questions: Question[] = [
     
     {
       id: 53,
-      type: 'multiple-choice',
-      multiSelect: true,
+      type: 'multi-select',
       textEn: 'During which weeks of your pregnancy did you experience noticeable morning sickness? (Select all that apply)',
       textZh: '在怀孕的哪些周数期间，您经历了明显的妊娠反应？（可多选）',
       options: [

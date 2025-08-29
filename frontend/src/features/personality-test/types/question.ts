@@ -1,4 +1,4 @@
-export type QuestionType = 'multiple-choice' | 'text-input' | 'scale-question';
+export type QuestionType = 'multiple-choice' | 'multi-select' | 'text-input' | 'scale-question';
 export type QuestionnaireType = 'mother' | 'corporate' | 'other' | 'both';
 
 interface BaseQuestion {
@@ -14,7 +14,11 @@ interface BaseQuestion {
 export interface MultipleChoiceQuestion extends BaseQuestion {
   type: 'multiple-choice';
   options: Option[];
-  multiSelect?: boolean;
+}
+
+export interface MultiSelectQuestion extends BaseQuestion {
+  type: 'multi-select';
+  options: Option[];
 }
 
 export interface ScaleQuestion extends BaseQuestion {
@@ -42,7 +46,7 @@ export interface ScaleLabels {
   maxZh: string;
 }
 
-export type Question = MultipleChoiceQuestion | ScaleQuestion | TextInputQuestion;
+export type Question = MultipleChoiceQuestion | MultiSelectQuestion | ScaleQuestion | TextInputQuestion;
 
 export interface QuestionMenu {
   identity: QuestionnaireType;

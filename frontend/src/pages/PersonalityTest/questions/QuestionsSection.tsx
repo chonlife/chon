@@ -18,6 +18,7 @@ interface QuestionsSectionProps {
   workedInCorporate: boolean;
   currentAnswers: Record<number, StoredAnswer>;
   onMultipleChoice: (question: Question, optionId: string) => void;
+  onMultiSelect: (question: Question, optionId: string) => void;
   onTextInput: (question: Question, text: string) => void;
   onScale: (question: Question, value: string, identity: QuestionnaireType | null) => void;
   scrollToSectionStart: () => void;
@@ -37,6 +38,7 @@ const QuestionsSection: React.FC<QuestionsSectionProps> = ({
   workedInCorporate,
   currentAnswers,
   onMultipleChoice,
+  onMultiSelect,
   onTextInput,
   onScale,
   scrollToSectionStart,
@@ -91,6 +93,7 @@ const QuestionsSection: React.FC<QuestionsSectionProps> = ({
             identity={identity}
             workedInCorporate={workedInCorporate}
             onMultipleChoice={onMultipleChoice}
+            onMultiSelect={onMultiSelect}
             onTextInput={onTextInput}
             onScale={onScale}
           />
