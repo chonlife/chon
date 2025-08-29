@@ -1907,6 +1907,10 @@
 }
   
   @media (max-width: 480px) {
+  .sticky-cta {
+    bottom: 40px;
+  }
+
   .sticky-cta__content {
     padding: 10px 14px;
     gap: 14px;
@@ -1919,6 +1923,10 @@
 }
   
   @media (max-width: 320px) {
+  .sticky-cta {
+    bottom: 32px;
+  }
+
   .sticky-cta__content {
     flex-direction: column;
     gap: 10px;
@@ -1926,8 +1934,8 @@
     width: calc(100% - 16px);
   }
   .sticky-cta__button {
-    font-size: 12px;
-    padding: 10px 12px;
+    font-size: 10px;
+    padding: 8px 10px;
     width: 100%;
     min-width: auto;
   }
