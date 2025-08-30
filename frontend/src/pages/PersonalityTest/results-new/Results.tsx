@@ -340,14 +340,14 @@ const Results: React.FC<ResultsProps> = ({ onCreateAccount, onRestart }) => {
       <div className="sticky-cta">
         <div className="sticky-cta__content">
           <button
-            className="primary-button sticky-cta__button"
+            className="sticky-cta__button save-results-button "
             onClick={() => onCreateAccount && onCreateAccount()}
             disabled={isAuthenticated}
           >
             {isAuthenticated ? (language === 'en' ? 'Saved' : '已保存') : (language === 'en' ? 'Save my results' : '保存我的结果')}
           </button>
           <button
-            className="secondary-button sticky-cta__button"
+            className="sticky-cta__button results-restart-button"
             onClick={() => onRestart && onRestart()}
           >
             {language === 'en' ? 'Restart' : '重新开始'}
