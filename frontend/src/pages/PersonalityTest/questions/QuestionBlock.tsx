@@ -3,6 +3,7 @@ import { Question, QuestionnaireType, StoredAnswer } from '../../../features/per
 import CountryAutocomplete from './CountryAutocomplete';
 import ChildrenCountDropdown from './ChildrenCountDropdown';
 import BirthWeightInput from './BirthWeightInput';
+import { scrollToNextQuestion } from '../ScrollUtils';
 import '../styles/question-multi-select.css';
 
 interface QuestionBlockProps {
@@ -66,25 +67,38 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
         </div>
       )}
       {question.type === 'multi-select' && (
-        <div className="multi-select-options">
-          {question.options?.map(option => {
-            const isSelected = Array.isArray(currentAnswer?.value) && 
-              (currentAnswer?.value as string[]).includes(option.id);
-            return (
-              <div
-                key={option.id}
-                className={`multi-select-option ${isSelected ? 'selected' : ''}`}
-                onClick={() => onMultiSelect(question, option.id)}
-              >
-                <div className="multi-select-checkbox">
-                  <div className="multi-select-checkbox-check"></div>
+        <div className="multi-select-container">
+          <div className="multi-select-options">
+            {question.options?.map(option => {
+              const isSelected = Array.isArray(currentAnswer?.value) && 
+                (currentAnswer?.value as string[]).includes(option.id);
+              return (
+                <div
+                  key={option.id}
+                  className={`multi-select-option ${isSelected ? 'selected' : ''}`}
+                  onClick={() => onMultiSelect(question, option.id)}
+                >
+                  <div className="multi-select-checkbox">
+                    <div className="multi-select-checkbox-check"></div>
+                  </div>
+                  <div className="multi-select-option-text">
+                    {option.id}) {language === 'en' ? option.textEn : option.textZh}
+                  </div>
                 </div>
-                <div className="multi-select-option-text">
-                  {option.id}) {language === 'en' ? option.textEn : option.textZh}
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+          <button
+            className={`multi-select-done-button ${
+              Array.isArray(currentAnswer?.value) && (currentAnswer?.value as string[]).length > 0 
+                ? 'enabled' 
+                : 'disabled'
+            }`}
+            disabled={!Array.isArray(currentAnswer?.value) || (currentAnswer?.value as string[]).length === 0}
+            onClick={() => scrollToNextQuestion(question.id)}
+          >
+            {language === 'en' ? 'Done' : '完成'}
+          </button>
         </div>
       )}
       {question.type === 'text-input' && !isCountryQuestion && !isChildrenCountQuestion && !isBirthWeightQuestion && (
