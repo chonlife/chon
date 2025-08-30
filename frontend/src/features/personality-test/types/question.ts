@@ -19,6 +19,7 @@ export interface MultipleChoiceQuestion extends BaseQuestion {
 export interface MultiSelectQuestion extends BaseQuestion {
   type: 'multi-select';
   options: Option[];
+  independentSelect?: string[];
 }
 
 export interface ScaleQuestion extends BaseQuestion {

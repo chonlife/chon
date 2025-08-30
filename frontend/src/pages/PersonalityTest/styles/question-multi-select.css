@@ -79,6 +79,19 @@
   transform: scale(1);
 }
 
+.multi-select-option.independent {
+  /* Independent options have slightly different styling to indicate they're different */
+  border-style: dashed;
+}
+
+.multi-select-option.independent:hover {
+  border-style: dashed;
+}
+
+.multi-select-option.independent.selected {
+  border-style: solid;
+}
+
 .multi-select-option-text {
   font-size: 1.15rem;
   line-height: 1.4;

@@ -331,9 +331,32 @@ const PersonalityTest = ({ onWhiteThemeChange, onHideUIChange, onViewportRestric
     const currentAnswers = answers;
     const prev = currentAnswers[question.id]?.value;
     const prevArray: string[] = Array.isArray(prev) ? prev : [];
-    const nextArray = prevArray.includes(optionId)
-      ? prevArray.filter(v => v !== optionId)
-      : [...prevArray, optionId];
+    
+    // Get independent select options for this question
+    const independentOptions = (question as any).independentSelect || [];
+    const isClickedIndependent = independentOptions.includes(optionId);
+    
+    let nextArray: string[];
+    
+    if (isClickedIndependent) {
+      // If clicking an independent option
+      if (prevArray.includes(optionId)) {
+        // If already selected, unselect it
+        nextArray = [];
+      } else {
+        // If not selected, select only this one (clear all others)
+        nextArray = [optionId];
+      }
+    } else {
+      // If clicking a regular (non-independent) option
+      // First, remove any independent options from the current selection
+      const nonIndependentArray = prevArray.filter(id => !independentOptions.includes(id));
+      
+      // Then toggle the clicked option
+      nextArray = nonIndependentArray.includes(optionId)
+        ? nonIndependentArray.filter(v => v !== optionId)
+        : [...nonIndependentArray, optionId];
+    }
 
     if (nextArray.length === 0) {
       const newAnswers = { ...currentAnswers };

@@ -72,15 +72,19 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
             {question.options?.map(option => {
               const isSelected = Array.isArray(currentAnswer?.value) && 
                 (currentAnswer?.value as string[]).includes(option.id);
+              const isIndependent = (question as any).independentSelect?.includes(option.id);
+              
               return (
                 <div
                   key={option.id}
-                  className={`multi-select-option ${isSelected ? 'selected' : ''}`}
+                  className={`multi-select-option ${isSelected ? 'selected' : ''} ${isIndependent ? 'independent' : ''}`}
                   onClick={() => onMultiSelect(question, option.id)}
                 >
-                  <div className="multi-select-checkbox">
-                    <div className="multi-select-checkbox-check"></div>
-                  </div>
+                  {!isIndependent && (
+                    <div className="multi-select-checkbox">
+                      <div className="multi-select-checkbox-check"></div>
+                    </div>
+                  )}
                   <div className="multi-select-option-text">
                     {option.id}) {language === 'en' ? option.textEn : option.textZh}
                   </div>
