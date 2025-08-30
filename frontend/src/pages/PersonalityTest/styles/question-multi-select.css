@@ -29,10 +29,13 @@
   min-height: 44px;
 }
 
-.multi-select-option:hover:not(.selected) {
-  background-color: #F0BDC0;
-  border-color: #e3a6a9;
-  box-shadow: 0 4px 8px rgba(240, 189, 192, 0.3);
+@media (hover: hover) and (pointer: fine) {
+  .multi-select-option:hover:not(.selected) {
+    background-color: #F0BDC0;
+    border-color: #e3a6a9;
+    box-shadow: 0 4px 8px rgba(240, 189, 192, 0.3);
+    transform: translateY(-2px);
+  }
 }
 
 .multi-select-option.selected {
@@ -55,9 +58,11 @@
   transition: all 0.3s ease;
 }
 
-.multi-select-option:hover:not(.selected) .multi-select-checkbox {
-  background-color: white;
-  border-color: white;
+@media (hover: hover) and (pointer: fine) {
+  .multi-select-option:hover:not(.selected) .multi-select-checkbox {
+    background-color: white;
+    border-color: white;
+  }
 }
 
 .multi-select-option.selected .multi-select-checkbox {
@@ -85,8 +90,10 @@
   border-style: dashed;
 }
 
-.multi-select-option.independent:hover:not(.selected) {
-  border-style: dashed;
+@media (hover: hover) and (pointer: fine) {
+  .multi-select-option.independent:hover:not(.selected) {
+    border-style: dashed;
+  }
 }
 
 .multi-select-option.independent.selected {
@@ -107,8 +114,10 @@
   font-weight: 500;
 }
 
-.multi-select-option:hover:not(.selected) .multi-select-option-text {
-  color: white;
+@media (hover: hover) and (pointer: fine) {
+  .multi-select-option:hover:not(.selected) .multi-select-option-text {
+    color: white;
+  }
 }
 
 @media (max-width: 768px) {
