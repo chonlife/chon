@@ -736,7 +736,7 @@ export const questions: Question[] = [
         { id: 'G', textEn: 'Weeks 37-40', textZh: '第37至第40周' },
         { id: 'H', textEn: 'I can\'t remember', textZh: '我记不清了' }
       ],
-      independentSelect: ['A', 'H']
+      independentSelect: ['A']
     },
     
     {
