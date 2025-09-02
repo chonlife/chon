@@ -21,7 +21,7 @@ export const cardsData: CardData[] = [
         objectivity: [60, 80],
         coreEndurance: [0, 60]
       },
-      image: '/images/characters/odin.jpg'
+      image: '/images/characters/odin.png'
     },
     {
       id: 'wukong',
@@ -43,7 +43,7 @@ export const cardsData: CardData[] = [
         objectivity: [60, 80],
         coreEndurance: [60, 90]
       },
-      image: '/images/characters/wukong.jpg'
+      image: '/images/characters/wukong.png'
     },
     {
       id: 'prometheus',
@@ -65,7 +65,7 @@ export const cardsData: CardData[] = [
         objectivity: [30, 70],
         coreEndurance: [60, 80]
       },
-      image: '/images/characters/prometheus.jpg'
+      image: '/images/characters/prometheus.jpeg'
     },
     {
       id: 'nuwa',
@@ -87,7 +87,7 @@ export const cardsData: CardData[] = [
         objectivity: [60, 80],
         coreEndurance: [80, 100]
       },
-      image: '/images/characters/nuwa.jpg'
+      image: '/images/characters/nuwa.jpeg'
     },
     {
       id: 'venus',
@@ -109,7 +109,7 @@ export const cardsData: CardData[] = [
         objectivity: [30, 60],
         coreEndurance: [20, 50]
       },
-      image: '/images/characters/venus.jpg'
+      image: '/images/characters/venus.png'
     },
     {
       id: 'athena',
@@ -131,6 +131,6 @@ export const cardsData: CardData[] = [
         objectivity: [70, 100],
         coreEndurance: [80, 100]
       },
-      image: '/images/characters/athena.jpg'
+      image: '/images/characters/athena.jpeg'
     }
   ];
