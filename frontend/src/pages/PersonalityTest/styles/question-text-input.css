@@ -14,6 +14,7 @@
     background-color: transparent;
     margin-bottom: 0.5rem;
     color: #333;
+    font-family: 'Kaisei Decol', serif;
   }
   
   .text-answer-input:focus {
@@ -180,4 +181,27 @@
     flex: 0 0 85px;
     height: 48px; /* Same height as input on small screens */
   }
+}
+
+/* Language-specific font override for Chinese */
+.personality-test-container[lang="zh"] .text-answer-input,
+.personality-test-container *[lang="zh"] .text-answer-input {
+  font-family: 'Alike Angular', serif !important;
+}
+
+.personality-test-container[lang="zh"] .text-answer-input::placeholder,
+.personality-test-container *[lang="zh"] .text-answer-input::placeholder {
+  font-family: 'Alike Angular', serif !important;
+}
+
+.personality-test-container[lang="zh"] .autocomplete-item,
+.personality-test-container *[lang="zh"] .autocomplete-item {
+  font-family: 'Alike Angular', serif !important;
+}
+
+.personality-test-container[lang="zh"] .weight-number-input,
+.personality-test-container *[lang="zh"] .weight-number-input,
+.personality-test-container[lang="zh"] .weight-unit-select,
+.personality-test-container *[lang="zh"] .weight-unit-select {
+  font-family: 'Alike Angular', serif !important;
 }
