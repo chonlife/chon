@@ -5,7 +5,7 @@ import { StoredAnswer } from '../features/personality-test/types/question.ts';
 import { CorporateRole } from '../pages/PersonalityTest/identity/IdentitySelection';
 
 // API Configuration
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+const API_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? '' : 'http://localhost:5001');
 
 // 问卷类型定义
 export type QuestionnaireType = 'mother' | 'corporate' | 'other' | 'both';
