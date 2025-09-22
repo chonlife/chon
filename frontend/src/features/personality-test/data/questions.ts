@@ -377,6 +377,8 @@ export const questions: Question[] = [
       textZh: '了解行业领域信息对您来说有多大价值？',
       textNonMotherEn: 'How valuable are working mothers staying updated with the professional field?',
       textNoneMotherZh: '职场母亲了解行业领域信息有多大价值？',
+      textLifeEn: 'How valuable are you staying updated with interested fields?',
+      textLifeZh: '了解感兴趣的领域信息对您来说有多大价值？',
       tags: ['奉献精神'],
       scaleLabels: {
         minEn: 'Not valuable',
@@ -393,6 +395,8 @@ export const questions: Question[] = [
       textZh: '发布和获取商业合作对您来说有多大价值？',
       textNonMotherEn: 'How valuable are working mothers posting and accessing new business deals?',
       textNoneMotherZh: '职场母亲发布和获取商业合作有多大价值？',
+      textLifeEn: 'How valuable are you sharing your life and exploring new opportunities?',
+      textLifeZh: '分享生活、探索新机会对您来说有多大价值？',
       tags: ['奉献精神'],
       scaleLabels: {
         minEn: 'Not valuable',
