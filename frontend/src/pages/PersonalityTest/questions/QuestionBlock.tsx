@@ -42,10 +42,10 @@ const QuestionBlock: React.FC<QuestionBlockProps> = ({
         {(() => {
           const qAny: any = question as any;
           // For corporate-only identity, prefer corporate-specific copy when present
-          if (identity === 'corporate' || identity === 'both') {
+          if (identity === 'corporate' || identity === 'other') {
             return language === 'en'
-              ? (qAny.textCorporateEn || question.textEn)
-              : (qAny.textCorporateZh || question.textZh);
+              ? (qAny.textNonMotherEn || question.textEn)
+              : (qAny.textNoneMotherZh || question.textZh);
           }
           // For non-corporate flows, show life variant when not worked in corporate and life copy exists
           return language === 'en'

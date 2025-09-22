@@ -7,8 +7,8 @@ interface BaseQuestion {
   textZh: string;
   textLifeEn?: string;
   textLifeZh?: string;
-  textCorporateEn?: string;
-  textCorporateZh?: string;
+  textNonMotherEn?: string;
+  textNoneMotherZh?: string;
 }
 
 export interface MultipleChoiceQuestion extends BaseQuestion {

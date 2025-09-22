@@ -375,8 +375,8 @@ export const questions: Question[] = [
       type: 'scale-question',
       textEn: 'How valuable are you staying updated with the professional field?',
       textZh: '了解行业领域信息对您来说有多大价值？',
-      textCorporateEn: 'How valuable are working mothers staying updated with the professional field?',
-      textCorporateZh: '职场母亲了解行业领域信息有多大价值？',
+      textNonMotherEn: 'How valuable are working mothers staying updated with the professional field?',
+      textNoneMotherZh: '职场母亲了解行业领域信息有多大价值？',
       tags: ['奉献精神'],
       scaleLabels: {
         minEn: 'Not valuable',
@@ -391,8 +391,8 @@ export const questions: Question[] = [
       type: 'scale-question',
       textEn: 'How valuable are you posting and accessing new business deals?',
       textZh: '发布和获取商业合作对您来说有多大价值？',
-      textCorporateEn: 'How valuable are working mothers posting and accessing new business deals?',
-      textCorporateZh: '职场母亲发布和获取商业合作有多大价值？',
+      textNonMotherEn: 'How valuable are working mothers posting and accessing new business deals?',
+      textNoneMotherZh: '职场母亲发布和获取商业合作有多大价值？',
       tags: ['奉献精神'],
       scaleLabels: {
         minEn: 'Not valuable',
@@ -407,8 +407,8 @@ export const questions: Question[] = [
       type: 'scale-question',
       textEn: 'How valuable are you sharing maternal experiences and emotional support?',
       textZh: '分享育儿经验、提供情感支持对您来说有多大价值？',
-      textCorporateEn: 'How valuable are working mothers sharing maternal experiences and emotional support?',
-      textCorporateZh: '职场母亲分享育儿经验、提供情感支持有多大价值？',
+      textNonMotherEn: 'How valuable are working mothers sharing maternal experiences and emotional support?',
+      textNoneMotherZh: '职场母亲分享育儿经验、提供情感支持有多大价值？',
       tags: ['奉献精神'],
       scaleLabels: {
         minEn: 'Not valuable',
@@ -423,8 +423,8 @@ export const questions: Question[] = [
       type: 'scale-question',
       textEn: 'How valuable are healthcare professionals’ medical advice for you?',
       textZh: '外部医疗专业人士提供医学建议有多大价值？',
-      textCorporateEn: 'How valuable are healthcare professionals’ medical advice for working mothers?',
-      textCorporateZh: '外部医疗专业人士为职场母亲提供医学建议有多大价值？',
+      textNonMotherEn: 'How valuable are healthcare professionals’ medical advice for working mothers?',
+      textNoneMotherZh: '外部医疗专业人士为职场母亲提供医学建议有多大价值？',
       tags: ['奉献精神'],
       scaleLabels: {
         minEn: 'Not valuable',
