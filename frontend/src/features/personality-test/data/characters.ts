@@ -36,12 +36,12 @@ export const cardsData: CardData[] = [
         zh: '悟空是《西游记》中聪明顽皮、法力无边的主角。他拥有无与伦比的速度、力量和变形能力，他单打天庭，与天兵天将作战，甚至将自己的名字从生死簿中抹掉。在佛祖的启蒙下，他从一个不羁的战士变成了一个严于律己的保护者。他体现了自由、机智和坚不可摧的决心，总是向他面前的规则发起挑战。'
       },
       tagRanges: {
-        selfAwareness: [40, 80],
-        dedication: [40, 80],
-        socialIntelligence: [70, 90],
+        selfAwareness: [40, 60],
+        dedication: [0, 40],
+        socialIntelligence: [40, 70],
         emotionalRegulation: [80, 100],
-        objectivity: [60, 80],
-        coreEndurance: [60, 90]
+        objectivity: [40, 60],
+        coreEndurance: [40, 60]
       },
       image: '/images/characters/wukong.png'
     },
@@ -61,7 +61,7 @@ export const cardsData: CardData[] = [
         selfAwareness: [0, 40],
         dedication: [80, 100],
         socialIntelligence: [30, 60],
-        emotionalRegulation: [0, 40],
+        emotionalRegulation: [10, 50],
         objectivity: [30, 70],
         coreEndurance: [60, 80]
       },
@@ -80,11 +80,11 @@ export const cardsData: CardData[] = [
         zh: '女娲是中国神话中最受尊崇的人物之一，是创造、平衡和恢复的女神。传说中，她用泥土创造了人类；当天体破裂时，她用五色石补缀天空，恢复了世界的秩序。她通常被描绘成蛇的下半身，体现了孕育的力量、智慧、创造与和谐，守护着世界的完整性和可持续发展性。'
       },
       tagRanges: {
-        selfAwareness: [0, 60],
-        dedication: [80, 100],
-        socialIntelligence: [60, 90],
-        emotionalRegulation: [80, 100],
-        objectivity: [60, 80],
+        selfAwareness: [0, 40],
+        dedication: [50, 80],
+        socialIntelligence: [40, 60],
+        emotionalRegulation: [60, 80],
+        objectivity: [40, 60],
         coreEndurance: [80, 100]
       },
       image: '/images/characters/nuwa.jpeg'
@@ -105,7 +105,7 @@ export const cardsData: CardData[] = [
         selfAwareness: [60, 80],
         dedication: [40, 60],
         socialIntelligence: [80, 100],
-        emotionalRegulation: [40, 90],
+        emotionalRegulation: [40, 70],
         objectivity: [30, 60],
         coreEndurance: [20, 50]
       },
@@ -124,12 +124,12 @@ export const cardsData: CardData[] = [
         zh: '雅典娜是希腊神话中的智慧、战争和工艺女神，她全身铠甲地从宙斯的头颅中诞生，从出生就体现了智慧和战略。雅典娜是谋略战争的大师。她也是工匠和建筑师的守护神，激励着人们制定作战计划和进行杰出的创新。雅典娜以猫头鹰和橄榄树为象征，代表理性、正义和追求卓越。'
       },
       tagRanges: {
-        selfAwareness: [80, 100],
-        dedication: [0, 60],
-        socialIntelligence: [60, 90],
-        emotionalRegulation: [60, 80],
+        selfAwareness: [60, 80],
+        dedication: [0, 40],
+        socialIntelligence: [50, 70],
+        emotionalRegulation: [40, 60],
         objectivity: [70, 100],
-        coreEndurance: [80, 100]
+        coreEndurance: [40, 60]
       },
       image: '/images/characters/athena.jpeg'
     }
