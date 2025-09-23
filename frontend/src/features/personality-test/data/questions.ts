@@ -396,7 +396,7 @@ export const questions: Question[] = [
       textNonMotherEn: 'How valuable are working mothers posting and accessing new business deals?',
       textNoneMotherZh: '职场母亲发布和获取商业合作有多大价值？',
       textLifeEn: 'How valuable are you sharing your life and exploring new opportunities?',
-      textLifeZh: '分享生活、探索新机会对您来说有多大价值？',
+      textLifeZh: '您分享生活和探索新机会有多大价值？',
       tags: ['奉献精神'],
       scaleLabels: {
         minEn: 'Not valuable',
