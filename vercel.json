@@ -3,7 +3,7 @@
   "buildCommand": "npm ci --prefix frontend && npm run build --prefix frontend",
   "outputDirectory": "frontend/dist",
   "functions": {
-    "api/**/*.py": { "runtime": "@vercel/python" }
+    "api/index.py": { "runtime": "python3.11" }
   },
   "rewrites": [
     { "source": "/api/:match*", "destination": "/api/:match*" },
