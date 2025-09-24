@@ -363,6 +363,5 @@ def get_user_responses(user_id):
         print(f"Error getting user responses: {e}")
         return jsonify({'error': str(e)}), 500
 
-# This is the entry point for Vercel serverless functions
-def handler(request):
-    return app(request)
+if __name__ == '__main__':
+    app.run(debug=True, port=5001)
